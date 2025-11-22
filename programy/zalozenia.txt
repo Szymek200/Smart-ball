@@ -1,0 +1,31 @@
+Esp 32
+
+ciagly pomiar przyspieszenia i obrotu
+
+Tryb life - ciagle przesylanie danych do aplikacji
+
+Tryb record - zapisywanie, zapisujemy co ktoras dana
+dokladne dane wykorzystujemy tylko do obliczen
+
+przeliczanie osi - z zawsze do gory
+
+Uderzenie -> konkretne pomiary
+
+lot - konretne pomiary
+
+Przechowywanie statystyk
+
+
+
+
+Aplikacja
+
+tryb live - zapisywanie danych do pliku - choice, kazde uderzenie to pliku
+
+Dynamiczne wykresy przyspieszen
+
+Wykres lotu pliki - tryb pojedynczy
+
+
+
+

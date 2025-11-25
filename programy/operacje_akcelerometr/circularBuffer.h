@@ -6,6 +6,9 @@
 #include <cstddef>
 #include <stdexcept>
 
+const int RINGSIZE = 1024;
+//const int RINGSIZE = 4096;
+
 struct Triple {
     int16_t x, y, z;
 };

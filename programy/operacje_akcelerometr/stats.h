@@ -17,7 +17,7 @@ class stats
     float maxRotation = 0;
  
 
-    RingBuffer<Sample, 4096> * ring;
+    RingBuffer<Sample, RINGSIZE> * ring;
 
     //copy of samples when hit detected
     std::deque<Sample> event;
@@ -56,7 +56,7 @@ bool isHit(TripleF accW);
 
   public:
 
-    stats(RingBuffer<Sample, 4096> * ring, float ballMass)
+    stats(RingBuffer<Sample, RINGSIZE> * ring, float ballMass)
     {
       this->ballMass = ballMass;
   

@@ -1,11 +1,11 @@
 # macOS
 .DS_Store
 
-# VSCode
+# VSCode / Devcontainers
 .vscode/
 .devcontainer/
 
-# Build artifacts
+# Build artifacts (embedded/C++/Arduino)
 build/
 *.elf
 *.bin
@@ -17,8 +17,6 @@ build/
 *.pdb
 *.tlog
 *.exe
-
-# CMake files
 CMakeFiles/
 CMakeCache.txt
 *.cmake
@@ -37,3 +35,14 @@ CMakeCache.txt
 ~$*.docx
 ~$*.pptx
 ~$*.xlsx
+
+# Android Studio
+.idea/
+.gradle/
+local.properties
+*.iml
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+.navigation/

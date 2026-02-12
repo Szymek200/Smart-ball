@@ -1,0 +1,39 @@
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+.devcontainer/
+
+# Build artifacts
+build/
+*.elf
+*.bin
+*.hex
+*.o
+*.obj
+*.log
+*.ilk
+*.pdb
+*.tlog
+*.exe
+
+# CMake files
+CMakeFiles/
+CMakeCache.txt
+*.cmake
+
+# Temporary files
+*~
+*.tmp
+*.swp
+
+# Arduino / PlatformIO
+*.pio
+*.elf
+*.bin
+
+# Microsoft Office temp files
+~$*.docx
+~$*.pptx
+~$*.xlsx

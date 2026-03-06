@@ -1,0 +1,30 @@
+# --- Pliki budowania (Build artifacts) ---
+build/
+sdkconfig
+sdkconfig.old
+
+# --- Pliki tymczasowe Pythona ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Logi i pliki sesji ---
+*.log
+*.tmp
+
+# --- Konfiguracja IDE (opcjonalne, ale zalecane) ---
+.vscode/
+# Jeśli chcesz dzielić się ustawieniami VS Code z zespołem, 
+# usuń powyższą linię i odkomentuj poniższe:
+# .vscode/*.log
+# .vscode/launch.json
+
+.idea/
+.eclipse/
+
+# --- Pliki specyficzne dla systemu operacyjnego ---
+.DS_Store
+Thumbs.db
+
+# --- Pliki środowiska lokalnego ---
+.env

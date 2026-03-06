@@ -1,0 +1,67 @@
+void enter_deep_sleep(void) {
+    ESP_LOGI(TAG, "Przygotowanie do uśpienia...");
+
+    // 1. Wyłącz Żyroskop (L3G4200D) - Power Down Mode
+    // Zapisujemy 0x00 do CTRL_REG1 (adres 0x20)
+    uint8_t pd_cmd = 0x00;
+    // Używamy globalnego uchwytu i2c z main.c
+    platform_i2c_write((void*)(0x69 << 1), 0x20, &pd_cmd, 1); 
+    ESP_LOGI(TAG, "Żyroskop wyłączony.");
+
+    // 2. Skonfiguruj H3LIS331DL do wybudzania (Wake-up on threshold)
+    
+    // a. Reset filtrów (opcjonalne)
+    h3lis331dl_hp_reset_get(&accel_ctx_global);
+
+    // b. Włącz filtr górnoprzepustowy (HPF), aby grawitacja nie wybudzała piłki
+    // CTRL_REG2: FDS=0, HPen2=0, HPen1=1, HPCF=00 -> 0x01 lub podobne w zależności od liba
+    // Używamy gotowych funkcji z Twojego h3lis331dl_reg.c
+    h3lis331dl_hp_path_set(&accel_ctx_global, H3LIS331DL_HP_ON_INT1); 
+    h3lis331dl_hp_bandwidth_set(&accel_ctx_global, H3LIS331DL_CUT_OFF_16Hz); // Filtr odcina DC (grawitację)
+
+    // c. Ustaw próg wybudzenia (INT1_THS)
+    // 1 LSB = FullScale / 128 (dla 100g to ok 780mg). 
+    // Dla wybudzenia przy lekkim ruchu ustawiamy np. 2 (ok 1.5G)
+    // Wartość eksperymentalna - zacznij od 2 lub 3
+    h3lis331dl_int1_threshold_set(&accel_ctx_global, 1); 
+    
+    // d. Czas trwania impulsu (INT1_DURATION) - 0 dla natychmiastowej reakcji
+    h3lis331dl_int1_dur_set(&accel_ctx_global, 0);
+
+    // e. Skonfiguruj zdarzenia, które wyzwalają przerwanie (XHIE | YHIE | ZHIE)
+    // Chcemy wybudzenia przy przekroczeniu progu na dowolnej osi
+    h3lis331dl_int1_on_th_conf_t int1_conf = {
+        .int1_xlie = 0, .int1_xhie = 1, // X High
+        .int1_ylie = 0, .int1_yhie = 1, // Y High
+        .int1_zlie = 0, .int1_zhie = 1  // Z High
+    };
+    h3lis331dl_int1_on_threshold_conf_set(&accel_ctx_global, int1_conf);
+
+    // f. Przypisz przerwanie do pinu fizycznego (CTRL_REG3)
+    h3lis331dl_pin_int1_route_set(&accel_ctx_global, H3LIS331DL_PAD1_INT1_SRC);
+    
+    // g. Włącz przerwanie (Latch request - sygnał trzyma stan, aż go odczytamy po wybudzeniu)
+    //    lub Pulsed (sygnał znika). Dla Deep Sleep lepiej Latch lub Active High/Low.
+    h3lis331dl_int1_notification_set(&accel_ctx_global, H3LIS331DL_INT1_LATCHED);
+    h3lis331dl_pin_polarity_set(&accel_ctx_global, H3LIS331DL_ACTIVE_HIGH);
+
+    // h. Ustaw ODR na niski, np. 50Hz lub 100Hz (CTRL_REG1) - oszczędność baterii
+    h3lis331dl_data_rate_set(&accel_ctx_global, H3LIS331DL_ODR_50Hz);
+
+    ESP_LOGI(TAG, "Akcelerometr skonfigurowany jako Wake-Up source.");
+
+    // 3. Konfiguracja wybudzania ESP32
+    // Upewnij się, że poziom logiczny zgadza się z h3lis331dl_pin_polarity_set (Active High -> poziom 1)
+    esp_sleep_enable_ext0_wakeup(ACCEL_INT_GPIO, 1); 
+
+    ESP_LOGI(TAG, "Dobranoc! Wybudzenie nastąpi po ruchu.");
+
+    rtc_gpio_pullup_dis(ACCEL_INT_GPIO);
+rtc_gpio_pulldown_en(ACCEL_INT_GPIO); // Wymuszamy stan niski, czekamy na wysoki z akcelerometru
+
+
+    
+    // Należy zwolnić mutexy i zamknąć połączenia jeśli to konieczne, ale w Deep Sleep
+    // pamięć RAM jest tracona, więc po prostu usypiamy.
+    esp_deep_sleep_start();
+}

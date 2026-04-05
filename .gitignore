@@ -114,3 +114,13 @@ python_scripts/
 license.txt
 Readme.html
 how-to-import.htm
+
+# --- GWARANCJA DOSTĘPU ---
+# Zawsze śledź te pliki, nawet jeśli są w ignorowanych folderach (poza ZipFiles)
+!*.pdf
+!*.kicad_sch
+!*.kicad_pcb
+!*.kicad_pro
+!*.kicad_sym
+!*.kicad_mod
+!*.pretty/

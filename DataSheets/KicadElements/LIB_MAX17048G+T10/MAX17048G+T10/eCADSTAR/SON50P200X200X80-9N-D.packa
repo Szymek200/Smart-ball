@@ -1,0 +1,13 @@
+(unit MM)
+
+(package "MAX17048G+T10"
+    (type UNDEF)
+    (uver 2)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (utime 2020-10-20-05:44:56)
+    (mountForm default
+        (footprintRef "SON50P200X200X80-9N-D")
+        (spec "System")
+    )
+)

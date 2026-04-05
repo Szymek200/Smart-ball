@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'ADM7155ACPZ_04_R7'
+CLASS = IC
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Analog Devices", "ADM7155ACPZ-04-R7" (!) = "", "SON50P300X300X80-9N-D", "Small Outline No-lead", "584-ADM7155ACPZ-04R7", "https://www.mouser.co.uk/ProductDetail/Analog-Devices/ADM7155ACPZ-04-R7?qs=iCT64eccu7j%2Fv45ioAdAhA%3D%3D", "LDO Voltage Regulators 600mA Ultra-Low-Nois High-PSRR LDO ADJ", "https://componentsearchengine.com/Datasheets/1/ADM7155ACPZ-04-R7.pdf", "0.8 mm"
+END_PART
+
+END.

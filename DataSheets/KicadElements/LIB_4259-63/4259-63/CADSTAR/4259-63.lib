@@ -1,0 +1,16 @@
+.4259-63 :1 ;RF switch IC
+SOT65P210X110-6N
+*STM IC
+*NGS
+*PLB 1="RF1" 2="GND" 3="RF2" 4="CTRL" 5="RFC" 6="'CTRL OR VDD'"
+*MXP 6
+*DFN 4259-63
+~!Mouser Part Number (81-4259-63)
+~!Link Mouser Price/Stock (https://www.mouser.co.uk/ProductDetail/pSemi/4259-63?qs=iw0hurA%2FaD37qvQcKdATTw%3D%3D)
+~!Manufacturer_Name (Peregrine Semiconductor)
+~!Manufacturer_Part_Number (4259-63)
+~!Link Datasheet (http://www.psemi.com/pdf/datasheets/pe4259ds.pdf)
+~!Height (1.1mm)
+~!3D_Model (4259-63)
+"4259-63"
+1.1!U 2.1!U 3.1!U 6.1!U 5.1!U 4.1!U 

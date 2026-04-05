@@ -1,0 +1,9 @@
+Manufacturer=Texas Instruments
+PartNumber=TPS61032PWP
+PartCategory=Integrated Circuit
+PackageCategory=Small Outline Packages
+PinCount=17
+Version=2.1
+Released=2019-03-04 09:49:14
+Downloaded=2026-04-05 08:15:47
+3D=Y

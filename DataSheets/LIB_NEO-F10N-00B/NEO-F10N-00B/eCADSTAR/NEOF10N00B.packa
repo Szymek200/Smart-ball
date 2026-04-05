@@ -1,0 +1,13 @@
+(unit MM)
+
+(package "NEO-F10N-00B"
+    (type UNDEF)
+    (uver 2)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (utime 2024-06-13-07:46:37)
+    (mountForm default
+        (footprintRef "NEOF10N00B")
+        (spec "System")
+    )
+)

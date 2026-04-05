@@ -1,0 +1,70 @@
+(Japanese_coding: sjis)
+(function "ECS_18856035"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2023-11-07-10:48:10)
+    (utime 2025-12-22-16:41:21)
+    (interface
+        (port "1" (symbPinId 1) (portType INOUT))
+        (port "2" (symbPinId 2) (portType INOUT))
+        (port "3" (symbPinId 3) (portType INOUT))
+    )
+    (property "symbolName" "SLW-1276864-4A-D")
+)
+
+
+(pinAssign "ECS_18856035"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2023-11-07-10:48:10)
+    (utime 2025-12-22-16:41:21)
+    (interface
+        (port "1" (symbPinId 1) (portName "NC") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "COM") (portType INOUT))
+        (port "3" (symbPinId 3) (portName "NO") (portType INOUT))
+    )
+    (internal
+        (funcInst (functionRef "ECS_18856035")
+                (port "1" (match "1"))
+                (port "2" (match "2"))
+                (port "3" (match "3"))
+        )
+    )
+    (property "usePowerBox" "No")
+    (property "symbolName" "SLW-1276864-4A-D")
+)
+
+
+(part "SLW-1276864-4A-D"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2023-11-07-10:48:10)
+    (utime 2025-12-22-16:41:21)
+    (packageRef "SLW-1276864-4A-D")
+    (pinAssignRef "ECS_18856035")
+    (interface
+        (port "1" (symbPinId 1) (portName "NC") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "COM") (portType INOUT))
+        (port "3" (symbPinId 3) (portName "NO") (portType INOUT))
+    )
+    (partClass UNDEF)
+    (useInSchema Y)
+    (useInLayout Y)
+    (inPartsList Y)
+    (partType NORMAL)
+    (placeRestriction FREE)
+    (property "enetNonSeries" "YES")
+    (property "refDesPrefix" "S")
+    (property "description" "SLW-1276864-4A-D - 12.7 x 6.8 x 6.4 mm, 2 mm Raised Slide Actuator, Vertical, Through Hole, Slide Switch")
+    (property "Mouser_Part_Number" "179-SLW-1276864-4A-D")
+    (property "Mouser_Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/SLW-1276864-4A-D?qs=1Kr7Jg1SGW90vOt02EYiag%3D%3D")
+    (property "Manufacturer_Name" "Same Sky")
+    (property "Manufacturer_Part_Number" "SLW-1276864-4A-D")
+    (property "Datasheet_Link" "https://www.sameskydevices.com/product/resource/SLW-1276864-4A-D.pdf")
+    (property "compAreaTopHeight" 10.6)
+)
+
+

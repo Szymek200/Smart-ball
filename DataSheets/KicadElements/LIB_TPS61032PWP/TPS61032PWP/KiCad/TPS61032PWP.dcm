@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP TPS61032PWP
+D 5-V Output, 1-A, 96% Efficient Boost Converter w/20uA Iq in TSSOP-16
+K
+F http://www.ti.com/lit/ds/symlink/tps61030.pdf
+$ENDCMP
+#
+#End Doc Library

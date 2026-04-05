@@ -1,0 +1,35 @@
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#SamacSys ECAD Model LSM6DSV16BXTR
+#/16509989/2012225/2.50/14/2/Integrated Circuit
+DEF LSM6DSV16BXTR IC 0 30 Y Y 1 F N
+F0 "IC" 1450 600 50 H V L CNN
+F1 "LSM6DSV16BXTR" 1450 500 50 H V L CNN
+F2 "LSM6DSV16BXTR" 1450 400 50 H I L CNN
+F3 "https://www.st.com/resource/en/datasheet/lsm6dsv16bx.pdf" 1450 300 50 H I L CNN
+F4 "6-axis IMU (inertial measurement unit) with embedded sensor fusion, AI, Qvar and hearable features for TWS" 1450 200 50 H I L CNN "Description"
+F5 "0.74" 1450 100 50 H I L CNN "Height"
+F6 "511-LSM6DSV16BXTR" 1450 0 50 H I L CNN "Mouser Part Number"
+F7 "https://www.mouser.co.uk/ProductDetail/STMicroelectronics/LSM6DSV16BXTR?qs=vvQtp7zwQdMXKB4RqH7GHQ%3D%3D" 1450 -100 50 H I L CNN "Mouser Price/Stock"
+F8 "STMicroelectronics" 1450 -200 50 H I L CNN "Manufacturer_Name"
+F9 "LSM6DSV16BXTR" 1450 -300 50 H I L CNN "Manufacturer_Part_Number"
+DRAW
+X SDO/SA0 1 0 0 200 R 50 50 0 0 P
+X TDMOUT 2 0 -100 200 R 50 50 0 0 P
+X BCLK 3 0 -200 200 R 50 50 0 0 P
+X INT1 4 0 -300 200 R 50 50 0 0 P
+X VDD_IO 5 700 -1200 200 U 50 50 0 0 P
+X AH1/QVAR1 6 800 -1200 200 U 50 50 0 0 P
+X GND 7 900 -1200 200 U 50 50 0 0 P
+X VDD 8 1600 -300 200 L 50 50 0 0 P
+X AH2/QVAR2 9 1600 -200 200 L 50 50 0 0 P
+X INT2 10 1600 -100 200 L 50 50 0 0 P
+X WCLK 11 1600 0 200 L 50 50 0 0 P
+X CS 12 900 600 200 D 50 50 0 0 P
+X SCL 13 800 600 200 D 50 50 0 0 P
+X SDA 14 700 600 200 D 50 50 0 0 P
+P 5 0 1 6 200 400 1400 400 1400 -1000 200 -1000 200 400 N
+ENDDRAW
+ENDDEF
+#
+#End Library

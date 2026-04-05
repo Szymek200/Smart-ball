@@ -1,0 +1,10 @@
+(unit MM)
+
+(package "UJ20CHGMSMTR4CP16TR"
+    (type UNDEF)
+    (uver 2)
+    (mountForm default
+        (footprintRef "UJ20CHGMSMTR4CP16TR")
+        (spec "default")
+    )
+)

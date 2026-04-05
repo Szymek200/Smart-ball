@@ -1,0 +1,9 @@
+Manufacturer=Analog Devices
+PartNumber=ADM7155ACPZ-04-R7
+PartCategory=Integrated Circuit
+PackageCategory=Small Outline No-lead
+PinCount=9
+Version=1.1
+Released=2019-11-09 11:56:12
+Downloaded=2026-03-22 19:03:22
+3D=Y

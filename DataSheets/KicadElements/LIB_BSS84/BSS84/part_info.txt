@@ -1,0 +1,9 @@
+Manufacturer=onsemi
+PartNumber=BSS84
+PartCategory=MOSFET (P-Channel)
+PackageCategory=SOT23 (3-Pin)
+PinCount=3
+Version=3.1
+Released=2018-03-01 21:24:04
+Downloaded=2026-04-03 16:59:10
+3D=Y

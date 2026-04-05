@@ -1,0 +1,70 @@
+(Japanese_coding: sjis)
+(function "ECS_2446689"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2021-02-05-09:26:00)
+    (utime 2023-03-07-16:10:32)
+    (interface
+        (port "1" (symbPinId 1) (portType INOUT))
+        (port "2" (symbPinId 3) (portType INOUT))
+        (port "3" (symbPinId 2) (portType INOUT))
+    )
+    (property "symbolName" "Si2323DDS-T1-GE3")
+)
+
+
+(pinAssign "ECS_2446689"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2021-02-05-09:26:00)
+    (utime 2023-03-07-16:10:32)
+    (interface
+        (port "1" (symbPinId 1) (portName "G") (portType INOUT))
+        (port "2" (symbPinId 3) (portName "S") (portType INOUT))
+        (port "3" (symbPinId 2) (portName "D") (portType INOUT))
+    )
+    (internal
+        (funcInst (functionRef "ECS_2446689")
+                (port "1" (match "1"))
+                (port "2" (match "2"))
+                (port "3" (match "3"))
+        )
+    )
+    (property "usePowerBox" "No")
+    (property "symbolName" "Si2323DDS-T1-GE3")
+)
+
+
+(part "Si2323DDS-T1-GE3"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2021-02-05-09:26:00)
+    (utime 2023-03-07-16:10:32)
+    (packageRef "Si2323DDS-T1-GE3")
+    (pinAssignRef "ECS_2446689")
+    (interface
+        (port "1" (symbPinId 1) (portName "G") (portType INOUT))
+        (port "2" (symbPinId 3) (portName "S") (portType INOUT))
+        (port "3" (symbPinId 2) (portName "D") (portType INOUT))
+    )
+    (partClass UNDEF)
+    (useInSchema Y)
+    (useInLayout Y)
+    (inPartsList Y)
+    (partType NORMAL)
+    (placeRestriction FREE)
+    (property "enetNonSeries" "YES")
+    (property "refDesPrefix" "Q")
+    (property "description" "VISHAY - SI2323DDS-T1-GE3 - Power MOSFET, P Channel, 20 V, 5.3 A, 0.032 ohm, SOT-23, Surface Mount")
+    (property "Mouser_Part_Number" "78-SI2323DDS-T1-GE3")
+    (property "Mouser_Price/Stock" "https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/SI2323DDS-T1-GE3?qs=vgn07B5hXavjZXK0uPQNiA%3D%3D")
+    (property "Manufacturer_Name" "Vishay")
+    (property "Manufacturer_Part_Number" "Si2323DDS-T1-GE3")
+    (property "Datasheet_Link" "https://altium.componentsearchengine.com/Datasheets/2/SI2323DDS-T1-GE3.pdf")
+    (property "compAreaTopHeight" 1.12)
+)
+
+

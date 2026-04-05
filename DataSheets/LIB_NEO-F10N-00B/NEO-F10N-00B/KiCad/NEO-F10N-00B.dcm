@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP NEO-F10N-00B
+D GNSS / GPS Modules u-blox F10 GNSS module Flash, TCXO, SAW, LNA LCC, 12x16 mm, 250 pcs/reel
+K
+F https://content.u-blox.com/sites/default/files/documents/NEO-F10N_DataSheet_UBX-23002117.pdf
+$ENDCMP
+#
+#End Doc Library

@@ -1,0 +1,9 @@
+Manufacturer=onsemi
+PartNumber=SS14
+PartCategory=Schottky Diode
+PackageCategory=Diodes Moulded
+PinCount=2
+Version=3.1
+Released=2018-03-13 18:34:37
+Downloaded=2026-04-03 19:00:28
+3D=Y

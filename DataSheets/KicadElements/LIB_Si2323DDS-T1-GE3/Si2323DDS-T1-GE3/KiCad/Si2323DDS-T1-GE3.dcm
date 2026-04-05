@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP Si2323DDS-T1-GE3
+D VISHAY - SI2323DDS-T1-GE3 - Power MOSFET, P Channel, 20 V, 5.3 A, 0.032 ohm, SOT-23, Surface Mount
+K
+F https://altium.componentsearchengine.com/Datasheets/2/SI2323DDS-T1-GE3.pdf
+$ENDCMP
+#
+#End Doc Library

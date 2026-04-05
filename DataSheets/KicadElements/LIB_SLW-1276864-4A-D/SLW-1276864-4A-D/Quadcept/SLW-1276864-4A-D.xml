@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--/18856035/2012225/2.50/3/2/Switch/-->
+<quadcept_library>
+  <setting unit="mil" />
+  <textstyle name="Default" height="47.244094488189" strokewidth="7.8740157480315" charwidth="47.244094488189" />
+  <textstyle name="Dimension" height="19.6850393700787" strokewidth="0" charwidth="19.6850393700787" />
+  <textstyle name="H127W0635TH00762" height="50" strokewidth="3" charwidth="25" />
+  <textstyle name="H15W15TH02" height="59.0551181102362" strokewidth="7.8740157480315" charwidth="59.0551181102362" />
+  <padstyle name="c252_h168" surface="False" plated="True" isvia="False" nopaste="True" nomask="True" complex="False" holesize="66.141732283464">
+    <padshape layer="TOP" shape="round" width="99.212598425196" height="99.212598425196" />
+    <padshape layer="TOP_SOLDER_MASK" shape="round" width="107.08661417323" height="107.08661417323" />
+    <padshape layer="INNER" shape="round" width="99.212598425196" height="99.212598425196" />
+    <padshape layer="BOTTOM" shape="round" width="99.212598425196" height="99.212598425196" />
+    <padshape layer="BOTTOM_SOLDER_MASK" shape="round" width="107.08661417323" height="107.08661417323" />
+  </padstyle>
+  <padstyle name="s252_h168" surface="False" plated="True" isvia="False" nopaste="True" nomask="True" complex="False" holesize="66.141732283464">
+    <padshape layer="TOP" shape="square" width="99.212598425196" height="99.212598425196" />
+    <padshape layer="TOP_SOLDER_MASK" shape="square" width="107.08661417323" height="107.08661417323" />
+    <padshape layer="INNER" shape="square" width="99.212598425196" height="99.212598425196" />
+    <padshape layer="BOTTOM" shape="square" width="99.212598425196" height="99.212598425196" />
+    <padshape layer="BOTTOM_SOLDER_MASK" shape="square" width="107.08661417323" height="107.08661417323" />
+  </padstyle>
+  <footprint name="SLW12768644AD" originx="0" originy="0" pickpointx="0" pickpointy="0">
+    <pcbpin number="1" name="1" style="s252_h168" originx="0" originy="0" rotation="90" />
+    <pcbpin number="2" name="2" style="c252_h168" originx="185.03937007874" originy="0" rotation="90" />
+    <pcbpin number="3" name="3" style="c252_h168" originx="370.07874015748" originy="0" rotation="90" />
+    <line layer="TOP_ASSEMBLY" originx="-64.960629921259" originy="133.85826771653" endx="435.03937007873" endy="133.85826771653" width="3.9370078740157" />
+    <line layer="TOP_ASSEMBLY" originx="435.03937007873" originy="133.85826771653" endx="435.03937007873" endy="-133.85826771653" width="3.9370078740157" />
+    <line layer="TOP_ASSEMBLY" originx="435.03937007873" originy="-133.85826771653" endx="-64.960629921259" endy="-133.85826771653" width="3.9370078740157" />
+    <line layer="TOP_ASSEMBLY" originx="-64.960629921259" originy="-133.85826771653" endx="-64.960629921259" endy="133.85826771653" width="3.9370078740157" />
+    <line layer="TOP_SILKSCREEN" originx="-64.960629921259" originy="133.85826771653" endx="435.03937007873" endy="133.85826771653" width="7.8740157480314" />
+    <line layer="TOP_SILKSCREEN" originx="435.03937007873" originy="133.85826771653" endx="435.03937007873" endy="-133.85826771653" width="7.8740157480314" />
+    <line layer="TOP_SILKSCREEN" originx="435.03937007873" originy="-133.85826771653" endx="-64.960629921259" endy="-133.85826771653" width="7.8740157480314" />
+    <line layer="TOP_SILKSCREEN" originx="-64.960629921259" originy="-133.85826771653" endx="-64.960629921259" endy="133.85826771653" width="7.8740157480314" />
+    <line layer="TOP_PLACE_BOUND" originx="-104.33070866142" originy="173.22834645669" endx="474.40944881889" endy="173.22834645669" width="3.9370078740157" />
+    <line layer="TOP_PLACE_BOUND" originx="474.40944881889" originy="173.22834645669" endx="474.40944881889" endy="-173.22834645669" width="3.9370078740157" />
+    <line layer="TOP_PLACE_BOUND" originx="474.40944881889" originy="-173.22834645669" endx="-104.33070866142" endy="-173.22834645669" width="3.9370078740157" />
+    <line layer="TOP_PLACE_BOUND" originx="-104.33070866142" originy="-173.22834645669" endx="-104.33070866142" endy="173.22834645669" width="3.9370078740157" />
+    <line layer="TOP_SILKSCREEN" originx="-90.551181102361" originy="0" endx="-90.551181102361" endy="0" width="3.9370078740157" />
+    <arc layer="TOP_SILKSCREEN" originx="-88.582677165353" originy="0" startangle="-180.0" sweepangle="180.0" radius="1.9685039370079" width="3.9370078740157" />
+    <line layer="TOP_SILKSCREEN" originx="-86.614173228345" originy="0" endx="-86.614173228345" endy="0" width="3.9370078740157" />
+    <arc layer="TOP_SILKSCREEN" originx="-88.582677165353" originy="0" startangle=".0" sweepangle="180.0" radius="1.9685039370079" width="3.9370078740157" />
+  </footprint>
+  <symbol name="SLW-1276864-4A-D" originx="0" originy="0">
+    <line originx="200" originy="100" endx="700" endy="100" width="0" />
+    <line originx="700" originy="-300" endx="700" endy="100" width="0" />
+    <line originx="700" originy="-300" endx="200" endy="-300" width="0" />
+    <line originx="200" originy="100" endx="200" endy="-300" width="0" />
+    <sympin number="1" originx="200" originy="0" rotation="180" length="100" width="7.8740157480315" flipped="False">
+      <text name="pinname" originx="230" originy="0" style="Default" rotation="0" justify="left" flipped="False" hidden="False" data="NC" />
+      <text name="pindes" originx="140" originy="20" style="Default" rotation="0" justify="lowerright" flipped="False" hidden="False" data="1" />
+    </sympin>
+    <sympin number="2" originx="200" originy="-100" rotation="180" length="100" width="7.8740157480315" flipped="False">
+      <text name="pinname" originx="230" originy="-100" style="Default" rotation="0" justify="left" flipped="False" hidden="False" data="COM" />
+      <text name="pindes" originx="140" originy="-80" style="Default" rotation="0" justify="lowerright" flipped="False" hidden="False" data="2" />
+    </sympin>
+    <sympin number="3" originx="200" originy="-200" rotation="180" length="100" width="7.8740157480315" flipped="False">
+      <text name="pinname" originx="230" originy="-200" style="Default" rotation="0" justify="left" flipped="False" hidden="False" data="NO" />
+      <text name="pindes" originx="140" originy="-180" style="Default" rotation="0" justify="lowerright" flipped="False" hidden="False" data="3" />
+    </sympin>
+  </symbol>
+  <component name="SLW-1276864-4A-D" designatorprefix="S" height="417.32283464566" footprint="SLW12768644AD">
+    <comppin designator="1" sympin="1" pinswap="0" gateswap="0" gate="1" group="1" side="" type="Any" name="NC" />
+    <comppin designator="2" sympin="2" pinswap="0" gateswap="0" gate="1" group="1" side="" type="Any" name="COM" />
+    <comppin designator="3" sympin="3" pinswap="0" gateswap="0" gate="1" group="1" side="" type="Any" name="NO" />
+    <attached_symbol gate="1" name="SLW-1276864-4A-D" />
+    <pinmap designator="1" footprintpin="1" />
+    <pinmap designator="2" footprintpin="2" />
+    <pinmap designator="3" footprintpin="3" />
+    <text name="Datasheet" originx="0" originy="0" style="Default" rotation="0" justify="" flipped="False" hidden="True" data="https://www.sameskydevices.com/product/resource/SLW-1276864-4A-D.pdf" />
+    <text name="Description" originx="0" originy="0" style="Default" rotation="0" justify="" flipped="False" hidden="True" data="SLW-1276864-4A-D - 12.7 x 6.8 x 6.4 mm, 2 mm Raised Slide Actuator, Vertical, Through Hole, Slide Switch" />
+    <text name="Mouser Part Number" originx="0" originy="0" style="Default" rotation="0" justify="" flipped="False" hidden="True" data="179-SLW-1276864-4A-D" />
+    <text name="Mouser Price/Stock" originx="0" originy="0" style="Default" rotation="0" justify="" flipped="False" hidden="True" data="https://www.mouser.co.uk/ProductDetail/Same-Sky/SLW-1276864-4A-D?qs=1Kr7Jg1SGW90vOt02EYiag%3D%3D" />
+    <text name="Manufacturer_Name" originx="0" originy="0" style="Default" rotation="0" justify="" flipped="False" hidden="True" data="Same Sky" />
+    <text name="Manufacturer_Part_Number" originx="750" originy="200" style="Default" rotation="0" justify="left" flipped="False" hidden="False" data="SLW-1276864-4A-D" />
+  </component>
+</quadcept_library>

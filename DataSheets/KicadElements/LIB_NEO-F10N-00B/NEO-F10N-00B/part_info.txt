@@ -1,0 +1,9 @@
+Manufacturer=u-blox
+PartNumber=NEO-F10N-00B
+PartCategory=Integrated Circuit
+PackageCategory=Other
+PinCount=24
+Version=1.3
+Released=2024-06-13 07:46:37
+Downloaded=2026-03-22 19:20:18
+3D=Y

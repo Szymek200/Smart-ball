@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'Si2323DDS_T1_GE3'
+CLASS = DISCRETE
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Vishay", "Si2323DDS-T1-GE3" (!) = "", "SOT95P237X112-3N", "SOT23 (3-Pin)", "78-SI2323DDS-T1-GE3", "https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/SI2323DDS-T1-GE3?qs=vgn07B5hXavjZXK0uPQNiA%3D%3D", "VISHAY - SI2323DDS-T1-GE3 - Power MOSFET, P Channel, 20 V, 5.3 A, 0.032 ohm, SOT-23, Surface Mount", "https://altium.componentsearchengine.com/Datasheets/2/SI2323DDS-T1-GE3.pdf", "1.12 mm"
+END_PART
+
+END.

@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'CL10B105KO8NNNC'
+CLASS = DISCRETE
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "SAMSUNG", "CL10B105KO8NNNC" (!) = "", "CAPC1608X90N", "Capacitor Chip Non-polarised", "187-CL10B105KO8NNNC", "https://www.mouser.co.uk/ProductDetail/Samsung-Electro-Mechanics/CL10B105KO8NNNC?qs=349EhDEZ59o2mlUAs%2FkaKg%3D%3D", "Samsung Electro-Mechanics 1uF Multilayer Ceramic Capacitor MLCC 16V dc +/-10% X7R Dielectric 0603 (1608M) SMD", "https://datasheet.datasheetarchive.com/originals/distributors/Datasheets-DGA10/2410179.pdf", "0.9 mm"
+END_PART
+
+END.

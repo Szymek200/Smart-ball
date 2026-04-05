@@ -1,0 +1,9 @@
+Manufacturer=Peregrine Semiconductor
+PartNumber=4259-63
+PartCategory=Integrated Circuit
+PackageCategory=SOT23 (6-Pin)
+PinCount=6
+Version=3.1
+Released=2017-02-13 09:09:14
+Downloaded=2026-04-04 17:21:31
+3D=Y

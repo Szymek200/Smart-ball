@@ -1,0 +1,16 @@
+.LSM6DSV16BXTR :1 ;6-axis IMU (inertial measurement unit) with embedded sensor fusion, AI, Qvar and hearable features for TWS
+LSM6DSV16BXTR
+*STM IC
+*NGS
+*PLB 1="SDO/SA0" 2="TDMOUT" 3="BCLK" 4="INT1" 5="VDD_IO" 6="AH1/QVAR1" 7="GND" 8="VDD" 9="AH2/QVAR2" 10="INT2" 11="WCLK" 12="CS" 13="SCL" 14="SDA"
+*MXP 14
+*DFN LSM6DSV16BXTR
+~!Mouser Part Number (511-LSM6DSV16BXTR)
+~!Link Mouser Price/Stock (https://www.mouser.co.uk/ProductDetail/STMicroelectronics/LSM6DSV16BXTR?qs=vvQtp7zwQdMXKB4RqH7GHQ%3D%3D)
+~!Manufacturer_Name (STMicroelectronics)
+~!Manufacturer_Part_Number (LSM6DSV16BXTR)
+~!Link Datasheet (https://www.st.com/resource/en/datasheet/lsm6dsv16bx.pdf)
+~!Height (0.74mm)
+~!3D_Model (LSM6DSV16BXTR)
+LSM6DSV16BXTR
+1.1!U 2.1!U 3.1!U 4.1!U 5.1!U 6.1!U 7.1!U 8.1!U 9.1!U 10.1!U 11.1!U 12.1!U 13.1!U 14.1!U 

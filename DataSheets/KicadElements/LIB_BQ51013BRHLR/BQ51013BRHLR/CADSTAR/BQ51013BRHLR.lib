@@ -1,0 +1,16 @@
+.BQ51013BRHLR :1 ;WPC 1.1 Compatible Fully Integrated Wireless Power Receiver IC
+BQ51050BRHLR
+*STM IC
+*NGS
+*PLB 1="PGND_1" 2="AC1" 3="BOOT1" 4="OUT" 5="CLAMP1" 6="COMM1" 7="'CHG'" 8="'AD-EN'" 9="AD" 10="EN1" 11="EN2" 12="ILIM" 13="TS/CTRL" 14="FOD" 15="COMM2" 16="CLAMP2" 17="BOOT2" 18="RECT" 19="AC2" 20="PGND_2" 21="EP"
+*MXP 21
+*DFN BQ51013BRHLR
+~!Mouser Part Number (595-BQ51013BRHLR)
+~!Link Mouser Price/Stock (https://www.mouser.co.uk/ProductDetail/Texas-Instruments/BQ51013BRHLR?qs=y1vSg4rOnUJlN8ZPg6D5Pw%3D%3D)
+~!Manufacturer_Name (Texas Instruments)
+~!Manufacturer_Part_Number (BQ51013BRHLR)
+~!Link Datasheet (http://www.ti.com/lit/ds/symlink/bq51013b.pdf)
+~!Height (-)
+~!3D_Model (BQ51013BRHLR)
+BQ51013BRHLR
+1.1!U 2.1!U 3.1!U 4.1!U 5.1!U 6.1!U 7.1!U 8.1!U 9.1!U 10.1!U 11.1!U 12.1!U 13.1!U 14.1!U 15.1!U 16.1!U 17.1!U 18.1!U 19.1!U 20.1!U 21.1!U 

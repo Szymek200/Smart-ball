@@ -1,0 +1,103 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "CL31A226MOCLNNC"
+   (description "Ceramic capacitor 1206 X5R 16V 22uF Samsung Electro-Mechanics 1206 CL 22uF Ceramic Multilayer Capacitor, 16 V, +85C, X5R Dielectric, +/-20% SMD")
+   (family "CAP")
+   (package "CAPC3216X100N")
+   (attribute "Datasheet Link" "https://datasheet.datasheetarchive.com/originals/distributors/Datasheets_SAMA/f725fe7da06092c10c109ee50d712988.pdf")
+   (attribute "Geometry.Height" "1mm")
+   (attribute "Mouser Part Number" "187-CL31A226MOCLNNC")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Samsung-Electro-Mechanics/CL31A226MOCLNNC?qs=X6jEic%2FHinD7wddQJyY%252BZw%3D%3D")
+   (attribute "Manufacturer_Name" "SAMSUNG")
+   (attribute "Manufacturer_Part_Number" "CL31A226MOCLNNC")
+   (gate
+    (symbol "CL31A226MOCLNNC")
+    (pin "1" 1 IO)
+    (pin "2" 2 IO)
+   )
+  )
+  (symbol "CL31A226MOCLNNC"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 220 100) (pt 220 -100))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 280 100) (pt 280 -100))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 200 0) (pt 220 0))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 280 0) (pt 300 0))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 0 -10) (rot 0) (just TOP LEFT) (visible false))
+    (number (pt 0 10) (rot 0) (just BOTTOM LEFT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 500 0) (rot 0) (mir X) (visible true))
+    (name (pt 0 -10) (rot 0) (just TOP LEFT) (visible false))
+    (number (pt 0 10) (rot 0) (just BOTTOM LEFT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "CAPC3216X100N"
+   (units MM)
+   (layer OCCA
+    (graphic
+     (stroke 0.05)
+     (path
+      (closed true)
+      (pt -2.065 1.06)
+      (pt 2.065 1.06)
+      (pt 2.065 -1.06)
+      (pt -2.065 -1.06)
+      (pt -2.065 1.06))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -1.6 0.8)
+      (pt 1.6 0.8)
+      (pt 1.6 -0.8)
+      (pt -1.6 -0.8)
+      (pt -1.6 0.8))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt 0 0.7)
+      (pt 0 -0.7))))
+   (leg 1 (pt -1.39 0) (padstack 0))
+   (leg 2 (pt 1.39 0) (padstack 0))
+   (padstack 0
+    (plated false)
+    (pad (layer TCOP) (rectf 1.05 1.82 0 0 90))
+   )
+   (model "CL31A226MOCLNNC.stp"
+    (euler 0 0 0)
+    (offset 0 0 0)
+   )
+  )
+ )
+)

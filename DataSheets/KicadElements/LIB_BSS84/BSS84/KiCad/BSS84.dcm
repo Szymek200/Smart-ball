@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP BSS84
+D -0.13 A, -50 V RDS(ON) = 10  @ VGS = -5 V; High-Density Cell Design for Low RDS(ON); Voltage-controlled P-channel small signal switch; High Saturation Current.
+K
+F https://www.onsemi.com/pub/Collateral/BSS84-D.PDF
+$ENDCMP
+#
+#End Doc Library

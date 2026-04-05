@@ -1,0 +1,13 @@
+(unit MM)
+
+(package "H3LIS331DLTR"
+    (type UNDEF)
+    (uver 2)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (utime 2020-04-21-15:28:51)
+    (mountForm default
+        (footprintRef "LIS3DHTR")
+        (spec "System")
+    )
+)

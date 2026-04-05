@@ -21,6 +21,9 @@ CMakeFiles/
 CMakeCache.txt
 *.cmake
 
+#zip files
+DataSheets/ZipFiles/
+
 # Temporary files
 *~
 *.tmp
@@ -46,3 +49,21 @@ captures/
 .externalNativeBuild/
 .cxx/
 .navigation/
+
+# KiCad - Temporary and backup files
+*.bak
+*.cadbak
+*~
+_autosave-*
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.kicad_prl
+
+# KiCad - Output directories (files generated for production)
+*-bak/
+*-backups/
+fp-info-cache
+python_scripts/
+
+# KiCad - Project local settings (user specific)
+*.kicad_user

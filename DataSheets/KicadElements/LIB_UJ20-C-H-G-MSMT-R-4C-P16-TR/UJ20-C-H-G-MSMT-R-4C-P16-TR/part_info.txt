@@ -1,0 +1,9 @@
+Manufacturer=Same Sky
+PartNumber=UJ20-C-H-G-MSMT-R-4C-P16-TR
+PartCategory=Connector
+PackageCategory=Other
+PinCount=16
+Version=2.5
+Released=2026-02-20 13:47:42
+Downloaded=2026-04-03 20:16:54
+3D=N

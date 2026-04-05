@@ -1,0 +1,9 @@
+Manufacturer=SAMSUNG
+PartNumber=CL31A226MOCLNNC
+PartCategory=Capacitor
+PackageCategory=Capacitor Chip Non-polarised
+PinCount=2
+Version=2.3
+Released=2016-07-28 15:39:22
+Downloaded=2026-04-05 08:35:17
+3D=Y

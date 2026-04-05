@@ -1,0 +1,16 @@
+.Si2323DDS-T1-GE3 :1 ;VISHAY - SI2323DDS-T1-GE3 - Power MOSFET, P Channel, 20 V, 5.3 A, 0.032 ohm, SOT-23, Surface Mount
+SOT95P237X112-3N
+*STM Q
+*NGS
+*PLB 1="G" 2="S" 3="D"
+*MXP 3
+*DFN Si2323DDS-T1-GE3
+~!Mouser Part Number (78-SI2323DDS-T1-GE3)
+~!Link Mouser Price/Stock (https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/SI2323DDS-T1-GE3?qs=vgn07B5hXavjZXK0uPQNiA%3D%3D)
+~!Manufacturer_Name (Vishay)
+~!Manufacturer_Part_Number (Si2323DDS-T1-GE3)
+~!Link Datasheet (https://altium.componentsearchengine.com/Datasheets/2/SI2323DDS-T1-GE3.pdf)
+~!Height (1.12mm)
+~!3D_Model (Si2323DDS-T1-GE3)
+Si2323DDS-T1-GE3
+1.1!U 2.1!U 3.1!U 

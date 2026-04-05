@@ -1,0 +1,10 @@
+(unit MM)
+
+(package "LIS3DHTR"
+    (type UNDEF)
+    (uver 2)
+    (mountForm default
+        (footprintRef "LIS3DHTR")
+        (spec "default")
+    )
+)

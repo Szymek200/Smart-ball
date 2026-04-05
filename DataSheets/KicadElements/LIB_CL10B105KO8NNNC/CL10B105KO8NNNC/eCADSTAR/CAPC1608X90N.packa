@@ -1,0 +1,13 @@
+(unit MM)
+
+(package "CL10B105KO8NNNC"
+    (type UNDEF)
+    (uver 2)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (utime 2023-06-22-02:40:16)
+    (mountForm default
+        (footprintRef "CAPC1608X90N")
+        (spec "System")
+    )
+)

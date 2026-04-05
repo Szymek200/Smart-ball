@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP CL31A226MOCLNNC
+D Ceramic capacitor 1206 X5R 16V 22uF Samsung Electro-Mechanics 1206 CL 22uF Ceramic Multilayer Capacitor, 16 V, +85C, X5R Dielectric, +/-20% SMD
+K
+F https://datasheet.datasheetarchive.com/originals/distributors/Datasheets_SAMA/f725fe7da06092c10c109ee50d712988.pdf
+$ENDCMP
+#
+#End Doc Library

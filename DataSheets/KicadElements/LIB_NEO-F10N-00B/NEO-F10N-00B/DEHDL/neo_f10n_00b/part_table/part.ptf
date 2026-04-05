@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'NEO_F10N_00B'
+CLASS = IC
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "u-blox", "NEO-F10N-00B" (!) = "", "NEOF10N00B", "Other", "377-NEO-F10N-00B", "https://www.mouser.co.uk/ProductDetail/u-blox/NEO-F10N-00B?qs=Imq1NPwxi76uVH%2FItRhLgw%3D%3D", "GNSS / GPS Modules u-blox F10 GNSS module Flash, TCXO, SAW, LNA LCC, 12x16 mm, 250 pcs/reel", "https://content.u-blox.com/sites/default/files/documents/NEO-F10N_DataSheet_UBX-23002117.pdf", "2.6 mm"
+END_PART
+
+END.

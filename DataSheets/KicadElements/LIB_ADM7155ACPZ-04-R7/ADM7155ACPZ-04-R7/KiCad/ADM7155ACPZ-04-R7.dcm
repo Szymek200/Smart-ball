@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP ADM7155ACPZ-04-R7
+D LDO Voltage Regulators 600mA Ultra-Low-Nois High-PSRR LDO ADJ
+K
+F https://componentsearchengine.com/Datasheets/1/ADM7155ACPZ-04-R7.pdf
+$ENDCMP
+#
+#End Doc Library

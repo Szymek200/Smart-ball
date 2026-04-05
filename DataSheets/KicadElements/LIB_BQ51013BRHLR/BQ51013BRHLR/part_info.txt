@@ -1,0 +1,9 @@
+Manufacturer=Texas Instruments
+PartNumber=BQ51013BRHLR
+PartCategory=Integrated Circuit
+PackageCategory=Other
+PinCount=21
+Version=1.1
+Released=2018-12-16 14:07:45
+Downloaded=2026-04-03 18:50:46
+3D=Y

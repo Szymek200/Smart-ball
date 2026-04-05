@@ -67,3 +67,50 @@ python_scripts/
 
 # KiCad - Project local settings (user specific)
 *.kicad_user
+
+
+
+# --- Ignorowanie zbędnych formatów bibliotek (nie-KiCad) ---
+**/Allegro/
+**/Altium/
+**/CADSTAR/
+**/CR-5000/
+**/CR-8000/
+**/Capture/
+**/CircuitStudio/
+**/DEHDL/
+**/DesignSpark*/
+**/DipTrace/
+**/EAGLE/
+**/Easy-PC/
+**/EasyEDA/
+**/OrCAD*/
+**/PADS/
+**/Proteus/
+**/Pulsonix/
+**/Quadcept/
+**/SOLIDWORKS*/
+**/TARGET*/
+**/Xpedition/
+**/eCADSTAR/
+**/xDX Designer/
+
+# Pliki pomocnicze w bibliotekach
+*.epw
+*.dsl
+*.asc
+*.lbr
+*.epl
+*.pdif
+*.pdspart
+*.plx
+*.cxf
+*.foota
+*.packa
+*.parta
+*.symba
+*.edf
+*.scr
+license.txt
+Readme.html
+how-to-import.htm

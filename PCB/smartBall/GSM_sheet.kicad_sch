@@ -6813,7 +6813,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Coaxial:U.FL_Molex_MCRF_73412-0110_Vertical"
 			(at 69.85 33.02 0)
 			(effects
 				(font
@@ -7161,7 +7161,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
 			(at 228.2952 48.26 0)
 			(effects
 				(font
@@ -7231,7 +7231,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm"
 			(at 86.36 170.18 0)
 			(effects
 				(font
@@ -7298,7 +7298,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
 			(at 256.2352 48.26 0)
 			(effects
 				(font
@@ -7368,7 +7368,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm"
 			(at 101.6 170.18 0)
 			(effects
 				(font
@@ -7782,7 +7782,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "SOT95P240X120-3N"
+		(property "Footprint" "BSS138:SOT95P240X120-3N"
 			(at 26.67 -44.12 0)
 			(effects
 				(font
@@ -7907,7 +7907,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm"
 			(at 15.24 142.24 0)
 			(effects
 				(font
@@ -7974,7 +7974,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm"
 			(at 103.8352 26.67 0)
 			(effects
 				(font
@@ -8110,7 +8110,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm"
 			(at 216.8652 48.26 0)
 			(effects
 				(font
@@ -8569,7 +8569,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
 			(at 170.942 140.97 90)
 			(effects
 				(font
@@ -8637,7 +8637,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
 			(at 80.01 31.242 90)
 			(effects
 				(font
@@ -8707,7 +8707,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Inductor_SMD:L_0805_2012Metric_Pad1.05x1.20mm_HandSolder"
 			(at 261.112 29.21 90)
 			(effects
 				(font
@@ -8777,7 +8777,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
 			(at 242.2652 48.26 0)
 			(effects
 				(font
@@ -8913,7 +8913,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm"
 			(at 38.1 92.71 0)
 			(effects
 				(font
@@ -8980,7 +8980,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm"
 			(at 106.68 177.8 0)
 			(effects
 				(font
@@ -9287,7 +9287,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
 			(at 204.1652 48.26 0)
 			(effects
 				(font
@@ -9421,7 +9421,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
 			(at 160.02 32.512 90)
 			(effects
 				(font
@@ -9491,7 +9491,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "SOT95P240X120-3N"
+		(property "Footprint" "BSS138:SOT95P240X120-3N"
 			(at 181.61 144.45 0)
 			(effects
 				(font
@@ -9614,7 +9614,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPC1608X90N"
+		(property "Footprint" "CL10B104KO8NNNC:CAPC1608X90N"
 			(at 233.68 182.55 0)
 			(effects
 				(font
@@ -9734,7 +9734,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
 			(at 93.98 31.242 90)
 			(effects
 				(font
@@ -9990,7 +9990,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm"
 			(at 87.3252 29.21 0)
 			(effects
 				(font
@@ -10060,7 +10060,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm"
 			(at 81.28 176.53 0)
 			(effects
 				(font
@@ -10191,7 +10191,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Diode_THT:D_DO-41_SOD81_P7.62mm_Horizontal"
 			(at 170.18 34.29 0)
 			(effects
 				(font

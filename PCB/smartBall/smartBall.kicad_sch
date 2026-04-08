@@ -4923,7 +4923,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "CAPC1608X90N"
+		(property "Footprint" "CL10B105KO8NNNC:CAPC1608X90N"
 			(at 343.84 68.58 0)
 			(effects
 				(font
@@ -5045,7 +5045,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
 			(at 257.302 59.69 90)
 			(effects
 				(font
@@ -5322,7 +5322,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
 			(at 251.1552 33.02 0)
 			(effects
 				(font
@@ -5719,7 +5719,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "CAPC1608X90N"
+		(property "Footprint" "CL10B105KO8NNNC:CAPC1608X90N"
 			(at 95.58 64.77 0)
 			(effects
 				(font
@@ -5907,7 +5907,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
 			(at 257.302 45.72 90)
 			(effects
 				(font
@@ -6107,7 +6107,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical"
 			(at 175.26 95.25 0)
 			(effects
 				(font
@@ -6216,7 +6216,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
 			(at 190.1952 44.45 0)
 			(effects
 				(font
@@ -6286,7 +6286,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "CAPC1608X90N"
+		(property "Footprint" "CL10B105KO8NNNC:CAPC1608X90N"
 			(at 110.82 27.94 0)
 			(effects
 				(font
@@ -6604,7 +6604,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
 			(at 54.61 36.322 90)
 			(effects
 				(font

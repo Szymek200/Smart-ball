@@ -1,0 +1,9 @@
+Manufacturer=Nexperia
+PartNumber=PESD3V3L1BSLZ
+PartCategory=Diode ESD (Bi-directional)
+PackageCategory=Other
+PinCount=2
+Version=2.8
+Released=2025-01-14 11:25:42
+Downloaded=2026-04-08 07:52:20
+3D=Y

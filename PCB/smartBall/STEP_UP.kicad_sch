@@ -5,198 +5,6 @@
 	(uuid "e5eb9094-39c6-40e6-8a14-1b66673d6446")
 	(paper "A4")
 	(lib_symbols
-		(symbol "CL31A226MOCLNNC:CL31A226MOCLNNC"
-			(pin_names
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "C"
-				(at 8.89 6.35 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Value" "CL31A226MOCLNNC"
-				(at 8.89 3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Footprint" "CAPC3216X100N"
-				(at 8.89 -96.19 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "https://datasheet.datasheetarchive.com/originals/distributors/Datasheets_SAMA/f725fe7da06092c10c109ee50d712988.pdf"
-				(at 8.89 -196.19 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Description" "Ceramic capacitor 1206 X5R 16V 22uF Samsung Electro-Mechanics 1206 CL 22uF Ceramic Multilayer Capacitor, 16 V, +85C, X5R Dielectric, +/-20% SMD"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Height" "1"
-				(at 8.89 -396.19 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Mouser Part Number" "187-CL31A226MOCLNNC"
-				(at 8.89 -496.19 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Samsung-Electro-Mechanics/CL31A226MOCLNNC?qs=X6jEic%2FHinD7wddQJyY%252BZw%3D%3D"
-				(at 8.89 -596.19 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer_Name" "SAMSUNG"
-				(at 8.89 -696.19 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer_Part_Number" "CL31A226MOCLNNC"
-				(at 8.89 -796.19 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(symbol "CL31A226MOCLNNC_1_1"
-				(polyline
-					(pts
-						(xy 5.08 0) (xy 5.588 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.588 2.54) (xy 5.588 -2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 7.112 2.54) (xy 7.112 -2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 7.112 0) (xy 7.62 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at 0 0 0)
-					(length 5.08)
-					(name "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 12.7 0 180)
-					(length 5.08)
-					(name "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Device:C"
 			(pin_numbers
 				(hide yes)
@@ -1724,16 +1532,6 @@
 	)
 	(wire
 		(pts
-			(xy 267.97 21.59) (xy 274.32 21.59)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "174009d1-2171-4d19-a158-afc0515229cd")
-	)
-	(wire
-		(pts
 			(xy 279.4 43.18) (xy 270.51 43.18)
 		)
 		(stroke
@@ -1751,6 +1549,26 @@
 			(type default)
 		)
 		(uuid "18eb7686-beb9-46c1-b8af-7441f7327fd3")
+	)
+	(wire
+		(pts
+			(xy 21.59 46.99) (xy 21.59 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1ed2688b-4b37-4d9b-9a88-48978a8fb18a")
+	)
+	(wire
+		(pts
+			(xy 265.43 33.02) (xy 279.4 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "210aa992-f3f5-4650-a7e5-8f5fd6438f40")
 	)
 	(wire
 		(pts
@@ -1794,7 +1612,7 @@
 	)
 	(wire
 		(pts
-			(xy 248.92 21.59) (xy 255.27 21.59)
+			(xy 248.92 21.59) (xy 257.81 21.59)
 		)
 		(stroke
 			(width 0)
@@ -1851,6 +1669,26 @@
 			(type default)
 		)
 		(uuid "33441b53-90ed-4780-bf99-5c75a510d83f")
+	)
+	(wire
+		(pts
+			(xy 265.43 21.59) (xy 274.32 21.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3b97a688-e31b-4efe-b171-d550b13349f6")
+	)
+	(wire
+		(pts
+			(xy 21.59 57.15) (xy 21.59 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3dc39b96-a1a9-4736-8988-b617442fb364")
 	)
 	(wire
 		(pts
@@ -2064,6 +1902,16 @@
 	)
 	(wire
 		(pts
+			(xy 25.4 55.88) (xy 45.72 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "78bbaa4b-ed96-4a59-9a1e-910b64489c32")
+	)
+	(wire
+		(pts
 			(xy 45.72 53.34) (xy 43.18 53.34)
 		)
 		(stroke
@@ -2184,7 +2032,7 @@
 	)
 	(wire
 		(pts
-			(xy 255.27 33.02) (xy 248.92 33.02)
+			(xy 248.92 33.02) (xy 257.81 33.02)
 		)
 		(stroke
 			(width 0)
@@ -2264,6 +2112,26 @@
 	)
 	(wire
 		(pts
+			(xy 25.4 59.69) (xy 25.4 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ad2fbf1f-b23a-4d7e-b0e5-53c0e39784c4")
+	)
+	(wire
+		(pts
+			(xy 21.59 59.69) (xy 25.4 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "afbe7020-0f9e-40e6-8999-d69dce789bab")
+	)
+	(wire
+		(pts
 			(xy 81.28 58.42) (xy 93.98 58.42)
 		)
 		(stroke
@@ -2291,6 +2159,16 @@
 			(type default)
 		)
 		(uuid "b83f698c-a92b-4da4-97b3-53de70a714ef")
+	)
+	(wire
+		(pts
+			(xy 26.67 46.99) (xy 21.59 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bb244e0d-3c5f-44f7-9dbd-d2897259f264")
 	)
 	(wire
 		(pts
@@ -2331,6 +2209,16 @@
 			(type default)
 		)
 		(uuid "cb205406-1a3f-4f59-8aa3-a4f0f3715093")
+	)
+	(wire
+		(pts
+			(xy 26.67 50.8) (xy 26.67 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d0253a0c-69c7-422a-9b9e-84c875dfc9f7")
 	)
 	(wire
 		(pts
@@ -2404,16 +2292,6 @@
 	)
 	(wire
 		(pts
-			(xy 267.97 33.02) (xy 279.4 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e93fb484-65fa-40e1-b5af-0b528d5738fd")
-	)
-	(wire
-		(pts
 			(xy 224.79 50.8) (xy 205.74 50.8)
 		)
 		(stroke
@@ -2451,6 +2329,16 @@
 			(type default)
 		)
 		(uuid "eed6147f-b6d8-4262-b2ad-1648d7959b22")
+	)
+	(wire
+		(pts
+			(xy 45.72 50.8) (xy 26.67 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eefd0bda-0491-4328-b80f-eefcff9a8c42")
 	)
 	(wire
 		(pts
@@ -2502,28 +2390,6 @@
 		)
 		(uuid "fe1fc707-f593-475d-8704-5ecefe255585")
 	)
-	(global_label "STEP_UP_5_ON"
-		(shape input)
-		(at 267.97 58.42 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "012aafdd-c89a-42ee-95c4-f7cc0346df84")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 284.9251 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-	)
 	(global_label "OUT+5V"
 		(shape input)
 		(at 279.4 24.13 90)
@@ -2564,6 +2430,28 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "LOUDNESS"
+		(shape input)
+		(at 267.97 58.42 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "73dec761-363f-495d-b62e-ef618ea900ee")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 280.8128 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 				(hide yes)
 			)
 		)
@@ -2635,126 +2523,6 @@
 		)
 	)
 	(symbol
-		(lib_id "CL31A226MOCLNNC:CL31A226MOCLNNC")
-		(at 255.27 21.59 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "1b9efeff-63aa-4dad-8cb4-59b30e8bbc52")
-		(property "Reference" "C16"
-			(at 261.62 13.97 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "CL31A226MOCLNNC"
-			(at 261.62 16.51 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "CAPC3216X100N"
-			(at 264.16 117.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://datasheet.datasheetarchive.com/originals/distributors/Datasheets_SAMA/f725fe7da06092c10c109ee50d712988.pdf"
-			(at 264.16 217.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Description" "Ceramic capacitor 1206 X5R 16V 22uF Samsung Electro-Mechanics 1206 CL 22uF Ceramic Multilayer Capacitor, 16 V, +85C, X5R Dielectric, +/-20% SMD"
-			(at 255.27 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Height" "1"
-			(at 264.16 417.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Mouser Part Number" "187-CL31A226MOCLNNC"
-			(at 264.16 517.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Samsung-Electro-Mechanics/CL31A226MOCLNNC?qs=X6jEic%2FHinD7wddQJyY%252BZw%3D%3D"
-			(at 264.16 617.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Name" "SAMSUNG"
-			(at 264.16 717.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Part_Number" "CL31A226MOCLNNC"
-			(at 264.16 817.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "cc66c3da-8373-47a4-b696-68e0d8197c27")
-		)
-		(pin "1"
-			(uuid "b73f220d-f146-44df-8957-30f0193779f5")
-		)
-		(instances
-			(project "smartBall"
-				(path "/88604d25-498a-4a0c-bf5d-b8ab9ca45bd7/2520541d-587b-4ff4-8d41-f776640f2402/a42136ab-f28f-49d2-bf82-c971252d7a3a"
-					(reference "C16")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 109.22 49.53 0)
 		(unit 1)
@@ -2815,6 +2583,74 @@
 			(project "smartBall"
 				(path "/88604d25-498a-4a0c-bf5d-b8ab9ca45bd7/2520541d-587b-4ff4-8d41-f776640f2402/a42136ab-f28f-49d2-bf82-c971252d7a3a"
 					(reference "#PWR03")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 261.62 33.02 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3ffc9016-aeff-4477-a828-4078d367977c")
+		(property "Reference" "C15"
+			(at 261.62 25.4 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "220µF"
+			(at 261.62 27.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 257.81 33.9852 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 261.62 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 261.62 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "47a82611-785f-4376-ab46-0925c3208cee")
+		)
+		(pin "2"
+			(uuid "f726f1a7-5344-4976-83ed-16a42b3f8814")
+		)
+		(instances
+			(project ""
+				(path "/88604d25-498a-4a0c-bf5d-b8ab9ca45bd7/2520541d-587b-4ff4-8d41-f776640f2402/a42136ab-f28f-49d2-bf82-c971252d7a3a"
+					(reference "C15")
 					(unit 1)
 				)
 			)
@@ -3087,6 +2923,76 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:L")
+		(at 21.59 53.34 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "81c7c337-3a8f-46dc-8b35-5f6a38b8bbfa")
+		(property "Reference" "L3"
+			(at 22.86 52.0699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2.2µH"
+			(at 22.86 54.6099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 21.59 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 21.59 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Inductor"
+			(at 21.59 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "fd19c67e-7531-4970-81b9-dbbcbc821bc9")
+		)
+		(pin "1"
+			(uuid "beb28955-8a10-4e0a-ae32-404a08cd8ca0")
+		)
+		(instances
+			(project ""
+				(path "/88604d25-498a-4a0c-bf5d-b8ab9ca45bd7/2520541d-587b-4ff4-8d41-f776640f2402/a42136ab-f28f-49d2-bf82-c971252d7a3a"
+					(reference "L3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 87.63 64.77 0)
 		(unit 1)
@@ -3248,7 +3154,7 @@
 				)
 			)
 		)
-		(property "Footprint" "SOP65P640X120-17N"
+		(property "Footprint" "TPS61032PWP:SOP65P640X120-17N"
 			(at 256.54 135.56 0)
 			(effects
 				(font
@@ -3681,7 +3587,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TPS63000IDRCRQ1"
+		(property "Footprint" "TPS63000DRCRQ1:TPS63000IDRCRQ1"
 			(at 77.47 133.02 0)
 			(effects
 				(font
@@ -3951,53 +3857,33 @@
 		)
 	)
 	(symbol
-		(lib_id "CL31A226MOCLNNC:CL31A226MOCLNNC")
-		(at 255.27 33.02 0)
+		(lib_id "Device:C")
+		(at 261.62 21.59 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "ec143937-da0e-4c75-aebb-bd2af50d0a73")
-		(property "Reference" "C15"
-			(at 261.62 25.4 0)
+		(uuid "fea5a24d-3d1c-4808-a92d-56d4fb3026f3")
+		(property "Reference" "C16"
+			(at 261.62 13.97 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "CL31A226MOCLNNC"
-			(at 261.62 27.94 0)
+		(property "Value" "2.2µF"
+			(at 261.62 16.51 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "CAPC3216X100N"
-			(at 264.16 129.21 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://datasheet.datasheetarchive.com/originals/distributors/Datasheets_SAMA/f725fe7da06092c10c109ee50d712988.pdf"
-			(at 264.16 229.21 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Description" "Ceramic capacitor 1206 X5R 16V 22uF Samsung Electro-Mechanics 1206 CL 22uF Ceramic Multilayer Capacitor, 16 V, +85C, X5R Dielectric, +/-20% SMD"
-			(at 255.27 33.02 0)
+		(property "Footprint" ""
+			(at 265.43 20.6248 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4005,66 +3891,34 @@
 				(hide yes)
 			)
 		)
-		(property "Height" "1"
-			(at 264.16 429.21 0)
+		(property "Datasheet" "~"
+			(at 261.62 21.59 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left top)
 				(hide yes)
 			)
 		)
-		(property "Mouser Part Number" "187-CL31A226MOCLNNC"
-			(at 264.16 529.21 0)
+		(property "Description" "Unpolarized capacitor"
+			(at 261.62 21.59 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left top)
 				(hide yes)
 			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Samsung-Electro-Mechanics/CL31A226MOCLNNC?qs=X6jEic%2FHinD7wddQJyY%252BZw%3D%3D"
-			(at 264.16 629.21 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Name" "SAMSUNG"
-			(at 264.16 729.21 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Part_Number" "CL31A226MOCLNNC"
-			(at 264.16 829.21 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "e8dc8bd3-dcc3-41fa-a110-74ca38ddd8c4")
 		)
 		(pin "1"
-			(uuid "86140e43-9cb1-4bef-a64c-87e1a5a59b2a")
+			(uuid "01a949b5-924d-43b5-9a27-a45139703210")
+		)
+		(pin "2"
+			(uuid "9aa3922c-6a42-459c-b938-866ccc5d7871")
 		)
 		(instances
 			(project ""
 				(path "/88604d25-498a-4a0c-bf5d-b8ab9ca45bd7/2520541d-587b-4ff4-8d41-f776640f2402/a42136ab-f28f-49d2-bf82-c971252d7a3a"
-					(reference "C15")
+					(reference "C16")
 					(unit 1)
 				)
 			)

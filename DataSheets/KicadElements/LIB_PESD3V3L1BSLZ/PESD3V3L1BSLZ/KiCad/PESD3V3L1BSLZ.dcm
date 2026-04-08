@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP PESD3V3L1BSLZ
+D 11.3V Clamp 7.5A (8/20s) Ipp Tvs Diode Surface Mount DFN1006-2
+K
+F https://assets.nexperia.com/documents/data-sheet/PESD3V3L1BSL.pdf
+$ENDCMP
+#
+#End Doc Library

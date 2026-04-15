@@ -4770,10 +4770,6 @@
 		(uuid "aa3b5bd3-806d-412e-9b08-b979d930b210")
 	)
 	(no_connect
-		(at 251.46 66.04)
-		(uuid "b4c6872d-05b4-4d6d-af41-8200cbcb42e5")
-	)
-	(no_connect
 		(at 157.48 123.19)
 		(uuid "ba1e2fc0-3fe1-4d24-86f3-40ae59149f21")
 	)
@@ -4956,6 +4952,16 @@
 			(type default)
 		)
 		(uuid "1e237d62-68aa-4a96-b159-156d9e893eeb")
+	)
+	(wire
+		(pts
+			(xy 251.46 66.04) (xy 251.46 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1e400f1c-beda-4625-aca1-80ab91422d76")
 	)
 	(wire
 		(pts
@@ -7178,7 +7184,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "TestPoint"
+		(property "Value" "USB_VBUS"
 			(at 93.98 174.7519 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7339,7 +7345,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "TestPoint"
+		(property "Value" "USB_DP"
 			(at 109.22 174.7519 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9077,7 +9083,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
+		(property "Value" "BOOT_CFG"
 			(at 35.56 90.6779 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9156,7 +9162,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "TestPoint"
+		(property "Value" "USB_DM"
 			(at 114.3 182.3719 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10224,7 +10230,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "TestPoint"
+		(property "Value" "MDM_LOG_TX"
 			(at 88.9 181.1019 0)
 			(show_name no)
 			(do_not_autoplace no)

@@ -764,164 +764,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Connector_Generic:Conn_01x02"
-			(pin_names
-				(offset 1.016)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "J"
-				(at 0 2.54 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Conn_01x02"
-				(at 0 -5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "connector"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "Connector*:*_1x??_*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "Conn_01x02_1_1"
-				(rectangle
-					(start -1.27 1.27)
-					(end 1.27 -3.81)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(rectangle
-					(start -1.27 0.127)
-					(end 0 -0.127)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 -2.413)
-					(end 0 -2.667)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 3.81)
-					(name "Pin_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -2.54 0)
-					(length 3.81)
-					(name "Pin_2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Device:C"
 			(pin_numbers
 				(hide yes)
@@ -2729,16 +2571,16 @@
 		(uuid "740e127a-d7be-4ee7-a8c1-87cdca4f9f7f")
 	)
 	(junction
+		(at 15.24 62.23)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7b2ca7fc-d92f-4305-ab8e-46455ef56121")
+	)
+	(junction
 		(at 119.38 60.96)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c6a1e723-9a12-423c-bdc8-576affb7f2bf")
-	)
-	(junction
-		(at 15.24 62.23)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ca847532-7d86-4186-ac48-df1cc3363da2")
 	)
 	(no_connect
 		(at 39.37 36.83)
@@ -3232,16 +3074,6 @@
 	)
 	(wire
 		(pts
-			(xy 275.59 87.63) (xy 275.59 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "78f2dbe7-aa83-4e73-9ae1-fd7a636a83ad")
-	)
-	(wire
-		(pts
 			(xy 110.49 59.69) (xy 110.49 64.77)
 		)
 		(stroke
@@ -3259,16 +3091,6 @@
 			(type default)
 		)
 		(uuid "7ec4db26-df00-4e73-a23a-1e221ad2cf5e")
-	)
-	(wire
-		(pts
-			(xy 259.08 68.58) (xy 264.16 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "81777a57-d09a-4266-be88-9be788bf1581")
 	)
 	(wire
 		(pts
@@ -3322,16 +3144,6 @@
 	)
 	(wire
 		(pts
-			(xy 275.59 91.44) (xy 260.35 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8d63154c-cb92-48fa-b698-919dfb2d27dd")
-	)
-	(wire
-		(pts
 			(xy 15.24 62.23) (xy 15.24 64.77)
 		)
 		(stroke
@@ -3372,16 +3184,6 @@
 	)
 	(wire
 		(pts
-			(xy 275.59 85.09) (xy 275.59 74.93)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9c73313a-d6a5-4800-a841-3041b9c29b84")
-	)
-	(wire
-		(pts
 			(xy 27.94 101.6) (xy 31.75 101.6)
 		)
 		(stroke
@@ -3402,16 +3204,6 @@
 	)
 	(wire
 		(pts
-			(xy 264.16 74.93) (xy 264.16 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a646e207-6db5-4912-8e46-848c673c5985")
-	)
-	(wire
-		(pts
 			(xy 58.42 173.99) (xy 62.23 173.99)
 		)
 		(stroke
@@ -3429,16 +3221,6 @@
 			(type default)
 		)
 		(uuid "a7075b02-85ca-4547-bc93-695db5688081")
-	)
-	(wire
-		(pts
-			(xy 275.59 74.93) (xy 264.16 74.93)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "abbce956-3f7d-42c2-8cb0-9340eec3a462")
 	)
 	(wire
 		(pts
@@ -3489,16 +3271,6 @@
 			(type default)
 		)
 		(uuid "bb74c144-77d4-4f29-a4ee-652ff0be1914")
-	)
-	(wire
-		(pts
-			(xy 260.35 91.44) (xy 260.35 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bbcd2fd9-779c-4c1d-8b64-b38eaa55717f")
 	)
 	(wire
 		(pts
@@ -3592,16 +3364,6 @@
 	)
 	(wire
 		(pts
-			(xy 274.32 85.09) (xy 275.59 85.09)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dcbbe704-0c66-4ecf-a17d-4305b102cdea")
-	)
-	(wire
-		(pts
 			(xy 200.66 97.79) (xy 200.66 100.33)
 		)
 		(stroke
@@ -3649,26 +3411,6 @@
 			(type default)
 		)
 		(uuid "e4d16681-15e9-44ed-bbac-772f5a2f7b78")
-	)
-	(wire
-		(pts
-			(xy 274.32 87.63) (xy 275.59 87.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e50ef0c8-eae7-4296-9a76-220a0ff0543a")
-	)
-	(wire
-		(pts
-			(xy 260.35 71.12) (xy 259.08 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e8c7a4cd-9644-4ab6-8b3d-129962498e1a")
 	)
 	(wire
 		(pts
@@ -3795,6 +3537,17 @@
 			(justify left)
 		)
 		(uuid "3ed761dd-534c-4835-baf6-15c2f742b418")
+	)
+	(hierarchical_label "OUT_N"
+		(shape output)
+		(at 259.08 68.58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4671af79-43d8-4270-9b55-f69c5816d9d9")
 	)
 	(hierarchical_label "GPS_POWER"
 		(shape input)
@@ -3927,6 +3680,17 @@
 			(justify left)
 		)
 		(uuid "e9b4c2b2-120c-4445-a53b-a75ee140f938")
+	)
+	(hierarchical_label "OUTP"
+		(shape output)
+		(at 259.08 71.12 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ef813bb0-d3eb-47f8-b279-88377e0f14c4")
 	)
 	(hierarchical_label "OUT+5V"
 		(shape input)
@@ -4597,86 +4361,6 @@
 			(project "MCU_board"
 				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8"
 					(reference "#PWR035")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 269.24 87.63 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "478251d1-df33-484e-881d-5da64548e882")
-		(property "Reference" "J2"
-			(at 269.24 78.74 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Speaker"
-			(at 269.24 81.28 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical"
-			(at 269.24 87.63 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 269.24 87.63 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 269.24 87.63 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "d7e40a19-4d6d-44e2-9245-f643afaa76ab")
-		)
-		(pin "1"
-			(uuid "9700cff0-9c6a-45b9-a046-ef8283ce84c4")
-		)
-		(instances
-			(project "MCU_board"
-				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8"
-					(reference "J2")
 					(unit 1)
 				)
 			)

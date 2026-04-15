@@ -1893,16 +1893,8 @@
 		(uuid "ae56c0db-808e-4696-b129-54b98000716a")
 	)
 	(no_connect
-		(at 227.33 105.41)
-		(uuid "b18cdb47-b006-4855-991e-fbf174fa5de2")
-	)
-	(no_connect
 		(at 232.41 31.75)
 		(uuid "b5b722b0-bc1a-4a84-892c-d3c0106287ac")
-	)
-	(no_connect
-		(at 227.33 102.87)
-		(uuid "b6ef6786-1e32-4183-95d1-6328678e43a3")
 	)
 	(no_connect
 		(at 237.49 31.75)
@@ -2087,6 +2079,16 @@
 			(type default)
 		)
 		(uuid "4885f0d9-aa08-4439-9dee-9074df00a134")
+	)
+	(wire
+		(pts
+			(xy 104.14 166.37) (xy 104.14 171.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "49268d17-2480-48e4-b4cb-6111cceff34d")
 	)
 	(wire
 		(pts
@@ -2320,6 +2322,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 105.41) (xy 227.33 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "85dbfe3e-74ef-4f7c-a53c-b62301bf9fb5")
+	)
+	(wire
+		(pts
 			(xy 59.69 40.64) (xy 72.39 40.64)
 		)
 		(stroke
@@ -2440,6 +2452,16 @@
 	)
 	(wire
 		(pts
+			(xy 101.6 166.37) (xy 101.6 171.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a568872e-72f3-46d7-a368-b3b9ffb36b2c")
+	)
+	(wire
+		(pts
 			(xy 59.69 83.82) (xy 72.39 83.82)
 		)
 		(stroke
@@ -2507,6 +2529,16 @@
 			(type default)
 		)
 		(uuid "bc73d779-564c-4922-9d00-2ff7940833a5")
+	)
+	(wire
+		(pts
+			(xy 224.79 102.87) (xy 227.33 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c99bc5ed-75bb-40f7-809b-a75d28608a07")
 	)
 	(wire
 		(pts
@@ -2748,6 +2780,16 @@
 		)
 		(uuid "0cde53e6-5edf-42cf-beff-c737e0991fc7")
 	)
+	(label "OUT_N"
+		(at 104.14 166.37 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "100101bb-fcc9-4344-ac46-b0b8d1564c3c")
+	)
 	(label "TIMEPULSE"
 		(at 66.04 53.34 180)
 		(effects
@@ -2828,6 +2870,16 @@
 		)
 		(uuid "2eca7fd3-7914-4e74-8b1a-560bbe1fa3d7")
 	)
+	(label "OUT_N"
+		(at 224.79 102.87 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "308e3d7c-f816-4d49-be05-37e342db29a0")
+	)
 	(label "G_BCLK"
 		(at 60.96 73.66 180)
 		(effects
@@ -2858,6 +2910,16 @@
 		)
 		(uuid "3aa705bd-1e6d-4b81-baa9-c0644360c411")
 	)
+	(label "OUT_P"
+		(at 224.79 105.41 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "3fa7f070-828f-43c8-bb9e-94a7b417c30e")
+	)
 	(label "GSM_POWER"
 		(at 124.46 167.64 90)
 		(effects
@@ -2867,6 +2929,16 @@
 			(justify left bottom)
 		)
 		(uuid "45f922c2-423c-4410-ade1-57dc2f6d7439")
+	)
+	(label "OUT_P"
+		(at 101.6 166.37 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4b20af68-4f5f-4cef-a2a7-f861c6ee6f94")
 	)
 	(label "USB_D-"
 		(at 227.33 85.09 180)
@@ -4428,6 +4500,26 @@
 		(pin "STATUS" output
 			(at 161.29 171.45 90)
 			(uuid "894e9b49-cb86-48f0-9ac4-e0ac7d19feae")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "OUTP" output
+			(at 101.6 171.45 90)
+			(uuid "d69d20b7-16a8-4f2a-91e8-65f9bb7e2127")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "OUT_N" output
+			(at 104.14 171.45 90)
+			(uuid "97d447ed-be21-4aca-b19a-39bb8ec58241")
 			(effects
 				(font
 					(size 1.27 1.27)

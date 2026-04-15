@@ -4666,14 +4666,6 @@
 		(uuid "f9d8977b-bbb2-40f4-8890-a6021889cb49")
 	)
 	(no_connect
-		(at 196.85 137.16)
-		(uuid "08b89cc9-150b-4be7-aa0c-eece76ecc46e")
-	)
-	(no_connect
-		(at 224.79 137.16)
-		(uuid "09a55722-b24e-4c22-b075-989fae911815")
-	)
-	(no_connect
 		(at 137.16 52.07)
 		(uuid "0ddc778c-d4d2-45fe-bf10-f73b62a73585")
 	)
@@ -4686,16 +4678,16 @@
 		(uuid "2b1f45f4-7087-4c36-a2c8-ba488b940d51")
 	)
 	(no_connect
-		(at 224.79 134.62)
-		(uuid "46408a45-7359-4654-a9b0-065edb99a4cc")
-	)
-	(no_connect
 		(at 157.48 72.39)
 		(uuid "579dcb20-70e5-4f81-85c2-9bea65d3ec4a")
 	)
 	(no_connect
 		(at 71.12 163.83)
 		(uuid "5a5e881c-1260-4fc0-965b-5f9c92f03250")
+	)
+	(no_connect
+		(at 45.72 97.79)
+		(uuid "5b9f32f9-d083-42ed-bb85-d39718a8e1d5")
 	)
 	(no_connect
 		(at 36.83 82.55)
@@ -4742,7 +4734,7 @@
 		(uuid "91495452-5578-4a4c-b1cd-4544b89c6088")
 	)
 	(no_connect
-		(at 157.48 111.76)
+		(at 157.48 113.03)
 		(uuid "92bec0bc-9838-4975-991c-ae1fea8fa45a")
 	)
 	(no_connect
@@ -4756,10 +4748,6 @@
 	(no_connect
 		(at 81.28 163.83)
 		(uuid "a210d155-1013-40d9-ac55-c4936e1cb4a7")
-	)
-	(no_connect
-		(at 196.85 134.62)
-		(uuid "a28aab68-2db4-4351-9564-5aa04eb6bce5")
 	)
 	(no_connect
 		(at 196.85 139.7)
@@ -4780,6 +4768,10 @@
 	(no_connect
 		(at 45.72 143.51)
 		(uuid "aa3b5bd3-806d-412e-9b08-b979d930b210")
+	)
+	(no_connect
+		(at 251.46 66.04)
+		(uuid "b4c6872d-05b4-4d6d-af41-8200cbcb42e5")
 	)
 	(no_connect
 		(at 157.48 123.19)
@@ -4927,16 +4919,6 @@
 	)
 	(wire
 		(pts
-			(xy 30.48 67.31) (xy 30.48 64.77)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "11f1e5d9-133c-4044-b4a6-7c3094f17d4b")
-	)
-	(wire
-		(pts
 			(xy 86.36 19.05) (xy 86.36 21.59)
 		)
 		(stroke
@@ -4964,16 +4946,6 @@
 			(type default)
 		)
 		(uuid "165b19d5-51e7-4985-bf28-a1b9974aa3b6")
-	)
-	(wire
-		(pts
-			(xy 17.78 44.45) (xy 17.78 48.26)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "16e60f0d-c9ec-487d-9072-13e12a3f9698")
 	)
 	(wire
 		(pts
@@ -5277,6 +5249,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 134.62) (xy 228.6 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "50a946c4-b895-4a59-8e11-13bd04243b0a")
+	)
+	(wire
+		(pts
 			(xy 101.6 33.02) (xy 101.6 52.07)
 		)
 		(stroke
@@ -5477,16 +5459,6 @@
 	)
 	(wire
 		(pts
-			(xy 30.48 44.45) (xy 17.78 44.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6dd27c22-04c1-43b8-b79a-2d977bdc6c19")
-	)
-	(wire
-		(pts
 			(xy 241.3 36.83) (xy 255.27 36.83)
 		)
 		(stroke
@@ -5644,16 +5616,6 @@
 			(type default)
 		)
 		(uuid "85dd7dad-2509-49af-bcfd-183d5684872a")
-	)
-	(wire
-		(pts
-			(xy 38.1 54.61) (xy 43.18 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "85fceabb-f442-48bb-9103-fbed22377df0")
 	)
 	(wire
 		(pts
@@ -5844,16 +5806,6 @@
 			(type default)
 		)
 		(uuid "a7376b68-5110-4014-a461-4f978fabd08f")
-	)
-	(wire
-		(pts
-			(xy 39.37 97.79) (xy 45.72 97.79)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a813368c-6d56-4a2a-beb9-2577734eb553")
 	)
 	(wire
 		(pts
@@ -6077,6 +6029,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 137.16) (xy 228.6 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c14f269e-7860-4d45-960d-bd79be592ed5")
+	)
+	(wire
+		(pts
 			(xy 158.75 36.83) (xy 203.2 36.83)
 		)
 		(stroke
@@ -6104,16 +6066,6 @@
 			(type default)
 		)
 		(uuid "c8b26c31-ddf3-4ac5-8cab-a1e958d26876")
-	)
-	(wire
-		(pts
-			(xy 30.48 49.53) (xy 30.48 44.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ca1fd2f1-0813-458e-9cdf-6ef528ba723d")
 	)
 	(wire
 		(pts
@@ -6297,6 +6249,16 @@
 	)
 	(wire
 		(pts
+			(xy 246.38 66.04) (xy 246.38 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e9df436c-560f-4935-8bef-1897e7603e97")
+	)
+	(wire
+		(pts
 			(xy 132.08 163.83) (xy 132.08 167.64)
 		)
 		(stroke
@@ -6425,6 +6387,16 @@
 		)
 		(uuid "072731f2-5b32-464d-bd3f-b6b992e6adab")
 	)
+	(label "PWRKEY"
+		(at 196.85 134.62 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2845a86f-9053-4ce0-b5b3-9a6ee583307f")
+	)
 	(label "SIM_DATA"
 		(at 233.68 106.68 180)
 		(effects
@@ -6494,6 +6466,16 @@
 			(justify right bottom)
 		)
 		(uuid "76c847d5-d301-4e65-a718-4babcc1ff24e")
+	)
+	(label "PWRKEY"
+		(at 30.48 67.31 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "7c48bc13-3734-476b-9e35-130a7809db9b")
 	)
 	(label "OUT1.8V"
 		(at 34.29 138.43 180)
@@ -6585,29 +6567,15 @@
 		)
 		(uuid "f778b547-d85e-4c7f-9765-a65d781bf5c1")
 	)
-	(global_label "PWRKEY"
-		(shape bidirectional)
-		(at 43.18 54.61 0)
-		(fields_autoplaced yes)
+	(label "STATUS"
+		(at 196.85 137.16 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right bottom)
 		)
-		(uuid "e5123054-e7dc-4ee6-a926-281cec9cde93")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 54.7755 54.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
+		(uuid "f94ef597-acef-42d3-8d6a-201eec13a221")
 	)
 	(hierarchical_label "BAT+"
 		(shape input)
@@ -6621,7 +6589,7 @@
 		(uuid "12928b7e-fcc0-482e-98e4-cf5297f3f651")
 	)
 	(hierarchical_label "GSM_TXD"
-		(shape input)
+		(shape output)
 		(at 228.6 132.08 0)
 		(effects
 			(font
@@ -6630,6 +6598,17 @@
 			(justify left)
 		)
 		(uuid "21a63243-2335-49d5-b9ff-a8ab488b638c")
+	)
+	(hierarchical_label "PWRKEY"
+		(shape input)
+		(at 228.6 134.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6a133cb0-231f-4aa5-a0af-6fc5ab15076c")
 	)
 	(hierarchical_label "GSM_RXD"
 		(shape input)
@@ -6663,6 +6642,17 @@
 			(justify right)
 		)
 		(uuid "84bdba7c-619b-46af-90c2-7e889cb79d3f")
+	)
+	(hierarchical_label "STATUS"
+		(shape output)
+		(at 228.6 137.16 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a7d091e5-1643-4c61-8786-0c1d3d5c6a9d")
 	)
 	(hierarchical_label "VOUT_3V3"
 		(shape input)
@@ -7781,153 +7771,6 @@
 		)
 	)
 	(symbol
-		(lib_id "BSS138:BSS138")
-		(at 38.1 54.61 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "284a2465-dce6-4369-ab7f-cb81950ddd56")
-		(property "Reference" "Q2"
-			(at 26.67 55.8799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "BSS138"
-			(at 26.67 58.4199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "BSS138:SOT95P240X120-3N"
-			(at 26.67 -44.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF"
-			(at 26.67 -144.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Description" "Compact industry standard SOT-23 surface mount package.; 0.22 A, 50 V. RDS(ON) = 3.5  @ VGS = 10 V. RDS(ON) = 6.0  @ VGS = 4.5 V; Rugged and Reliable.; High density cell design for extremely low RDS(ON)."
-			(at 38.1 54.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Height" "1.2"
-			(at 26.67 -344.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" "512-BSS138"
-			(at 26.67 -444.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi-Fairchild/BSS138?qs=HK%252BeIG1iaahCeqBvjB4arg%3D%3D"
-			(at 26.67 -544.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Name" "onsemi"
-			(at 26.67 -644.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Part_Number" "BSS138"
-			(at 26.67 -744.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(pin "2"
-			(uuid "6559e40b-6d7e-4ef7-adc7-c5e4551923e6")
-		)
-		(pin "3"
-			(uuid "514b7b20-2743-4095-925d-7edf41e7686c")
-		)
-		(pin "1"
-			(uuid "11da24de-e142-4913-820f-5cf11e6bea95")
-		)
-		(instances
-			(project "smartBall"
-				(path "/88604d25-498a-4a0c-bf5d-b8ab9ca45bd7/fa45934c-4794-4ba6-bd1a-84173322bb33/ea4c8736-f392-459d-9b84-ce09c609ead2"
-					(reference "Q2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "TXB0104PWR:TXB0104PWR")
 		(at 196.85 127 0)
 		(unit 1)
@@ -8421,84 +8264,6 @@
 			(project "smartBall"
 				(path "/88604d25-498a-4a0c-bf5d-b8ab9ca45bd7/fa45934c-4794-4ba6-bd1a-84173322bb33/ea4c8736-f392-459d-9b84-ce09c609ead2"
 					(reference "C26")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 17.78 48.26 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "5287f7a4-a7b0-4629-8a7d-c69f6b11f55f")
-		(property "Reference" "#PWR061"
-			(at 17.78 54.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 17.78 53.34 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 17.78 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 17.78 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 17.78 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "8fb7fa2a-e219-4395-a4fb-cd1a7b147486")
-		)
-		(instances
-			(project "smartBall"
-				(path "/88604d25-498a-4a0c-bf5d-b8ab9ca45bd7/fa45934c-4794-4ba6-bd1a-84173322bb33/ea4c8736-f392-459d-9b84-ce09c609ead2"
-					(reference "#PWR061")
 					(unit 1)
 				)
 			)

@@ -3228,6 +3228,16 @@
 	)
 	(wire
 		(pts
+			(xy 58.42 165.1) (xy 68.58 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "67e6c5d3-8797-4de0-9032-0a8225f2c0fc")
+	)
+	(wire
+		(pts
 			(xy 39.37 46.99) (xy 15.24 46.99)
 		)
 		(stroke
@@ -3245,6 +3255,16 @@
 			(type default)
 		)
 		(uuid "6ac0cee7-0f56-48db-a16c-1a9b2ac7311c")
+	)
+	(wire
+		(pts
+			(xy 58.42 167.64) (xy 69.85 167.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6dac0295-3ee2-4d73-9e97-f30019cd241d")
 	)
 	(wire
 		(pts
@@ -3886,30 +3906,6 @@
 		)
 		(uuid "fc0938af-e87c-42da-839d-9632faf60d53")
 	)
-	(global_label "G_DIN"
-		(shape output)
-		(at 213.36 63.5 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "e4c3d72f-8883-4145-b842-e7eda1ef8fea")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 204.9319 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-	)
 	(hierarchical_label "RXD"
 		(shape input)
 		(at 31.75 54.61 180)
@@ -3922,7 +3918,7 @@
 		(uuid "0077fc34-5432-47cb-9ff7-75a400745986")
 	)
 	(hierarchical_label "TXD"
-		(shape input)
+		(shape output)
 		(at 31.75 52.07 180)
 		(effects
 			(font
@@ -3945,7 +3941,7 @@
 	)
 	(hierarchical_label "G_DIN"
 		(shape input)
-		(at 210.82 59.69 180)
+		(at 213.36 63.5 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4021,7 +4017,7 @@
 		(uuid "86fa0351-c180-4249-ab39-060f709e09f5")
 	)
 	(hierarchical_label "GSM_TXD"
-		(shape input)
+		(shape output)
 		(at 62.23 173.99 0)
 		(effects
 			(font
@@ -4030,6 +4026,17 @@
 			(justify left)
 		)
 		(uuid "9704c472-e291-4fe8-a594-710e5da47dda")
+	)
+	(hierarchical_label "STATUS"
+		(shape output)
+		(at 68.58 165.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "98b02446-5584-4701-8ace-b44da7cab84c")
 	)
 	(hierarchical_label "GSM_RXD"
 		(shape input)
@@ -4041,6 +4048,17 @@
 			(justify left)
 		)
 		(uuid "9fcffb6f-b812-4241-811d-1d23d45ffec1")
+	)
+	(hierarchical_label "PWRKEY"
+		(shape input)
+		(at 69.85 167.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b20d83da-61fb-42f8-8087-ca835fe35890")
 	)
 	(hierarchical_label "+3V3"
 		(shape input)
@@ -4055,7 +4073,7 @@
 	)
 	(hierarchical_label "+3V3"
 		(shape input)
-		(at 27.94 57.15 180)
+		(at 29.21 57.15 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4065,7 +4083,7 @@
 		(uuid "cb5af6bc-6c67-4a43-a06b-adfd6f60b93f")
 	)
 	(hierarchical_label "TIMEPULSE"
-		(shape input)
+		(shape output)
 		(at 92.71 57.15 0)
 		(effects
 			(font
@@ -4076,7 +4094,7 @@
 		(uuid "d030bc7e-7c87-4e53-a33a-e00b54e1e616")
 	)
 	(hierarchical_label "GPS_INT"
-		(shape input)
+		(shape output)
 		(at 86.36 54.61 0)
 		(effects
 			(font
@@ -6283,7 +6301,7 @@
 				(justify right)
 			)
 		)
-		(pin "GSM_TXD" input
+		(pin "GSM_TXD" output
 			(at 58.42 173.99 0)
 			(uuid "0a5455e0-a7f6-4c2b-85fa-3bb9abeb93ee")
 			(effects
@@ -6306,6 +6324,26 @@
 		(pin "VOUT_3V3" input
 			(at 58.42 181.61 0)
 			(uuid "4c434e52-192a-49fc-a49e-8f40e3706a44")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "PWRKEY" input
+			(at 58.42 167.64 0)
+			(uuid "0ff207b2-dc81-47cc-84cc-629833729f3c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "STATUS" output
+			(at 58.42 165.1 0)
+			(uuid "3a98ef09-c322-4ac9-ab2b-42ebc7f4c0d5")
 			(effects
 				(font
 					(size 1.27 1.27)

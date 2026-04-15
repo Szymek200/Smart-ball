@@ -819,7 +819,7 @@
         "uuid": "88604d25-498a-4a0c-bf5d-b8ab9ca45bd7"
       }
     ],
-    "used_designators": "IC2",
+    "used_designators": "#PWR17,IC2",
     "variants": []
   },
   "sheets": [

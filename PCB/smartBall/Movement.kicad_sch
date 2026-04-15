@@ -1601,7 +1601,7 @@
 		(uuid "fc164314-f2ae-4cf2-a367-e166fd6c40e5")
 	)
 	(hierarchical_label "IMU_INT1"
-		(shape input)
+		(shape output)
 		(at 167.64 77.47 180)
 		(effects
 			(font
@@ -1634,7 +1634,7 @@
 		(uuid "1db8108f-515f-4016-80d2-4e32e406264a")
 	)
 	(hierarchical_label "ACCEL_INT2"
-		(shape input)
+		(shape output)
 		(at 106.68 86.36 0)
 		(effects
 			(font
@@ -1656,7 +1656,7 @@
 		(uuid "4abb1c83-230d-42e9-8a86-f18db0b66299")
 	)
 	(hierarchical_label "MISO"
-		(shape input)
+		(shape output)
 		(at 165.1 69.85 180)
 		(effects
 			(font
@@ -1689,7 +1689,7 @@
 		(uuid "651d7fef-86d1-4994-b347-73d81dd62658")
 	)
 	(hierarchical_label "IMU_INT2"
-		(shape input)
+		(shape output)
 		(at 215.9 72.39 0)
 		(effects
 			(font
@@ -1755,7 +1755,7 @@
 		(uuid "a083e3b7-47e4-4222-9631-8c7fdbf60c90")
 	)
 	(hierarchical_label "ACCEL_INT1"
-		(shape input)
+		(shape output)
 		(at 106.68 82.55 0)
 		(effects
 			(font
@@ -1777,7 +1777,7 @@
 		(uuid "b797fc03-5e2e-42a7-bb9f-e3a605d1cd70")
 	)
 	(hierarchical_label "MISO"
-		(shape input)
+		(shape output)
 		(at 74.93 120.65 270)
 		(effects
 			(font
@@ -1788,7 +1788,7 @@
 		(uuid "cb7fdf07-e116-457c-a72e-4fc824a9d3d2")
 	)
 	(hierarchical_label "DATA_IN"
-		(shape input)
+		(shape output)
 		(at 154.94 72.39 180)
 		(effects
 			(font
@@ -1800,7 +1800,7 @@
 	)
 	(hierarchical_label "WCLK"
 		(shape input)
-		(at 218.44 69.85 0)
+		(at 217.17 69.85 0)
 		(effects
 			(font
 				(size 1.27 1.27)

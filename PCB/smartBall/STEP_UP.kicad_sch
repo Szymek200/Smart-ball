@@ -3811,7 +3811,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TPS63000DRCRQ1:TPS63000IDRCRQ1"
+		(property "Footprint" "TPS63000IDRCRQ1:TPS63000IDRCRQ1"
 			(at 77.47 133.02 0)
 			(hide yes)
 			(show_name no)

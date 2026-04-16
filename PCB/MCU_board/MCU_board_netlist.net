@@ -1,0 +1,8167 @@
+(export
+	(version "E")
+	(design
+		(source "/Users/deuter/repos/Smart-ball/PCB/MCU_board/MCU_board.kicad_sch")
+		(date "2026-04-16T10:39:30")
+		(tool "Eeschema 10.0.0")
+		(sheet
+			(number "1")
+			(name "/")
+			(tstamps "/")
+			(title_block
+				(title)
+				(company)
+				(rev)
+				(date)
+				(source "MCU_board.kicad_sch")
+				(comment
+					(number "1")
+					(value "")
+				)
+				(comment
+					(number "2")
+					(value "")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "2")
+			(name "/Stationary/")
+			(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/")
+			(title_block
+				(title)
+				(company)
+				(rev)
+				(date)
+				(source "Stationary.kicad_sch")
+				(comment
+					(number "1")
+					(value "")
+				)
+				(comment
+					(number "2")
+					(value "")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+		(sheet
+			(number "3")
+			(name "/Stationary/GSM_sheet/")
+			(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			(title_block
+				(title)
+				(company)
+				(rev)
+				(date)
+				(source "GSM_sheet.kicad_sch")
+				(comment
+					(number "1")
+					(value "")
+				)
+				(comment
+					(number "2")
+					(value "")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+	)
+	(components
+		(comp
+			(ref "C1")
+			(value "100nF")
+			(description "Unpolarized capacitor")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(libsource
+				(lib "Device")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "Sheetname")
+				(value "Root")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MCU_board.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b17a0f30-66dc-486c-af9c-0602df99112a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C2")
+			(value "1μF")
+			(description "Unpolarized capacitor")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(libsource
+				(lib "Device")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "Sheetname")
+				(value "Root")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MCU_board.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "0559f891-02ee-4a21-aa39-f9e9e80a8a75")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C3")
+			(value "100nF")
+			(description "Unpolarized capacitor")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(libsource
+				(lib "Device")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "Sheetname")
+				(value "Root")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MCU_board.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "2cd932a5-4f8d-4905-a37f-3efbed754148")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "IC3")
+			(value "ESP32-S3-WROOM-1-N4R8")
+			(footprint "ESP32-S3-WROOM-1-N4R8/:ESP32S3WROOM1N4R8")
+			(datasheet "https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf")
+			(description "Bluetooth, WiFi 802.11b/g/n, Bluetooth v5.0 Transceiver Module 2.4GHz PCB Trace Surface Mount , 3V ~ 3.6V , 95mA ~ 97mA , -40C ~ 65C (TA)")
+			(fields
+				(field
+					(name "Height") "3.25")
+				(field
+					(name "Mouser Part Number") "356-ESP32S3WROM1N4R8")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Espressif-Systems/ESP32-S3-WROOM-1-N4R8?qs=Li%252BoUPsLEnsFpZnU9mcr%2FQ%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Espressif Systems")
+				(field
+					(name "Manufacturer_Part_Number") "ESP32-S3-WROOM-1-N4R8")
+				(field
+					(name "Footprint") "ESP32-S3-WROOM-1-N4R8/:ESP32S3WROOM1N4R8")
+				(field
+					(name "Datasheet") "https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf")
+				(field
+					(name "Description") "Bluetooth, WiFi 802.11b/g/n, Bluetooth v5.0 Transceiver Module 2.4GHz PCB Trace Surface Mount , 3V ~ 3.6V , 95mA ~ 97mA , -40C ~ 65C (TA)")
+			)
+			(libsource
+				(lib "ESP32-S3-WROOM-1-N4R8")
+				(part "ESP32-S3-WROOM-1-N4R8")
+				(description "Bluetooth, WiFi 802.11b/g/n, Bluetooth v5.0 Transceiver Module 2.4GHz PCB Trace Surface Mount , 3V ~ 3.6V , 95mA ~ 97mA , -40C ~ 65C (TA)")
+			)
+			(property
+				(name "Height")
+				(value "3.25")
+			)
+			(property
+				(name "Mouser Part Number")
+				(value "356-ESP32S3WROM1N4R8")
+			)
+			(property
+				(name "Mouser Price/Stock")
+				(value "https://www.mouser.co.uk/ProductDetail/Espressif-Systems/ESP32-S3-WROOM-1-N4R8?qs=Li%252BoUPsLEnsFpZnU9mcr%2FQ%3D%3D")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "Espressif Systems")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "ESP32-S3-WROOM-1-N4R8")
+			)
+			(property
+				(name "Sheetname")
+				(value "Root")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MCU_board.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "739aa32e-b5ec-47a1-9f3e-6398c1246b12")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "16")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "18")
+						)
+						(pin
+							(num "19")
+						)
+						(pin
+							(num "20")
+						)
+						(pin
+							(num "21")
+						)
+						(pin
+							(num "22")
+						)
+						(pin
+							(num "23")
+						)
+						(pin
+							(num "24")
+						)
+						(pin
+							(num "25")
+						)
+						(pin
+							(num "26")
+						)
+						(pin
+							(num "27")
+						)
+						(pin
+							(num "28")
+						)
+						(pin
+							(num "29")
+						)
+						(pin
+							(num "30")
+						)
+						(pin
+							(num "31")
+						)
+						(pin
+							(num "32")
+						)
+						(pin
+							(num "33")
+						)
+						(pin
+							(num "34")
+						)
+						(pin
+							(num "35")
+						)
+						(pin
+							(num "36")
+						)
+						(pin
+							(num "37")
+						)
+						(pin
+							(num "38")
+						)
+						(pin
+							(num "39")
+						)
+						(pin
+							(num "40")
+						)
+						(pin
+							(num "41")
+						)
+						(pin
+							(num "42")
+						)
+						(pin
+							(num "43")
+						)
+						(pin
+							(num "44")
+						)
+						(pin
+							(num "45")
+						)
+						(pin
+							(num "46")
+						)
+						(pin
+							(num "47")
+						)
+						(pin
+							(num "48")
+						)
+						(pin
+							(num "49")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J13")
+			(value "Conn_01x15")
+			(footprint "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical")
+			(description "Generic connector, single row, 01x15, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			(fields
+				(field
+					(name "Footprint") "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic connector, single row, 01x15, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x15")
+				(description "Generic connector, single row, 01x15, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Sheetname")
+				(value "Root")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MCU_board.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "30223dbd-7414-411c-9b57-ba9f037416ba")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "15")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J14")
+			(value "Conn_01x15")
+			(footprint "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical")
+			(description "Generic connector, single row, 01x15, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			(fields
+				(field
+					(name "Footprint") "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic connector, single row, 01x15, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(libsource
+				(lib "Connector_Generic")
+				(part "Conn_01x15")
+				(description "Generic connector, single row, 01x15, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "Sheetname")
+				(value "Root")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MCU_board.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_1x??_*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "8f8e30e7-1a17-433f-a94d-895c6c2c5a18")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "15")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R29")
+			(value "10kΩ")
+			(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+			(description "Resistor")
+			(fields
+				(field
+					(name "Footprint") "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Sheetname")
+				(value "Root")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MCU_board.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "1bfc3c3b-7537-4670-917d-170ca013b216")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R30")
+			(value "10kΩ")
+			(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+			(description "Resistor")
+			(fields
+				(field
+					(name "Footprint") "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Sheetname")
+				(value "Root")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MCU_board.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "fcff59d7-7523-42df-ab0d-bd9346a6a107")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "S1")
+			(value "1825910-6")
+			(footprint "18259106")
+			(datasheet "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=1308111-1_SWITCHES_CORE_PROGRAM_CATALOG&DocType=Catalog%20Section&DocLang=English&PartCntxt=1825910-6&DocFormat=pdf")
+			(description "Body Features: Product Orientation Vertical | Case Material Nylon | Actuator Force 5.64 OZ | Cover Material PET Film | Actuator Force 160 G | Actuator Color Black | Actuator Material PBT | Actuator Profile Extended | Case Color Black | Configuration Features: Operating Function NO | Ganged With | Support Bracket Without | Switch Feedback Type Tactile | Configuration (Pole-Throw) Single Pole - Single Throw | Number of Actuators Single | ESD Grounding Terminal Without | Contact Features: Contact Base Material")
+			(fields
+				(field
+					(name "Height") "5.3")
+				(field
+					(name "TME Electronic Components Part Number")
+				)
+				(field
+					(name "TME Electronic Components Price/Stock")
+				)
+				(field
+					(name "Manufacturer_Name") "TE Connectivity")
+				(field
+					(name "Manufacturer_Part_Number") "1825910-6")
+				(field
+					(name "Footprint") "18259106")
+				(field
+					(name "Datasheet") "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=1308111-1_SWITCHES_CORE_PROGRAM_CATALOG&DocType=Catalog%20Section&DocLang=English&PartCntxt=1825910-6&DocFormat=pdf")
+				(field
+					(name "Description") "Body Features: Product Orientation Vertical | Case Material Nylon | Actuator Force 5.64 OZ | Cover Material PET Film | Actuator Force 160 G | Actuator Color Black | Actuator Material PBT | Actuator Profile Extended | Case Color Black | Configuration Features: Operating Function NO | Ganged With | Support Bracket Without | Switch Feedback Type Tactile | Configuration (Pole-Throw) Single Pole - Single Throw | Number of Actuators Single | ESD Grounding Terminal Without | Contact Features: Contact Base Material")
+			)
+			(libsource
+				(lib "1825910-6")
+				(part "1825910-6")
+				(description "Body Features: Product Orientation Vertical | Case Material Nylon | Actuator Force 5.64 OZ | Cover Material PET Film | Actuator Force 160 G | Actuator Color Black | Actuator Material PBT | Actuator Profile Extended | Case Color Black | Configuration Features: Operating Function NO | Ganged With | Support Bracket Without | Switch Feedback Type Tactile | Configuration (Pole-Throw) Single Pole - Single Throw | Number of Actuators Single | ESD Grounding Terminal Without | Contact Features: Contact Base Material")
+			)
+			(property
+				(name "Height")
+				(value "5.3")
+			)
+			(property
+				(name "TME Electronic Components Part Number")
+				(value "")
+			)
+			(property
+				(name "TME Electronic Components Price/Stock")
+				(value "")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "TE Connectivity")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "1825910-6")
+			)
+			(property
+				(name "Sheetname")
+				(value "Root")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MCU_board.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "44938490-f87d-4f42-a784-6403ff481c11")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "S4")
+			(value "1825910-6")
+			(footprint "18259106")
+			(datasheet "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=1308111-1_SWITCHES_CORE_PROGRAM_CATALOG&DocType=Catalog%20Section&DocLang=English&PartCntxt=1825910-6&DocFormat=pdf")
+			(description "Body Features: Product Orientation Vertical | Case Material Nylon | Actuator Force 5.64 OZ | Cover Material PET Film | Actuator Force 160 G | Actuator Color Black | Actuator Material PBT | Actuator Profile Extended | Case Color Black | Configuration Features: Operating Function NO | Ganged With | Support Bracket Without | Switch Feedback Type Tactile | Configuration (Pole-Throw) Single Pole - Single Throw | Number of Actuators Single | ESD Grounding Terminal Without | Contact Features: Contact Base Material")
+			(fields
+				(field
+					(name "Height") "5.3")
+				(field
+					(name "TME Electronic Components Part Number")
+				)
+				(field
+					(name "TME Electronic Components Price/Stock")
+				)
+				(field
+					(name "Manufacturer_Name") "TE Connectivity")
+				(field
+					(name "Manufacturer_Part_Number") "1825910-6")
+				(field
+					(name "Footprint") "18259106")
+				(field
+					(name "Datasheet") "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=1308111-1_SWITCHES_CORE_PROGRAM_CATALOG&DocType=Catalog%20Section&DocLang=English&PartCntxt=1825910-6&DocFormat=pdf")
+				(field
+					(name "Description") "Body Features: Product Orientation Vertical | Case Material Nylon | Actuator Force 5.64 OZ | Cover Material PET Film | Actuator Force 160 G | Actuator Color Black | Actuator Material PBT | Actuator Profile Extended | Case Color Black | Configuration Features: Operating Function NO | Ganged With | Support Bracket Without | Switch Feedback Type Tactile | Configuration (Pole-Throw) Single Pole - Single Throw | Number of Actuators Single | ESD Grounding Terminal Without | Contact Features: Contact Base Material")
+			)
+			(libsource
+				(lib "1825910-6")
+				(part "1825910-6")
+				(description "Body Features: Product Orientation Vertical | Case Material Nylon | Actuator Force 5.64 OZ | Cover Material PET Film | Actuator Force 160 G | Actuator Color Black | Actuator Material PBT | Actuator Profile Extended | Case Color Black | Configuration Features: Operating Function NO | Ganged With | Support Bracket Without | Switch Feedback Type Tactile | Configuration (Pole-Throw) Single Pole - Single Throw | Number of Actuators Single | ESD Grounding Terminal Without | Contact Features: Contact Base Material")
+			)
+			(property
+				(name "Height")
+				(value "5.3")
+			)
+			(property
+				(name "TME Electronic Components Part Number")
+				(value "")
+			)
+			(property
+				(name "TME Electronic Components Price/Stock")
+				(value "")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "TE Connectivity")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "1825910-6")
+			)
+			(property
+				(name "Sheetname")
+				(value "Root")
+			)
+			(property
+				(name "Sheetfile")
+				(value "MCU_board.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "4b534845-df8d-4e1f-b8af-7e57506601e5")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C8")
+			(value "100 nF")
+			(footprint "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm")
+			(description "Unpolarized capacitor")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(libsource
+				(lib "Device")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "Sheetname")
+				(value "Stationary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Stationary.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Stationary/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/")
+			)
+			(tstamps "f8d51cdc-3003-412b-bd57-a0d7c8224a12")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "IC1")
+			(value "NEO-F10N-00B")
+			(footprint "NEO-F10N-00B:NEOF10N00B")
+			(datasheet "https://content.u-blox.com/sites/default/files/documents/NEO-F10N_DataSheet_UBX-23002117.pdf")
+			(description "GNSS / GPS Modules u-blox F10 GNSS module Flash, TCXO, SAW, LNA LCC, 12x16 mm, 250 pcs/reel")
+			(fields
+				(field
+					(name "Height") "2.6")
+				(field
+					(name "Mouser Part Number") "377-NEO-F10N-00B")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/u-blox/NEO-F10N-00B?qs=Imq1NPwxi76uVH%2FItRhLgw%3D%3D")
+				(field
+					(name "Manufacturer_Name") "u-blox")
+				(field
+					(name "Manufacturer_Part_Number") "NEO-F10N-00B")
+				(field
+					(name "Footprint") "NEO-F10N-00B:NEOF10N00B")
+				(field
+					(name "Datasheet") "https://content.u-blox.com/sites/default/files/documents/NEO-F10N_DataSheet_UBX-23002117.pdf")
+				(field
+					(name "Description") "GNSS / GPS Modules u-blox F10 GNSS module Flash, TCXO, SAW, LNA LCC, 12x16 mm, 250 pcs/reel")
+			)
+			(libsource
+				(lib "NEO-F10N-00B")
+				(part "NEO-F10N-00B")
+				(description "GNSS / GPS Modules u-blox F10 GNSS module Flash, TCXO, SAW, LNA LCC, 12x16 mm, 250 pcs/reel")
+			)
+			(property
+				(name "Height")
+				(value "2.6")
+			)
+			(property
+				(name "Mouser Part Number")
+				(value "377-NEO-F10N-00B")
+			)
+			(property
+				(name "Mouser Price/Stock")
+				(value "https://www.mouser.co.uk/ProductDetail/u-blox/NEO-F10N-00B?qs=Imq1NPwxi76uVH%2FItRhLgw%3D%3D")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "u-blox")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "NEO-F10N-00B")
+			)
+			(property
+				(name "Sheetname")
+				(value "Stationary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Stationary.kicad_sch")
+			)
+			(sheetpath
+				(names "/Stationary/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/")
+			)
+			(tstamps "f82c8763-7919-4d04-a761-a2eca65bd8cd")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "16")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "18")
+						)
+						(pin
+							(num "19")
+						)
+						(pin
+							(num "20")
+						)
+						(pin
+							(num "21")
+						)
+						(pin
+							(num "22")
+						)
+						(pin
+							(num "23")
+						)
+						(pin
+							(num "24")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "IC6")
+			(value "4259-63")
+			(footprint "4259-63:SOT65P210X110-6N")
+			(datasheet "http://www.psemi.com/pdf/datasheets/pe4259ds.pdf")
+			(description "RF switch IC")
+			(fields
+				(field
+					(name "Height") "1.1")
+				(field
+					(name "Mouser Part Number") "81-4259-63")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/pSemi/4259-63?qs=iw0hurA%2FaD37qvQcKdATTw%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Peregrine Semiconductor")
+				(field
+					(name "Manufacturer_Part_Number") "4259-63")
+				(field
+					(name "Footprint") "4259-63:SOT65P210X110-6N")
+				(field
+					(name "Datasheet") "http://www.psemi.com/pdf/datasheets/pe4259ds.pdf")
+				(field
+					(name "Description") "RF switch IC")
+			)
+			(libsource
+				(lib "4259-63")
+				(part "4259-63")
+				(description "RF switch IC")
+			)
+			(property
+				(name "Height")
+				(value "1.1")
+			)
+			(property
+				(name "Mouser Part Number")
+				(value "81-4259-63")
+			)
+			(property
+				(name "Mouser Price/Stock")
+				(value "https://www.mouser.co.uk/ProductDetail/pSemi/4259-63?qs=iw0hurA%2FaD37qvQcKdATTw%3D%3D")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "Peregrine Semiconductor")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "4259-63")
+			)
+			(property
+				(name "Sheetname")
+				(value "Stationary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Stationary.kicad_sch")
+			)
+			(sheetpath
+				(names "/Stationary/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/")
+			)
+			(tstamps "6b81cfc7-2a3b-475b-8528-55e2940549de")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "IC8")
+			(value "MAX98357AETE+T")
+			(footprint "MAX98357AETE+T:QFN50P300X300X80-17N")
+			(datasheet "https://datasheets.maximintegrated.com/en/ds/MAX98357A-MAX98357B.pdf")
+			(description "Audio Amplifiers Digital Input Class D Amplifier")
+			(fields
+				(field
+					(name "Height") "0.8")
+				(field
+					(name "Mouser Part Number") "700-MAX98357AETE+T")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Analog-Devices-Maxim-Integrated/MAX98357AETE%2bT?qs=AAveGqk956HhNpoJjF5x2g%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Analog Devices")
+				(field
+					(name "Manufacturer_Part_Number") "MAX98357AETE+T")
+				(field
+					(name "Footprint") "MAX98357AETE+T:QFN50P300X300X80-17N")
+				(field
+					(name "Datasheet") "https://datasheets.maximintegrated.com/en/ds/MAX98357A-MAX98357B.pdf")
+				(field
+					(name "Description") "Audio Amplifiers Digital Input Class D Amplifier")
+			)
+			(libsource
+				(lib "MAX98357AETE+T")
+				(part "MAX98357AETE+T")
+				(description "Audio Amplifiers Digital Input Class D Amplifier")
+			)
+			(property
+				(name "Height")
+				(value "0.8")
+			)
+			(property
+				(name "Mouser Part Number")
+				(value "700-MAX98357AETE+T")
+			)
+			(property
+				(name "Mouser Price/Stock")
+				(value "https://www.mouser.co.uk/ProductDetail/Analog-Devices-Maxim-Integrated/MAX98357AETE%2bT?qs=AAveGqk956HhNpoJjF5x2g%3D%3D")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "Analog Devices")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "MAX98357AETE+T")
+			)
+			(property
+				(name "Sheetname")
+				(value "Stationary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Stationary.kicad_sch")
+			)
+			(sheetpath
+				(names "/Stationary/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/")
+			)
+			(tstamps "2958e107-a61d-4fe3-ada6-ea6b8006f8d4")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "16")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "9")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J4")
+			(value "FXP612 (u.FL) 2")
+			(footprint "Connector_Coaxial:U.FL_Molex_MCRF_73412-0110_Vertical")
+			(description "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)")
+			(fields
+				(field
+					(name "Footprint") "Connector_Coaxial:U.FL_Molex_MCRF_73412-0110_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)")
+			)
+			(libsource
+				(lib "Connector")
+				(part "Conn_Coaxial")
+				(description "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)")
+			)
+			(property
+				(name "Sheetname")
+				(value "Stationary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Stationary.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "BNC SMA SMB SMC LEMO coaxial connector CINCH RCA MCX MMCX U.FL UMRF")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*BNC* *SMA* *SMB* *SMC* *Cinch* *LEMO* *UMRF* *MCX* *U.FL*")
+			)
+			(sheetpath
+				(names "/Stationary/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/")
+			)
+			(tstamps "f36d0976-9f61-4713-af9d-8d7006fdb957")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J5")
+			(value "FXP612 (u.FL) 1")
+			(footprint "Connector_Coaxial:U.FL_Molex_MCRF_73412-0110_Vertical")
+			(description "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)")
+			(fields
+				(field
+					(name "Footprint") "Connector_Coaxial:U.FL_Molex_MCRF_73412-0110_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)")
+			)
+			(libsource
+				(lib "Connector")
+				(part "Conn_Coaxial")
+				(description "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)")
+			)
+			(property
+				(name "Sheetname")
+				(value "Stationary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Stationary.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "BNC SMA SMB SMC LEMO coaxial connector CINCH RCA MCX MMCX U.FL UMRF")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*BNC* *SMA* *SMB* *SMC* *Cinch* *LEMO* *UMRF* *MCX* *U.FL*")
+			)
+			(sheetpath
+				(names "/Stationary/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/")
+			)
+			(tstamps "93e276e7-6c1c-4a3e-b252-af2352f94099")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q3")
+			(value "Si2323DDS-T1-GE3")
+			(footprint "Si2323DDS-T1-GE3:SOT95P237X112-3N")
+			(datasheet "https://altium.componentsearchengine.com/Datasheets/2/SI2323DDS-T1-GE3.pdf")
+			(description "VISHAY - SI2323DDS-T1-GE3 - Power MOSFET, P Channel, 20 V, 5.3 A, 0.032 ohm, SOT-23, Surface Mount")
+			(fields
+				(field
+					(name "Height") "1.12")
+				(field
+					(name "Mouser Part Number") "78-SI2323DDS-T1-GE3")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/SI2323DDS-T1-GE3?qs=vgn07B5hXavjZXK0uPQNiA%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Vishay")
+				(field
+					(name "Manufacturer_Part_Number") "Si2323DDS-T1-GE3")
+				(field
+					(name "Footprint") "Si2323DDS-T1-GE3:SOT95P237X112-3N")
+				(field
+					(name "Datasheet") "https://altium.componentsearchengine.com/Datasheets/2/SI2323DDS-T1-GE3.pdf")
+				(field
+					(name "Description") "VISHAY - SI2323DDS-T1-GE3 - Power MOSFET, P Channel, 20 V, 5.3 A, 0.032 ohm, SOT-23, Surface Mount")
+			)
+			(libsource
+				(lib "Si2323DDS-T1-GE3")
+				(part "Si2323DDS-T1-GE3")
+				(description "VISHAY - SI2323DDS-T1-GE3 - Power MOSFET, P Channel, 20 V, 5.3 A, 0.032 ohm, SOT-23, Surface Mount")
+			)
+			(property
+				(name "Height")
+				(value "1.12")
+			)
+			(property
+				(name "Mouser Part Number")
+				(value "78-SI2323DDS-T1-GE3")
+			)
+			(property
+				(name "Mouser Price/Stock")
+				(value "https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/SI2323DDS-T1-GE3?qs=vgn07B5hXavjZXK0uPQNiA%3D%3D")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "Vishay")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "Si2323DDS-T1-GE3")
+			)
+			(property
+				(name "Sheetname")
+				(value "Stationary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Stationary.kicad_sch")
+			)
+			(sheetpath
+				(names "/Stationary/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/")
+			)
+			(tstamps "25fa58f3-9b9a-4e59-a43c-50db7f7d1a31")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q4")
+			(value "BSS138")
+			(footprint "BSS138:SOT95P240X120-3N")
+			(datasheet "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF")
+			(description "Compact industry standard SOT-23 surface mount package.; 0.22 A, 50 V. RDS(ON) = 3.5  @ VGS = 10 V. RDS(ON) = 6.0  @ VGS = 4.5 V; Rugged and Reliable.; High density cell design for extremely low RDS(ON).")
+			(fields
+				(field
+					(name "Height") "1.2")
+				(field
+					(name "Mouser Part Number") "512-BSS138")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/onsemi-Fairchild/BSS138?qs=HK%252BeIG1iaahCeqBvjB4arg%3D%3D")
+				(field
+					(name "Manufacturer_Name") "onsemi")
+				(field
+					(name "Manufacturer_Part_Number") "BSS138")
+				(field
+					(name "Footprint") "BSS138:SOT95P240X120-3N")
+				(field
+					(name "Datasheet") "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF")
+				(field
+					(name "Description") "Compact industry standard SOT-23 surface mount package.; 0.22 A, 50 V. RDS(ON) = 3.5  @ VGS = 10 V. RDS(ON) = 6.0  @ VGS = 4.5 V; Rugged and Reliable.; High density cell design for extremely low RDS(ON).")
+			)
+			(libsource
+				(lib "BSS138")
+				(part "BSS138")
+				(description "Compact industry standard SOT-23 surface mount package.; 0.22 A, 50 V. RDS(ON) = 3.5  @ VGS = 10 V. RDS(ON) = 6.0  @ VGS = 4.5 V; Rugged and Reliable.; High density cell design for extremely low RDS(ON).")
+			)
+			(property
+				(name "Height")
+				(value "1.2")
+			)
+			(property
+				(name "Mouser Part Number")
+				(value "512-BSS138")
+			)
+			(property
+				(name "Mouser Price/Stock")
+				(value "https://www.mouser.co.uk/ProductDetail/onsemi-Fairchild/BSS138?qs=HK%252BeIG1iaahCeqBvjB4arg%3D%3D")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "onsemi")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "BSS138")
+			)
+			(property
+				(name "Sheetname")
+				(value "Stationary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Stationary.kicad_sch")
+			)
+			(sheetpath
+				(names "/Stationary/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/")
+			)
+			(tstamps "b4d070e9-92fa-475d-89f0-91e410d8adfd")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R16")
+			(value "680kΩ")
+			(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+			(description "Resistor")
+			(fields
+				(field
+					(name "Footprint") "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Sheetname")
+				(value "Stationary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Stationary.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Stationary/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/")
+			)
+			(tstamps "01e78d2c-47fa-47db-95dc-12ebb41ab9b7")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R17")
+			(value "10kΩ")
+			(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+			(description "Resistor")
+			(fields
+				(field
+					(name "Footprint") "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Sheetname")
+				(value "Stationary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Stationary.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Stationary/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/")
+			)
+			(tstamps "2fb23025-7cca-4869-b0bb-92d75f3fae0a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R26")
+			(value "100kΩ")
+			(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+			(description "Resistor")
+			(fields
+				(field
+					(name "Footprint") "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Sheetname")
+				(value "Stationary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Stationary.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Stationary/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/")
+			)
+			(tstamps "b4e7e052-fc45-4a6a-8937-86789f855563")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R28")
+			(value "10kΩ")
+			(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+			(description "Resistor")
+			(fields
+				(field
+					(name "Footprint") "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Sheetname")
+				(value "Stationary")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Stationary.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Stationary/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/")
+			)
+			(tstamps "b1f23fc0-0aba-4306-b519-750429bece65")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C10")
+			(value "CL10B104KO8NNNC")
+			(footprint "CL10B104KO8NNNC:CAPC1608X90N")
+			(datasheet "https://datasheet.datasheetarchive.com/originals/distributors/Datasheets_SAMA/482ee8b8a1396945e1abac0da9778f7f.pdf")
+			(description "Samsung Electro-Mechanics 0603 (1608M) 100nF Multilayer Ceramic Capacitor MLCC 16V dc +/-10% SMD CL10B104KO8NNNC")
+			(fields
+				(field
+					(name "Height") "0.9")
+				(field
+					(name "Mouser Part Number") "187-CL10B104KO8NNNC")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Samsung-Electro-Mechanics/CL10B104KO8NNNC?qs=349EhDEZ59pqoJFRnk4a8w%3D%3D")
+				(field
+					(name "Manufacturer_Name") "SAMSUNG")
+				(field
+					(name "Manufacturer_Part_Number") "CL10B104KO8NNNC")
+				(field
+					(name "Footprint") "CL10B104KO8NNNC:CAPC1608X90N")
+				(field
+					(name "Datasheet") "https://datasheet.datasheetarchive.com/originals/distributors/Datasheets_SAMA/482ee8b8a1396945e1abac0da9778f7f.pdf")
+				(field
+					(name "Description") "Samsung Electro-Mechanics 0603 (1608M) 100nF Multilayer Ceramic Capacitor MLCC 16V dc +/-10% SMD CL10B104KO8NNNC")
+			)
+			(libsource
+				(lib "CL10B104KO8NNNC")
+				(part "CL10B104KO8NNNC")
+				(description "Samsung Electro-Mechanics 0603 (1608M) 100nF Multilayer Ceramic Capacitor MLCC 16V dc +/-10% SMD CL10B104KO8NNNC")
+			)
+			(property
+				(name "Height")
+				(value "0.9")
+			)
+			(property
+				(name "Mouser Part Number")
+				(value "187-CL10B104KO8NNNC")
+			)
+			(property
+				(name "Mouser Price/Stock")
+				(value "https://www.mouser.co.uk/ProductDetail/Samsung-Electro-Mechanics/CL10B104KO8NNNC?qs=349EhDEZ59pqoJFRnk4a8w%3D%3D")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "SAMSUNG")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "CL10B104KO8NNNC")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "cf3b0e18-dde3-4de7-b2b4-e1fa60212dec")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C12")
+			(value "0F")
+			(footprint "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm")
+			(description "Unpolarized capacitor")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(libsource
+				(lib "Device")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "e263960d-e294-4477-9367-78ade1a22997")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C13")
+			(value "0F")
+			(footprint "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm")
+			(description "Unpolarized capacitor")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(libsource
+				(lib "Device")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "4084cf3a-2bef-48e8-aa78-649fa42d8f8d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C22")
+			(value "1000nF")
+			(footprint "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm")
+			(description "Unpolarized capacitor")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(libsource
+				(lib "Device")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "b0fb75d2-984f-4342-b4de-2f0464dc4c49")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C23")
+			(value "100µF")
+			(footprint "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm")
+			(description "Polarized capacitor")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Polarized capacitor")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Polarized")
+				(description "Polarized capacitor")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "CP_*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "1aa756d9-cf5c-44da-b12b-ac0aed95ebb7")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C24")
+			(value "100µF")
+			(footprint "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm")
+			(description "Polarized capacitor")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Polarized capacitor")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Polarized")
+				(description "Polarized capacitor")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "CP_*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "7fa59e4e-667e-4968-8bd0-515bcf4cb016")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C25")
+			(value "100µF")
+			(footprint "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm")
+			(description "Polarized capacitor")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Polarized capacitor")
+			)
+			(libsource
+				(lib "Device")
+				(part "C_Polarized")
+				(description "Polarized capacitor")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "CP_*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "0dadb8e2-afd8-49ae-92bc-64d52b9c214f")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C26")
+			(value "1µF")
+			(footprint "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm")
+			(description "Unpolarized capacitor")
+			(fields
+				(field
+					(name "Footprint") "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(libsource
+				(lib "Device")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "49045b48-1120-4c98-a760-0856f6666ebb")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D4")
+			(value "LED")
+			(footprint "Diode_THT:D_DO-41_SOD81_P7.62mm_Horizontal")
+			(description "Light emitting diode")
+			(fields
+				(field
+					(name "Sim.Pins") "1=K 2=A")
+				(field
+					(name "Footprint") "Diode_THT:D_DO-41_SOD81_P7.62mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Light emitting diode")
+			)
+			(libsource
+				(lib "Device")
+				(part "LED")
+				(description "Light emitting diode")
+			)
+			(property
+				(name "Sim.Pins")
+				(value "1=K 2=A")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "LED diode")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "LED* LED_SMD:* LED_THT:*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "ffa463f8-29c4-4c4a-bcd2-1a4efbeb9e79")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D5")
+			(value "PESD3V3L1BSLZ")
+			(footprint "PESD3V3L1BSLZ:PESD3V3L1BSLZ")
+			(datasheet "https://assets.nexperia.com/documents/data-sheet/PESD3V3L1BSL.pdf")
+			(description "11.3V Clamp 7.5A (8/20s) Ipp Tvs Diode Surface Mount DFN1006-2")
+			(fields
+				(field
+					(name "Height") "0.45")
+				(field
+					(name "Mouser Part Number") "771-PESD3V3L1BSLZ")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Nexperia/PESD3V3L1BSLZ?qs=Li%252BoUPsLEnsrB%2FnSgNrAWw%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Nexperia")
+				(field
+					(name "Manufacturer_Part_Number") "PESD3V3L1BSLZ")
+				(field
+					(name "Footprint") "PESD3V3L1BSLZ:PESD3V3L1BSLZ")
+				(field
+					(name "Datasheet") "https://assets.nexperia.com/documents/data-sheet/PESD3V3L1BSL.pdf")
+				(field
+					(name "Description") "11.3V Clamp 7.5A (8/20s) Ipp Tvs Diode Surface Mount DFN1006-2")
+			)
+			(libsource
+				(lib "PESD3V3L1BSLZ")
+				(part "PESD3V3L1BSLZ")
+				(description "11.3V Clamp 7.5A (8/20s) Ipp Tvs Diode Surface Mount DFN1006-2")
+			)
+			(property
+				(name "Height")
+				(value "0.45")
+			)
+			(property
+				(name "Mouser Part Number")
+				(value "771-PESD3V3L1BSLZ")
+			)
+			(property
+				(name "Mouser Price/Stock")
+				(value "https://www.mouser.co.uk/ProductDetail/Nexperia/PESD3V3L1BSLZ?qs=Li%252BoUPsLEnsrB%2FnSgNrAWw%3D%3D")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "Nexperia")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "PESD3V3L1BSLZ")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "dbfa9442-3e51-4947-a3f3-2cb983e7eecd")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "FB1")
+			(value "280Ω")
+			(footprint "Inductor_SMD:L_0805_2012Metric_Pad1.05x1.20mm_HandSolder")
+			(description "Ferrite bead")
+			(fields
+				(field
+					(name "Footprint") "Inductor_SMD:L_0805_2012Metric_Pad1.05x1.20mm_HandSolder")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Ferrite bead")
+			)
+			(libsource
+				(lib "Device")
+				(part "FerriteBead")
+				(description "Ferrite bead")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "L ferrite bead inductor filter")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Inductor_* L_* *Ferrite*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "7d1c8e83-2e2b-4051-bf5f-f4e36657b816")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "IC2")
+			(value "TXB0104PWR")
+			(footprint "Smartball_footprints:SOP65P640X120-14N")
+			(datasheet "http://www.ti.com/lit/ds/symlink/txb0104.pdf")
+			(description "4-Bit Bidirectional Voltage-Level Shifter with Auto Direction Sensing and +/-15 kV ESD Protect")
+			(fields
+				(field
+					(name "Height") "1.2")
+				(field
+					(name "Mouser Part Number") "595-TXB0104PWR")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Texas-Instruments/TXB0104PWR?qs=oFXvjAmG9EjSF69GpMWq5w%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Texas Instruments")
+				(field
+					(name "Manufacturer_Part_Number") "TXB0104PWR")
+				(field
+					(name "Footprint") "Smartball_footprints:SOP65P640X120-14N")
+				(field
+					(name "Datasheet") "http://www.ti.com/lit/ds/symlink/txb0104.pdf")
+				(field
+					(name "Description") "4-Bit Bidirectional Voltage-Level Shifter with Auto Direction Sensing and +/-15 kV ESD Protect")
+			)
+			(libsource
+				(lib "TXB0104PWR")
+				(part "TXB0104PWR")
+				(description "4-Bit Bidirectional Voltage-Level Shifter with Auto Direction Sensing and +/-15 kV ESD Protect")
+			)
+			(property
+				(name "Height")
+				(value "1.2")
+			)
+			(property
+				(name "Mouser Part Number")
+				(value "595-TXB0104PWR")
+			)
+			(property
+				(name "Mouser Price/Stock")
+				(value "https://www.mouser.co.uk/ProductDetail/Texas-Instruments/TXB0104PWR?qs=oFXvjAmG9EjSF69GpMWq5w%3D%3D")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "Texas Instruments")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "TXB0104PWR")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "38bf3c7e-0b98-41c0-8cc6-cf7cb31659d1")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "8")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J6")
+			(value "SIM8055-6-1-14-00-A")
+			(footprint "SIM8055-6-1-14-00-A:GCT_SIM8055-6-1-14-00-A")
+			(fields
+				(field
+					(name "MF") "Global Connector Technology")
+				(field
+					(name "MAXIMUM_PACKAGE_HEIGHT") "1.35mm")
+				(field
+					(name "Package") "None")
+				(field
+					(name "Price") "None")
+				(field
+					(name "Check_prices") "https://www.snapeda.com/parts/SIM8055-6-1-14-00-A/Global+Connector+Technology/view-part/?ref=eda")
+				(field
+					(name "STANDARD") "Manufacturer recommendations")
+				(field
+					(name "PARTREV") "A1")
+				(field
+					(name "SnapEDA_Link") "https://www.snapeda.com/parts/SIM8055-6-1-14-00-A/Global+Connector+Technology/view-part/?ref=snap")
+				(field
+					(name "MP") "SIM8055-6-1-14-00-A")
+				(field
+					(name "Description_1") "7 (6 + 1) Position Card Connector NANO SIM Surface Mount, Right Angle Gold")
+				(field
+					(name "Availability") "In Stock")
+				(field
+					(name "MANUFACTURER") "Global Connector Technology")
+				(field
+					(name "Footprint") "SIM8055-6-1-14-00-A:GCT_SIM8055-6-1-14-00-A")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "SIM8055-6-1-14-00-A")
+				(part "SIM8055-6-1-14-00-A")
+				(description "")
+			)
+			(property
+				(name "MF")
+				(value "Global Connector Technology")
+			)
+			(property
+				(name "MAXIMUM_PACKAGE_HEIGHT")
+				(value "1.35mm")
+			)
+			(property
+				(name "Package")
+				(value "None")
+			)
+			(property
+				(name "Price")
+				(value "None")
+			)
+			(property
+				(name "Check_prices")
+				(value "https://www.snapeda.com/parts/SIM8055-6-1-14-00-A/Global+Connector+Technology/view-part/?ref=eda")
+			)
+			(property
+				(name "STANDARD")
+				(value "Manufacturer recommendations")
+			)
+			(property
+				(name "PARTREV")
+				(value "A1")
+			)
+			(property
+				(name "SnapEDA_Link")
+				(value "https://www.snapeda.com/parts/SIM8055-6-1-14-00-A/Global+Connector+Technology/view-part/?ref=snap")
+			)
+			(property
+				(name "MP")
+				(value "SIM8055-6-1-14-00-A")
+			)
+			(property
+				(name "Description_1")
+				(value "7 (6 + 1) Position Card Connector NANO SIM Surface Mount, Right Angle Gold")
+			)
+			(property
+				(name "Availability")
+				(value "In Stock")
+			)
+			(property
+				(name "MANUFACTURER")
+				(value "Global Connector Technology")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "09498544-d5ca-46b3-86bc-af6efcae5935")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "C1")
+						)
+						(pin
+							(num "C2")
+						)
+						(pin
+							(num "C3")
+						)
+						(pin
+							(num "C5")
+						)
+						(pin
+							(num "C6")
+						)
+						(pin
+							(num "C7")
+						)
+						(pin
+							(num "CD")
+						)
+						(pin
+							(num "C4")
+						)
+						(pin
+							(num "C8")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J7")
+			(value "FXP612 (u.FL) 1")
+			(footprint "Connector_Coaxial:U.FL_Molex_MCRF_73412-0110_Vertical")
+			(description "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)")
+			(fields
+				(field
+					(name "Footprint") "Connector_Coaxial:U.FL_Molex_MCRF_73412-0110_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)")
+			)
+			(libsource
+				(lib "Connector")
+				(part "Conn_Coaxial")
+				(description "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "BNC SMA SMB SMC LEMO coaxial connector CINCH RCA MCX MMCX U.FL UMRF")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*BNC* *SMA* *SMB* *SMC* *Cinch* *LEMO* *UMRF* *MCX* *U.FL*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "04117348-60f5-46f2-9ff2-141b53b87855")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q5")
+			(value "BSS138")
+			(footprint "BSS138:SOT95P240X120-3N")
+			(datasheet "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF")
+			(description "Compact industry standard SOT-23 surface mount package.; 0.22 A, 50 V. RDS(ON) = 3.5  @ VGS = 10 V. RDS(ON) = 6.0  @ VGS = 4.5 V; Rugged and Reliable.; High density cell design for extremely low RDS(ON).")
+			(fields
+				(field
+					(name "Height") "1.2")
+				(field
+					(name "Mouser Part Number") "512-BSS138")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/onsemi-Fairchild/BSS138?qs=HK%252BeIG1iaahCeqBvjB4arg%3D%3D")
+				(field
+					(name "Manufacturer_Name") "onsemi")
+				(field
+					(name "Manufacturer_Part_Number") "BSS138")
+				(field
+					(name "Footprint") "BSS138:SOT95P240X120-3N")
+				(field
+					(name "Datasheet") "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF")
+				(field
+					(name "Description") "Compact industry standard SOT-23 surface mount package.; 0.22 A, 50 V. RDS(ON) = 3.5  @ VGS = 10 V. RDS(ON) = 6.0  @ VGS = 4.5 V; Rugged and Reliable.; High density cell design for extremely low RDS(ON).")
+			)
+			(libsource
+				(lib "BSS138")
+				(part "BSS138")
+				(description "Compact industry standard SOT-23 surface mount package.; 0.22 A, 50 V. RDS(ON) = 3.5  @ VGS = 10 V. RDS(ON) = 6.0  @ VGS = 4.5 V; Rugged and Reliable.; High density cell design for extremely low RDS(ON).")
+			)
+			(property
+				(name "Height")
+				(value "1.2")
+			)
+			(property
+				(name "Mouser Part Number")
+				(value "512-BSS138")
+			)
+			(property
+				(name "Mouser Price/Stock")
+				(value "https://www.mouser.co.uk/ProductDetail/onsemi-Fairchild/BSS138?qs=HK%252BeIG1iaahCeqBvjB4arg%3D%3D")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "onsemi")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "BSS138")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "ced43f00-bf72-487d-8228-7782f72d9c1a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R18")
+			(value "330Ω")
+			(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+			(description "Resistor")
+			(fields
+				(field
+					(name "Footprint") "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "c8c4da02-6b64-47c2-98c0-92bfcaf5ffa6")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R19")
+			(value "10kΩ")
+			(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+			(description "Resistor")
+			(fields
+				(field
+					(name "Footprint") "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "6fb5f611-c010-4487-a8bf-048f00e879f0")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R20")
+			(value "0Ω")
+			(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+			(description "Resistor")
+			(fields
+				(field
+					(name "Footprint") "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "776a104b-893b-4253-bc5b-6897e0b7c736")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R21")
+			(value "0Ω")
+			(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+			(description "Resistor")
+			(fields
+				(field
+					(name "Footprint") "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "d0586131-4b3e-49e6-a5cd-7f1d150efed1")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "S2")
+			(value "SLW-1276864-4A-D")
+			(footprint "SLW-1276864-4A-D:SLW12768644AD")
+			(datasheet "https://www.sameskydevices.com/product/resource/SLW-1276864-4A-D.pdf")
+			(description "SLW-1276864-4A-D - 12.7 x 6.8 x 6.4 mm, 2 mm Raised Slide Actuator, Vertical, Through Hole, Slide Switch")
+			(fields
+				(field
+					(name "Height") "10.6")
+				(field
+					(name "Mouser Part Number") "179-SLW-1276864-4A-D")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Same-Sky/SLW-1276864-4A-D?qs=1Kr7Jg1SGW90vOt02EYiag%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Same Sky")
+				(field
+					(name "Manufacturer_Part_Number") "SLW-1276864-4A-D")
+				(field
+					(name "Footprint") "SLW-1276864-4A-D:SLW12768644AD")
+				(field
+					(name "Datasheet") "https://www.sameskydevices.com/product/resource/SLW-1276864-4A-D.pdf")
+				(field
+					(name "Description") "SLW-1276864-4A-D - 12.7 x 6.8 x 6.4 mm, 2 mm Raised Slide Actuator, Vertical, Through Hole, Slide Switch")
+			)
+			(libsource
+				(lib "SLW-1276864-4A-D")
+				(part "SLW-1276864-4A-D")
+				(description "SLW-1276864-4A-D - 12.7 x 6.8 x 6.4 mm, 2 mm Raised Slide Actuator, Vertical, Through Hole, Slide Switch")
+			)
+			(property
+				(name "Height")
+				(value "10.6")
+			)
+			(property
+				(name "Mouser Part Number")
+				(value "179-SLW-1276864-4A-D")
+			)
+			(property
+				(name "Mouser Price/Stock")
+				(value "https://www.mouser.co.uk/ProductDetail/Same-Sky/SLW-1276864-4A-D?qs=1Kr7Jg1SGW90vOt02EYiag%3D%3D")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "Same Sky")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "SLW-1276864-4A-D")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "6cad66fb-9a46-46cc-96fe-969ec67bff14")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "S3")
+			(value "SLW-1276864-4A-D")
+			(footprint "SLW-1276864-4A-D:SLW12768644AD")
+			(datasheet "https://www.sameskydevices.com/product/resource/SLW-1276864-4A-D.pdf")
+			(description "SLW-1276864-4A-D - 12.7 x 6.8 x 6.4 mm, 2 mm Raised Slide Actuator, Vertical, Through Hole, Slide Switch")
+			(fields
+				(field
+					(name "Height") "10.6")
+				(field
+					(name "Mouser Part Number") "179-SLW-1276864-4A-D")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Same-Sky/SLW-1276864-4A-D?qs=1Kr7Jg1SGW90vOt02EYiag%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Same Sky")
+				(field
+					(name "Manufacturer_Part_Number") "SLW-1276864-4A-D")
+				(field
+					(name "Footprint") "SLW-1276864-4A-D:SLW12768644AD")
+				(field
+					(name "Datasheet") "https://www.sameskydevices.com/product/resource/SLW-1276864-4A-D.pdf")
+				(field
+					(name "Description") "SLW-1276864-4A-D - 12.7 x 6.8 x 6.4 mm, 2 mm Raised Slide Actuator, Vertical, Through Hole, Slide Switch")
+			)
+			(libsource
+				(lib "SLW-1276864-4A-D")
+				(part "SLW-1276864-4A-D")
+				(description "SLW-1276864-4A-D - 12.7 x 6.8 x 6.4 mm, 2 mm Raised Slide Actuator, Vertical, Through Hole, Slide Switch")
+			)
+			(property
+				(name "Height")
+				(value "10.6")
+			)
+			(property
+				(name "Mouser Part Number")
+				(value "179-SLW-1276864-4A-D")
+			)
+			(property
+				(name "Mouser Price/Stock")
+				(value "https://www.mouser.co.uk/ProductDetail/Same-Sky/SLW-1276864-4A-D?qs=1Kr7Jg1SGW90vOt02EYiag%3D%3D")
+			)
+			(property
+				(name "Manufacturer_Name")
+				(value "Same Sky")
+			)
+			(property
+				(name "Manufacturer_Part_Number")
+				(value "SLW-1276864-4A-D")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "ed8a937d-c09c-404f-8d9f-fb50b7e574fc")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "TP1")
+			(value "USB_DP")
+			(footprint "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm")
+			(description "test point")
+			(fields
+				(field
+					(name "Footprint") "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "test point")
+			)
+			(libsource
+				(lib "Connector")
+				(part "TestPoint")
+				(description "test point")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "test point tp")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Pin* Test*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "1c84cd69-dc11-48ac-970d-430ae8de27e8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "TP2")
+			(value "BOOT_CFG")
+			(footprint "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm")
+			(description "test point")
+			(fields
+				(field
+					(name "Footprint") "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "test point")
+			)
+			(libsource
+				(lib "Connector")
+				(part "TestPoint")
+				(description "test point")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "test point tp")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Pin* Test*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "87557515-26e0-4ef9-8718-2e43d30df378")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "TP3")
+			(value "USB_DM")
+			(footprint "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm")
+			(description "test point")
+			(fields
+				(field
+					(name "Footprint") "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "test point")
+			)
+			(libsource
+				(lib "Connector")
+				(part "TestPoint")
+				(description "test point")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "test point tp")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Pin* Test*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "8cb1d66e-07c1-4d30-8a7d-14b558be1f02")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "TP4")
+			(value "USB_VBUS")
+			(footprint "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm")
+			(description "test point")
+			(fields
+				(field
+					(name "Footprint") "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "test point")
+			)
+			(libsource
+				(lib "Connector")
+				(part "TestPoint")
+				(description "test point")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "test point tp")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Pin* Test*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "0ffdf41f-e349-468b-bebc-14dfa2f7fea0")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "TP5")
+			(value "MDM_LOG_TX")
+			(footprint "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm")
+			(description "test point")
+			(fields
+				(field
+					(name "Footprint") "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "test point")
+			)
+			(libsource
+				(lib "Connector")
+				(part "TestPoint")
+				(description "test point")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "test point tp")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Pin* Test*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "e4e944c1-2886-4593-a608-a306eeb81a57")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "TP6")
+			(value "TestPoint")
+			(footprint "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm")
+			(description "test point")
+			(fields
+				(field
+					(name "Footprint") "TestPoint:TestPoint_THTPad_D2.0mm_Drill1.0mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "test point")
+			)
+			(libsource
+				(lib "Connector")
+				(part "TestPoint")
+				(description "test point")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "test point tp")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Pin* Test*")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "3b9852e9-4172-4bc7-af4b-25f1ba0fdfcd")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U2")
+			(value "SIM7000G")
+			(footprint "SIM7000G:SIM7000G")
+			(fields
+				(field
+					(name "MF") "SIMCom Wireless Solutions Limited")
+				(field
+					(name "Description_1") "Cellular Cat-M, Cat-NB, EDGE, GPRS, LPWA Transceiver Module 850MHz, 900MHz, 1.8GHz, 1.9GHz Antenna Not Included Surface Mount")
+				(field
+					(name "Package") "None")
+				(field
+					(name "Price") "None")
+				(field
+					(name "SnapEDA_Link") "https://www.snapeda.com/parts/SIM7000G/SIMCom/view-part/?ref=snap")
+				(field
+					(name "MP") "SIM7000G")
+				(field
+					(name "Availability") "In Stock")
+				(field
+					(name "Check_prices") "https://www.snapeda.com/parts/SIM7000G/SIMCom/view-part/?ref=eda")
+				(field
+					(name "Footprint") "SIM7000G:SIM7000G")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "SIM7000G")
+				(part "SIM7000G")
+				(description "")
+			)
+			(property
+				(name "MF")
+				(value "SIMCom Wireless Solutions Limited")
+			)
+			(property
+				(name "Description_1")
+				(value "Cellular Cat-M, Cat-NB, EDGE, GPRS, LPWA Transceiver Module 850MHz, 900MHz, 1.8GHz, 1.9GHz Antenna Not Included Surface Mount")
+			)
+			(property
+				(name "Package")
+				(value "None")
+			)
+			(property
+				(name "Price")
+				(value "None")
+			)
+			(property
+				(name "SnapEDA_Link")
+				(value "https://www.snapeda.com/parts/SIM7000G/SIMCom/view-part/?ref=snap")
+			)
+			(property
+				(name "MP")
+				(value "SIM7000G")
+			)
+			(property
+				(name "Availability")
+				(value "In Stock")
+			)
+			(property
+				(name "Check_prices")
+				(value "https://www.snapeda.com/parts/SIM7000G/SIMCom/view-part/?ref=eda")
+			)
+			(property
+				(name "Sheetname")
+				(value "GSM_sheet")
+			)
+			(property
+				(name "Sheetfile")
+				(value "GSM_sheet.kicad_sch")
+			)
+			(sheetpath
+				(names "/Stationary/GSM_sheet/")
+				(tstamps "/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2/")
+			)
+			(tstamps "223ee8b3-9243-4592-9635-8848083a4499")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "P$1")
+						)
+						(pin
+							(num "P$2")
+						)
+						(pin
+							(num "P$3")
+						)
+						(pin
+							(num "P$4")
+						)
+						(pin
+							(num "P$5")
+						)
+						(pin
+							(num "P$6")
+						)
+						(pin
+							(num "P$7")
+						)
+						(pin
+							(num "P$8")
+						)
+						(pin
+							(num "P$9")
+						)
+						(pin
+							(num "P$10")
+						)
+						(pin
+							(num "P$11")
+						)
+						(pin
+							(num "P$12")
+						)
+						(pin
+							(num "P$13")
+						)
+						(pin
+							(num "P$14")
+						)
+						(pin
+							(num "P$15")
+						)
+						(pin
+							(num "P$16")
+						)
+						(pin
+							(num "P$17")
+						)
+						(pin
+							(num "P$68")
+						)
+						(pin
+							(num "P$18")
+						)
+						(pin
+							(num "P$67")
+						)
+						(pin
+							(num "P$19")
+						)
+						(pin
+							(num "P$66")
+						)
+						(pin
+							(num "P$20")
+						)
+						(pin
+							(num "P$65")
+						)
+						(pin
+							(num "P$21")
+						)
+						(pin
+							(num "P$64")
+						)
+						(pin
+							(num "P$22")
+						)
+						(pin
+							(num "P$63")
+						)
+						(pin
+							(num "P$23")
+						)
+						(pin
+							(num "P$62")
+						)
+						(pin
+							(num "P$24")
+						)
+						(pin
+							(num "P$61")
+						)
+						(pin
+							(num "P$25")
+						)
+						(pin
+							(num "P$60")
+						)
+						(pin
+							(num "P$26")
+						)
+						(pin
+							(num "P$59")
+						)
+						(pin
+							(num "P$27")
+						)
+						(pin
+							(num "P$58")
+						)
+						(pin
+							(num "P$28")
+						)
+						(pin
+							(num "P$57")
+						)
+						(pin
+							(num "P$29")
+						)
+						(pin
+							(num "P$56")
+						)
+						(pin
+							(num "P$30")
+						)
+						(pin
+							(num "P$55")
+						)
+						(pin
+							(num "P$31")
+						)
+						(pin
+							(num "P$54")
+						)
+						(pin
+							(num "P$32")
+						)
+						(pin
+							(num "P$53")
+						)
+						(pin
+							(num "P$33")
+						)
+						(pin
+							(num "P$52")
+						)
+						(pin
+							(num "P$34")
+						)
+						(pin
+							(num "P$51")
+						)
+						(pin
+							(num "P$50")
+						)
+						(pin
+							(num "P$49")
+						)
+						(pin
+							(num "P$48")
+						)
+						(pin
+							(num "P$47")
+						)
+						(pin
+							(num "P$46")
+						)
+						(pin
+							(num "P$45")
+						)
+						(pin
+							(num "P$44")
+						)
+						(pin
+							(num "P$43")
+						)
+						(pin
+							(num "P$42")
+						)
+						(pin
+							(num "P$41")
+						)
+						(pin
+							(num "P$40")
+						)
+						(pin
+							(num "P$39")
+						)
+						(pin
+							(num "P$38")
+						)
+						(pin
+							(num "P$37")
+						)
+						(pin
+							(num "P$36")
+						)
+						(pin
+							(num "P$35")
+						)
+					)
+				)
+			)
+		)
+	)
+	(groups)
+	(variants)
+	(libparts
+		(libpart
+			(lib "1825910-6")
+			(part "1825910-6")
+			(description "Body Features: Product Orientation Vertical | Case Material Nylon | Actuator Force 5.64 OZ | Cover Material PET Film | Actuator Force 160 G | Actuator Color Black | Actuator Material PBT | Actuator Profile Extended | Case Color Black | Configuration Features: Operating Function NO | Ganged With | Support Bracket Without | Switch Feedback Type Tactile | Configuration (Pole-Throw) Single Pole - Single Throw | Number of Actuators Single | ESD Grounding Terminal Without | Contact Features: Contact Base Material")
+			(docs "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=1308111-1_SWITCHES_CORE_PROGRAM_CATALOG&DocType=Catalog%20Section&DocLang=English&PartCntxt=1825910-6&DocFormat=pdf")
+			(fields
+				(field
+					(name "Reference") "S")
+				(field
+					(name "Value") "1825910-6")
+				(field
+					(name "Footprint") "18259106")
+				(field
+					(name "Datasheet") "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=1308111-1_SWITCHES_CORE_PROGRAM_CATALOG&DocType=Catalog%20Section&DocLang=English&PartCntxt=1825910-6&DocFormat=pdf")
+				(field
+					(name "Description") "Body Features: Product Orientation Vertical | Case Material Nylon | Actuator Force 5.64 OZ | Cover Material PET Film | Actuator Force 160 G | Actuator Color Black | Actuator Material PBT | Actuator Profile Extended | Case Color Black | Configuration Features: Operating Function NO | Ganged With | Support Bracket Without | Switch Feedback Type Tactile | Configuration (Pole-Throw) Single Pole - Single Throw | Number of Actuators Single | ESD Grounding Terminal Without | Contact Features: Contact Base Material")
+				(field
+					(name "Height") "5.3")
+				(field
+					(name "TME Electronic Components Part Number")
+				)
+				(field
+					(name "TME Electronic Components Price/Stock")
+				)
+				(field
+					(name "Manufacturer_Name") "TE Connectivity")
+				(field
+					(name "Manufacturer_Part_Number") "1825910-6")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "COM_1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "COM_2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "NO_1")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "NO_2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "4259-63")
+			(part "4259-63")
+			(description "RF switch IC")
+			(docs "http://www.psemi.com/pdf/datasheets/pe4259ds.pdf")
+			(fields
+				(field
+					(name "Reference") "IC")
+				(field
+					(name "Value") "4259-63")
+				(field
+					(name "Footprint") "SOT65P210X110-6N")
+				(field
+					(name "Datasheet") "http://www.psemi.com/pdf/datasheets/pe4259ds.pdf")
+				(field
+					(name "Description") "RF switch IC")
+				(field
+					(name "Height") "1.1")
+				(field
+					(name "Mouser Part Number") "81-4259-63")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/pSemi/4259-63?qs=iw0hurA%2FaD37qvQcKdATTw%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Peregrine Semiconductor")
+				(field
+					(name "Manufacturer_Part_Number") "4259-63")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "RF1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "RF2")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "CTRL")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "RFC")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "~{CTRL_OR_VDD}")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "BSS138")
+			(part "BSS138")
+			(description "Compact industry standard SOT-23 surface mount package.; 0.22 A, 50 V. RDS(ON) = 3.5  @ VGS = 10 V. RDS(ON) = 6.0  @ VGS = 4.5 V; Rugged and Reliable.; High density cell design for extremely low RDS(ON).")
+			(docs "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF")
+			(fields
+				(field
+					(name "Reference") "Q")
+				(field
+					(name "Value") "BSS138")
+				(field
+					(name "Footprint") "SOT95P240X120-3N")
+				(field
+					(name "Datasheet") "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF")
+				(field
+					(name "Description") "Compact industry standard SOT-23 surface mount package.; 0.22 A, 50 V. RDS(ON) = 3.5  @ VGS = 10 V. RDS(ON) = 6.0  @ VGS = 4.5 V; Rugged and Reliable.; High density cell design for extremely low RDS(ON).")
+				(field
+					(name "Height") "1.2")
+				(field
+					(name "Mouser Part Number") "512-BSS138")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/onsemi-Fairchild/BSS138?qs=HK%252BeIG1iaahCeqBvjB4arg%3D%3D")
+				(field
+					(name "Manufacturer_Name") "onsemi")
+				(field
+					(name "Manufacturer_Part_Number") "BSS138")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "G")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "S")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "D")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "CL10B104KO8NNNC")
+			(part "CL10B104KO8NNNC")
+			(description "Samsung Electro-Mechanics 0603 (1608M) 100nF Multilayer Ceramic Capacitor MLCC 16V dc +/-10% SMD CL10B104KO8NNNC")
+			(docs "https://datasheet.datasheetarchive.com/originals/distributors/Datasheets_SAMA/482ee8b8a1396945e1abac0da9778f7f.pdf")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "CL10B104KO8NNNC")
+				(field
+					(name "Footprint") "CAPC1608X90N")
+				(field
+					(name "Datasheet") "https://datasheet.datasheetarchive.com/originals/distributors/Datasheets_SAMA/482ee8b8a1396945e1abac0da9778f7f.pdf")
+				(field
+					(name "Description") "Samsung Electro-Mechanics 0603 (1608M) 100nF Multilayer Ceramic Capacitor MLCC 16V dc +/-10% SMD CL10B104KO8NNNC")
+				(field
+					(name "Height") "0.9")
+				(field
+					(name "Mouser Part Number") "187-CL10B104KO8NNNC")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Samsung-Electro-Mechanics/CL10B104KO8NNNC?qs=349EhDEZ59pqoJFRnk4a8w%3D%3D")
+				(field
+					(name "Manufacturer_Name") "SAMSUNG")
+				(field
+					(name "Manufacturer_Part_Number") "CL10B104KO8NNNC")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Connector")
+			(part "Conn_Coaxial")
+			(description "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)")
+			(footprints
+				(fp "*BNC*")
+				(fp "*SMA*")
+				(fp "*SMB*")
+				(fp "*SMC*")
+				(fp "*Cinch*")
+				(fp "*LEMO*")
+				(fp "*UMRF*")
+				(fp "*MCX*")
+				(fp "*U.FL*")
+			)
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "Conn_Coaxial")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "In")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "Ext")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Connector")
+			(part "TestPoint")
+			(description "test point")
+			(footprints
+				(fp "Pin*")
+				(fp "Test*")
+			)
+			(fields
+				(field
+					(name "Reference") "TP")
+				(field
+					(name "Value") "TestPoint")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "test point")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Connector_Generic")
+			(part "Conn_01x15")
+			(description "Generic connector, single row, 01x15, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			(footprints
+				(fp "Connector*:*_1x??_*")
+			)
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "Conn_01x15")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic connector, single row, 01x15, script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "Pin_1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "Pin_2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "Pin_3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "Pin_4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "Pin_5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "Pin_6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "Pin_7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "Pin_8")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "Pin_9")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "Pin_10")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "Pin_11")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "Pin_12")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "Pin_13")
+					(type "passive")
+				)
+				(pin
+					(num "14")
+					(name "Pin_14")
+					(type "passive")
+				)
+				(pin
+					(num "15")
+					(name "Pin_15")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "C")
+			(description "Unpolarized capacitor")
+			(footprints
+				(fp "C_*")
+			)
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "C")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "C_Polarized")
+			(description "Polarized capacitor")
+			(footprints
+				(fp "CP_*")
+			)
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "C_Polarized")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Polarized capacitor")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "FerriteBead")
+			(description "Ferrite bead")
+			(footprints
+				(fp "Inductor_*")
+				(fp "L_*")
+				(fp "*Ferrite*")
+			)
+			(fields
+				(field
+					(name "Reference") "FB")
+				(field
+					(name "Value") "FerriteBead")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Ferrite bead")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "LED")
+			(description "Light emitting diode")
+			(footprints
+				(fp "LED*")
+				(fp "LED_SMD:*")
+				(fp "LED_THT:*")
+			)
+			(fields
+				(field
+					(name "Reference") "D")
+				(field
+					(name "Value") "LED")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Light emitting diode")
+				(field
+					(name "Sim.Pins") "1=K 2=A")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "K")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "A")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "R")
+			(description "Resistor")
+			(footprints
+				(fp "R_*")
+			)
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "R")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "ESP32-S3-WROOM-1-N4R8")
+			(part "ESP32-S3-WROOM-1-N4R8")
+			(description "Bluetooth, WiFi 802.11b/g/n, Bluetooth v5.0 Transceiver Module 2.4GHz PCB Trace Surface Mount , 3V ~ 3.6V , 95mA ~ 97mA , -40C ~ 65C (TA)")
+			(docs "https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf")
+			(fields
+				(field
+					(name "Reference") "IC")
+				(field
+					(name "Value") "ESP32-S3-WROOM-1-N4R8")
+				(field
+					(name "Footprint") "ESP32S3WROOM1N4R8")
+				(field
+					(name "Datasheet") "https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf")
+				(field
+					(name "Description") "Bluetooth, WiFi 802.11b/g/n, Bluetooth v5.0 Transceiver Module 2.4GHz PCB Trace Surface Mount , 3V ~ 3.6V , 95mA ~ 97mA , -40C ~ 65C (TA)")
+				(field
+					(name "Height") "3.25")
+				(field
+					(name "Mouser Part Number") "356-ESP32S3WROM1N4R8")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Espressif-Systems/ESP32-S3-WROOM-1-N4R8?qs=Li%252BoUPsLEnsFpZnU9mcr%2FQ%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Espressif Systems")
+				(field
+					(name "Manufacturer_Part_Number") "ESP32-S3-WROOM-1-N4R8")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "GND_1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "3V3")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "EN")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "IO4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "IO5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "IO6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "IO7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "IO15")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "IO16")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "IO17")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "IO18")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "IO8")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "IO19")
+					(type "passive")
+				)
+				(pin
+					(num "14")
+					(name "IO20")
+					(type "passive")
+				)
+				(pin
+					(num "15")
+					(name "IO3")
+					(type "passive")
+				)
+				(pin
+					(num "16")
+					(name "IO46")
+					(type "passive")
+				)
+				(pin
+					(num "17")
+					(name "IO9")
+					(type "passive")
+				)
+				(pin
+					(num "18")
+					(name "IO10")
+					(type "passive")
+				)
+				(pin
+					(num "19")
+					(name "IO11")
+					(type "passive")
+				)
+				(pin
+					(num "20")
+					(name "IO12")
+					(type "passive")
+				)
+				(pin
+					(num "21")
+					(name "IO13")
+					(type "passive")
+				)
+				(pin
+					(num "22")
+					(name "IO14")
+					(type "passive")
+				)
+				(pin
+					(num "23")
+					(name "IO21")
+					(type "passive")
+				)
+				(pin
+					(num "24")
+					(name "IO47")
+					(type "passive")
+				)
+				(pin
+					(num "25")
+					(name "IO48")
+					(type "passive")
+				)
+				(pin
+					(num "26")
+					(name "IO45")
+					(type "passive")
+				)
+				(pin
+					(num "27")
+					(name "IO0")
+					(type "passive")
+				)
+				(pin
+					(num "28")
+					(name "IO35")
+					(type "passive")
+				)
+				(pin
+					(num "29")
+					(name "IO36")
+					(type "passive")
+				)
+				(pin
+					(num "30")
+					(name "IO37")
+					(type "passive")
+				)
+				(pin
+					(num "31")
+					(name "IO38")
+					(type "passive")
+				)
+				(pin
+					(num "32")
+					(name "IO39")
+					(type "passive")
+				)
+				(pin
+					(num "33")
+					(name "IO40")
+					(type "passive")
+				)
+				(pin
+					(num "34")
+					(name "IO41")
+					(type "passive")
+				)
+				(pin
+					(num "35")
+					(name "IO42")
+					(type "passive")
+				)
+				(pin
+					(num "36")
+					(name "RXD0")
+					(type "passive")
+				)
+				(pin
+					(num "37")
+					(name "TXD0")
+					(type "passive")
+				)
+				(pin
+					(num "38")
+					(name "IO2")
+					(type "passive")
+				)
+				(pin
+					(num "39")
+					(name "IO1")
+					(type "passive")
+				)
+				(pin
+					(num "40")
+					(name "GND_2")
+					(type "passive")
+				)
+				(pin
+					(num "41")
+					(name "GND_3")
+					(type "passive")
+				)
+				(pin
+					(num "42")
+					(name "GND_4")
+					(type "passive")
+				)
+				(pin
+					(num "43")
+					(name "GND_5")
+					(type "passive")
+				)
+				(pin
+					(num "44")
+					(name "GND_6")
+					(type "passive")
+				)
+				(pin
+					(num "45")
+					(name "GND_7")
+					(type "passive")
+				)
+				(pin
+					(num "46")
+					(name "GND_8")
+					(type "passive")
+				)
+				(pin
+					(num "47")
+					(name "GND_9")
+					(type "passive")
+				)
+				(pin
+					(num "48")
+					(name "GND_10")
+					(type "passive")
+				)
+				(pin
+					(num "49")
+					(name "GND_11")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "MAX98357AETE+T")
+			(part "MAX98357AETE+T")
+			(description "Audio Amplifiers Digital Input Class D Amplifier")
+			(docs "https://datasheets.maximintegrated.com/en/ds/MAX98357A-MAX98357B.pdf")
+			(fields
+				(field
+					(name "Reference") "IC")
+				(field
+					(name "Value") "MAX98357AETE+T")
+				(field
+					(name "Footprint") "QFN50P300X300X80-17N")
+				(field
+					(name "Datasheet") "https://datasheets.maximintegrated.com/en/ds/MAX98357A-MAX98357B.pdf")
+				(field
+					(name "Description") "Audio Amplifiers Digital Input Class D Amplifier")
+				(field
+					(name "Height") "0.8")
+				(field
+					(name "Mouser Part Number") "700-MAX98357AETE+T")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Analog-Devices-Maxim-Integrated/MAX98357AETE%2bT?qs=AAveGqk956HhNpoJjF5x2g%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Analog Devices")
+				(field
+					(name "Manufacturer_Part_Number") "MAX98357AETE+T")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "DIN")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "GAIN_SLOT")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "GND_1")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "~{SD_MODE}")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "N.C._1")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "N.C._2")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "VDD_1")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "VDD_2")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "OUTP")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "OUTN")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "GND_2")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "N.C._3")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "N.C._4")
+					(type "passive")
+				)
+				(pin
+					(num "14")
+					(name "LRCLK")
+					(type "passive")
+				)
+				(pin
+					(num "15")
+					(name "GND_3")
+					(type "passive")
+				)
+				(pin
+					(num "16")
+					(name "BCLK")
+					(type "passive")
+				)
+				(pin
+					(num "17")
+					(name "THERMAL_PAD")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "NEO-F10N-00B")
+			(part "NEO-F10N-00B")
+			(description "GNSS / GPS Modules u-blox F10 GNSS module Flash, TCXO, SAW, LNA LCC, 12x16 mm, 250 pcs/reel")
+			(docs "https://content.u-blox.com/sites/default/files/documents/NEO-F10N_DataSheet_UBX-23002117.pdf")
+			(fields
+				(field
+					(name "Reference") "IC")
+				(field
+					(name "Value") "NEO-F10N-00B")
+				(field
+					(name "Footprint") "NEOF10N00B")
+				(field
+					(name "Datasheet") "https://content.u-blox.com/sites/default/files/documents/NEO-F10N_DataSheet_UBX-23002117.pdf")
+				(field
+					(name "Description") "GNSS / GPS Modules u-blox F10 GNSS module Flash, TCXO, SAW, LNA LCC, 12x16 mm, 250 pcs/reel")
+				(field
+					(name "Height") "2.6")
+				(field
+					(name "Mouser Part Number") "377-NEO-F10N-00B")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/u-blox/NEO-F10N-00B?qs=Imq1NPwxi76uVH%2FItRhLgw%3D%3D")
+				(field
+					(name "Manufacturer_Name") "u-blox")
+				(field
+					(name "Manufacturer_Part_Number") "NEO-F10N-00B")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "SAFEBOOT_N")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "RESERVED_1")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "TIMEPULSE")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "EXTINT")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "RESERVED_2")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "RESERVED_3")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "RESERVED_4")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "RESET_N")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "VCC_RF")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "GND_1")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "RF_IN")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "GND_2")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "GND_3")
+					(type "passive")
+				)
+				(pin
+					(num "14")
+					(name "LNA_EN")
+					(type "passive")
+				)
+				(pin
+					(num "15")
+					(name "RESERVED_5")
+					(type "passive")
+				)
+				(pin
+					(num "16")
+					(name "RESERVED_6")
+					(type "passive")
+				)
+				(pin
+					(num "17")
+					(name "RESERVED_7")
+					(type "passive")
+				)
+				(pin
+					(num "18")
+					(name "RESERVED_8")
+					(type "passive")
+				)
+				(pin
+					(num "19")
+					(name "RESERVED_9")
+					(type "passive")
+				)
+				(pin
+					(num "20")
+					(name "TXD")
+					(type "passive")
+				)
+				(pin
+					(num "21")
+					(name "RXD")
+					(type "passive")
+				)
+				(pin
+					(num "22")
+					(name "V_BCKP")
+					(type "passive")
+				)
+				(pin
+					(num "23")
+					(name "VCC")
+					(type "passive")
+				)
+				(pin
+					(num "24")
+					(name "GND_4")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "PESD3V3L1BSLZ")
+			(part "PESD3V3L1BSLZ")
+			(description "11.3V Clamp 7.5A (8/20s) Ipp Tvs Diode Surface Mount DFN1006-2")
+			(docs "https://assets.nexperia.com/documents/data-sheet/PESD3V3L1BSL.pdf")
+			(fields
+				(field
+					(name "Reference") "D")
+				(field
+					(name "Value") "PESD3V3L1BSLZ")
+				(field
+					(name "Footprint") "PESD3V3L1BSLZ")
+				(field
+					(name "Datasheet") "https://assets.nexperia.com/documents/data-sheet/PESD3V3L1BSL.pdf")
+				(field
+					(name "Description") "11.3V Clamp 7.5A (8/20s) Ipp Tvs Diode Surface Mount DFN1006-2")
+				(field
+					(name "Height") "0.45")
+				(field
+					(name "Mouser Part Number") "771-PESD3V3L1BSLZ")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Nexperia/PESD3V3L1BSLZ?qs=Li%252BoUPsLEnsrB%2FnSgNrAWw%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Nexperia")
+				(field
+					(name "Manufacturer_Part_Number") "PESD3V3L1BSLZ")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "K1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "K2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "SIM7000G")
+			(part "SIM7000G")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "SIM7000G")
+				(field
+					(name "Footprint") "SIM7000G:SIM7000G")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+				(field
+					(name "MF") "SIMCom Wireless Solutions Limited")
+				(field
+					(name "Description_1") "Cellular Cat-M, Cat-NB, EDGE, GPRS, LPWA Transceiver Module 850MHz, 900MHz, 1.8GHz, 1.9GHz Antenna Not Included Surface Mount")
+				(field
+					(name "Package") "None")
+				(field
+					(name "Price") "None")
+				(field
+					(name "SnapEDA_Link") "https://www.snapeda.com/parts/SIM7000G/SIMCom/view-part/?ref=snap")
+				(field
+					(name "MP") "SIM7000G")
+				(field
+					(name "Availability") "In Stock")
+				(field
+					(name "Check_prices") "https://www.snapeda.com/parts/SIM7000G/SIMCom/view-part/?ref=eda")
+			)
+			(pins
+				(pin
+					(num "P$1")
+					(name "PWRKEY")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$2")
+					(name "GND@1")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$3")
+					(name "DTR")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$4")
+					(name "RI")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$5")
+					(name "DCD")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$6")
+					(name "BOOT_CFG")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$7")
+					(name "CTS")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$8")
+					(name "RTS")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$9")
+					(name "TXD")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$10")
+					(name "RXD")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$11")
+					(name "PCM_CLK")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$12")
+					(name "PCM_SYNC")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$13")
+					(name "PCM_DIN")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$14")
+					(name "PCM_DOUT")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$15")
+					(name "VDD_EXT")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$16")
+					(name "NRESET")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$17")
+					(name "GND@2")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$18")
+					(name "GND@3")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$19")
+					(name "NC@1")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$20")
+					(name "NC@2")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$21")
+					(name "NC@3")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$22")
+					(name "NC@4")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$23")
+					(name "MDM_LOG_TX")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$24")
+					(name "USB_VBUS")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$25")
+					(name "ADC")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$26")
+					(name "NC@5")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$27")
+					(name "USB_DP")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$28")
+					(name "USB_DM")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$29")
+					(name "GND@4")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$30")
+					(name "SIM_VDD")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$31")
+					(name "SIM_DATA")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$32")
+					(name "SIM_CLK")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$33")
+					(name "SIM_RST")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$34")
+					(name "SIM_DET")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$35")
+					(name "NC@6")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$36")
+					(name "NC@7")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$37")
+					(name "I2C_SDA")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$38")
+					(name "I2C_SCL")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$39")
+					(name "GND@5")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$40")
+					(name "NC@8")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$41")
+					(name "NC@9")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$42")
+					(name "NC@10")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$43")
+					(name "NC@11")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$44")
+					(name "NC@12")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$45")
+					(name "GND@6")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$46")
+					(name "GND@7")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$47")
+					(name "NC@13")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$48")
+					(name "GPIO4")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$49")
+					(name "GPIO1/UART3_RXD")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$50")
+					(name "GPIO0/UART3_TXD")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$51")
+					(name "NC@14")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$52")
+					(name "NETLIGHT")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$53")
+					(name "GNSS_ANT")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$54")
+					(name "GND@8")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$55")
+					(name "VBAT@1")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$56")
+					(name "VBAT@2")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$57")
+					(name "VBAT@3")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$58")
+					(name "GND@9")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$59")
+					(name "GND@10")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$60")
+					(name "RF_ANT")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$61")
+					(name "GND@11")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$62")
+					(name "GND@12")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$63")
+					(name "GND@13")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$64")
+					(name "GND@14")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$65")
+					(name "GND@15")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$66")
+					(name "STATUS")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$67")
+					(name "GPIO2")
+					(type "bidirectional")
+				)
+				(pin
+					(num "P$68")
+					(name "GPIO3")
+					(type "bidirectional")
+				)
+			)
+		)
+		(libpart
+			(lib "SIM8055-6-1-14-00-A")
+			(part "SIM8055-6-1-14-00-A")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "SIM8055-6-1-14-00-A")
+				(field
+					(name "Footprint") "SIM8055-6-1-14-00-A:GCT_SIM8055-6-1-14-00-A")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+				(field
+					(name "MF") "Global Connector Technology")
+				(field
+					(name "MAXIMUM_PACKAGE_HEIGHT") "1.35mm")
+				(field
+					(name "Package") "None")
+				(field
+					(name "Price") "None")
+				(field
+					(name "Check_prices") "https://www.snapeda.com/parts/SIM8055-6-1-14-00-A/Global+Connector+Technology/view-part/?ref=eda")
+				(field
+					(name "STANDARD") "Manufacturer recommendations")
+				(field
+					(name "PARTREV") "A1")
+				(field
+					(name "SnapEDA_Link") "https://www.snapeda.com/parts/SIM8055-6-1-14-00-A/Global+Connector+Technology/view-part/?ref=snap")
+				(field
+					(name "MP") "SIM8055-6-1-14-00-A")
+				(field
+					(name "Description_1") "7 (6 + 1) Position Card Connector NANO SIM Surface Mount, Right Angle Gold")
+				(field
+					(name "Availability") "In Stock")
+				(field
+					(name "MANUFACTURER") "Global Connector Technology")
+			)
+			(pins
+				(pin
+					(num "C1")
+					(name "VCC")
+					(type "passive")
+				)
+				(pin
+					(num "C2")
+					(name "RST")
+					(type "passive")
+				)
+				(pin
+					(num "C3")
+					(name "CLK")
+					(type "passive")
+				)
+				(pin
+					(num "C4")
+					(name "SHIELD")
+					(type "passive")
+				)
+				(pin
+					(num "C5")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "C6")
+					(name "VPP")
+					(type "passive")
+				)
+				(pin
+					(num "C7")
+					(name "I/O")
+					(type "passive")
+				)
+				(pin
+					(num "C8")
+					(name "SHIELD")
+					(type "passive")
+				)
+				(pin
+					(num "CD")
+					(name "CD")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "SLW-1276864-4A-D")
+			(part "SLW-1276864-4A-D")
+			(description "SLW-1276864-4A-D - 12.7 x 6.8 x 6.4 mm, 2 mm Raised Slide Actuator, Vertical, Through Hole, Slide Switch")
+			(docs "https://www.sameskydevices.com/product/resource/SLW-1276864-4A-D.pdf")
+			(fields
+				(field
+					(name "Reference") "S")
+				(field
+					(name "Value") "SLW-1276864-4A-D")
+				(field
+					(name "Footprint") "SLW12768644AD")
+				(field
+					(name "Datasheet") "https://www.sameskydevices.com/product/resource/SLW-1276864-4A-D.pdf")
+				(field
+					(name "Description") "SLW-1276864-4A-D - 12.7 x 6.8 x 6.4 mm, 2 mm Raised Slide Actuator, Vertical, Through Hole, Slide Switch")
+				(field
+					(name "Height") "10.6")
+				(field
+					(name "Mouser Part Number") "179-SLW-1276864-4A-D")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Same-Sky/SLW-1276864-4A-D?qs=1Kr7Jg1SGW90vOt02EYiag%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Same Sky")
+				(field
+					(name "Manufacturer_Part_Number") "SLW-1276864-4A-D")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "NC")
+					(type "no_connect")
+				)
+				(pin
+					(num "2")
+					(name "COM")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "NO")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Si2323DDS-T1-GE3")
+			(part "Si2323DDS-T1-GE3")
+			(description "VISHAY - SI2323DDS-T1-GE3 - Power MOSFET, P Channel, 20 V, 5.3 A, 0.032 ohm, SOT-23, Surface Mount")
+			(docs "https://altium.componentsearchengine.com/Datasheets/2/SI2323DDS-T1-GE3.pdf")
+			(fields
+				(field
+					(name "Reference") "Q")
+				(field
+					(name "Value") "Si2323DDS-T1-GE3")
+				(field
+					(name "Footprint") "SOT95P237X112-3N")
+				(field
+					(name "Datasheet") "https://altium.componentsearchengine.com/Datasheets/2/SI2323DDS-T1-GE3.pdf")
+				(field
+					(name "Description") "VISHAY - SI2323DDS-T1-GE3 - Power MOSFET, P Channel, 20 V, 5.3 A, 0.032 ohm, SOT-23, Surface Mount")
+				(field
+					(name "Height") "1.12")
+				(field
+					(name "Mouser Part Number") "78-SI2323DDS-T1-GE3")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Vishay-Semiconductors/SI2323DDS-T1-GE3?qs=vgn07B5hXavjZXK0uPQNiA%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Vishay")
+				(field
+					(name "Manufacturer_Part_Number") "Si2323DDS-T1-GE3")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "G")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "S")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "D")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "TXB0104PWR")
+			(part "TXB0104PWR")
+			(description "4-Bit Bidirectional Voltage-Level Shifter with Auto Direction Sensing and +/-15 kV ESD Protect")
+			(docs "http://www.ti.com/lit/ds/symlink/txb0104.pdf")
+			(fields
+				(field
+					(name "Reference") "IC")
+				(field
+					(name "Value") "TXB0104PWR")
+				(field
+					(name "Footprint") "SOP65P640X120-14N")
+				(field
+					(name "Datasheet") "http://www.ti.com/lit/ds/symlink/txb0104.pdf")
+				(field
+					(name "Description") "4-Bit Bidirectional Voltage-Level Shifter with Auto Direction Sensing and +/-15 kV ESD Protect")
+				(field
+					(name "Height") "1.2")
+				(field
+					(name "Mouser Part Number") "595-TXB0104PWR")
+				(field
+					(name "Mouser Price/Stock") "https://www.mouser.co.uk/ProductDetail/Texas-Instruments/TXB0104PWR?qs=oFXvjAmG9EjSF69GpMWq5w%3D%3D")
+				(field
+					(name "Manufacturer_Name") "Texas Instruments")
+				(field
+					(name "Manufacturer_Part_Number") "TXB0104PWR")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "VCCA")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "A1")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "A2")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "A3")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "A4")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "NC_1")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "OE")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "NC_2")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "B4")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "B3")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "B2")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "B1")
+					(type "passive")
+				)
+				(pin
+					(num "14")
+					(name "VCCB")
+					(type "passive")
+				)
+			)
+		)
+	)
+	(libraries
+		(library
+			(logical "1825910-6")
+			(uri "/Users/deuter/repos/Smart-ball/DataSheets/KicadElements/LIB_1825910-6/1825910-6/KiCad/1825910-6.kicad_sym")
+		)
+		(library
+			(logical "4259-63")
+			(uri "/Users/deuter/repos/Smart-ball/DataSheets/KicadElements/LIB_4259-63/4259-63/KiCad/4259-63.kicad_sym")
+		)
+		(library
+			(logical "BSS138")
+			(uri "/Users/deuter/repos/Smart-ball/DataSheets/KicadElements/LIB_BSS138/BSS138/KiCad/BSS138.kicad_sym")
+		)
+		(library
+			(logical "CL10B104KO8NNNC")
+			(uri "/Users/deuter/repos/Smart-ball/DataSheets/KicadElements/LIB_CL10B104KO8NNNC/CL10B104KO8NNNC/KiCad/CL10B104KO8NNNC.kicad_sym")
+		)
+		(library
+			(logical "Connector")
+			(uri "${KICAD10_SYMBOL_DIR}/Connector.kicad_sym")
+		)
+		(library
+			(logical "Connector_Generic")
+			(uri "${KICAD10_SYMBOL_DIR}/Connector_Generic.kicad_sym")
+		)
+		(library
+			(logical "Device")
+			(uri "${KICAD10_SYMBOL_DIR}/Device.kicad_sym")
+		)
+		(library
+			(logical "MAX98357AETE+T")
+			(uri "/Users/deuter/repos/Smart-ball/DataSheets/KicadElements/LIB_MAX98357AETE+T/MAX98357AETE+T/KiCad/MAX98357AETE+T.kicad_sym")
+		)
+		(library
+			(logical "NEO-F10N-00B")
+			(uri "/Users/deuter/repos/Smart-ball/DataSheets/KicadElements/LIB_NEO-F10N-00B/NEO-F10N-00B/KiCad/NEO-F10N-00B.kicad_sym")
+		)
+		(library
+			(logical "PESD3V3L1BSLZ")
+			(uri "/Users/deuter/repos/Smart-ball/DataSheets/KicadElements/LIB_PESD3V3L1BSLZ/PESD3V3L1BSLZ/KiCad/PESD3V3L1BSLZ.kicad_sym")
+		)
+		(library
+			(logical "SIM7000G")
+			(uri "/Users/deuter/repos/Smart-ball/DataSheets/KicadElements/SIM7000G/SIM7000G.kicad_sym")
+		)
+		(library
+			(logical "SIM8055-6-1-14-00-A")
+			(uri "/Users/deuter/repos/Smart-ball/DataSheets/KicadElements/SIM8055-6-1-14-00-A/SIM8055-6-1-14-00-A.kicad_sym")
+		)
+		(library
+			(logical "SLW-1276864-4A-D")
+			(uri "/Users/deuter/repos/Smart-ball/DataSheets/KicadElements/LIB_SLW-1276864-4A-D/SLW-1276864-4A-D/KiCad/SLW-1276864-4A-D.kicad_sym")
+		)
+		(library
+			(logical "Si2323DDS-T1-GE3")
+			(uri "/Users/deuter/repos/Smart-ball/DataSheets/KicadElements/LIB_Si2323DDS-T1-GE3/Si2323DDS-T1-GE3/KiCad/Si2323DDS-T1-GE3.kicad_sym")
+		)
+		(library
+			(logical "TXB0104PWR")
+			(uri "/Users/deuter/repos/Smart-ball/DataSheets/KicadElements/LIB_TXB0104PWR/TXB0104PWR/KiCad/TXB0104PWR.kicad_sym")
+		)
+	)
+	(nets
+		(net
+			(code "1")
+			(name "/+3V3")
+			(class "Default")
+			(node
+				(ref "C2")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C3")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C8")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC1")
+				(pin "22")
+				(pinfunction "V_BCKP_22")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC2")
+				(pin "14")
+				(pinfunction "VCCB_14")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "2")
+				(pinfunction "3V3_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J14")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q3")
+				(pin "2")
+				(pinfunction "S_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R18")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R29")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R30")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "2")
+			(name "/ACCEL_CS")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "22")
+				(pinfunction "IO14_22")
+				(pintype "passive")
+			)
+			(node
+				(ref "J13")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "3")
+			(name "/ACCEL_INT1")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "23")
+				(pinfunction "IO21_23")
+				(pintype "passive")
+			)
+			(node
+				(ref "J13")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "4")
+			(name "/ACCEL_INT2")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "28")
+				(pinfunction "IO35_28")
+				(pintype "passive")
+			)
+			(node
+				(ref "J13")
+				(pin "3")
+				(pinfunction "Pin_3_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "5")
+			(name "/ANTENA_SW")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "9")
+				(pinfunction "IO16_9")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC6")
+				(pin "4")
+				(pinfunction "CTRL_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "6")
+			(name "/BAT+")
+			(class "Default")
+			(node
+				(ref "J14")
+				(pin "12")
+				(pinfunction "Pin_12_12")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "7")
+			(name "/BCLK")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "19")
+				(pinfunction "IO11_19")
+				(pintype "passive")
+			)
+			(node
+				(ref "J13")
+				(pin "4")
+				(pinfunction "Pin_4_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "8")
+			(name "/DATA_IN")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "20")
+				(pinfunction "IO12_20")
+				(pintype "passive")
+			)
+			(node
+				(ref "J13")
+				(pin "5")
+				(pinfunction "Pin_5_5")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "9")
+			(name "/FG_ALTR")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "24")
+				(pinfunction "IO47_24")
+				(pintype "passive")
+			)
+			(node
+				(ref "J14")
+				(pin "9")
+				(pinfunction "Pin_9_9")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "10")
+			(name "/GSM_INT")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "4")
+				(pinfunction "EXTINT_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "7")
+				(pinfunction "IO7_7")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "11")
+			(name "/GSM_POWER")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "6")
+				(pinfunction "IO6_6")
+				(pintype "passive")
+			)
+			(node
+				(ref "R17")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "12")
+			(name "/GSM_RXT")
+			(class "Default")
+			(node
+				(ref "IC2")
+				(pin "13")
+				(pinfunction "B1_13")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC2")
+				(pin "2")
+				(pinfunction "A1_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "33")
+				(pinfunction "IO40_33")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$10")
+				(pinfunction "RXD_P$10")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "13")
+			(name "/GSM_TXD")
+			(class "Default")
+			(node
+				(ref "IC2")
+				(pin "12")
+				(pinfunction "B2_12")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC2")
+				(pin "3")
+				(pinfunction "A2_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "34")
+				(pinfunction "IO41_34")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$9")
+				(pinfunction "TXD_P$9")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "14")
+			(name "/G_BCLK")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "16")
+				(pinfunction "IO46_16")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC8")
+				(pin "16")
+				(pinfunction "BCLK_16")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "15")
+			(name "/G_DIN")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "15")
+				(pinfunction "IO3_15")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC8")
+				(pin "1")
+				(pinfunction "DIN_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "16")
+			(name "/G_LRCLK")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "39")
+				(pinfunction "IO1_39")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC8")
+				(pin "14")
+				(pinfunction "LRCLK_14")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "17")
+			(name "/I2C_SCL")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "36")
+				(pinfunction "RXD0_36")
+				(pintype "passive")
+			)
+			(node
+				(ref "J14")
+				(pin "10")
+				(pinfunction "Pin_10_10")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "18")
+			(name "/I2C_SDA")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "37")
+				(pinfunction "TXD0_37")
+				(pintype "passive")
+			)
+			(node
+				(ref "J14")
+				(pin "11")
+				(pinfunction "Pin_11_11")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "19")
+			(name "/IMU_CS")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "17")
+				(pinfunction "IO9_17")
+				(pintype "passive")
+			)
+			(node
+				(ref "J13")
+				(pin "6")
+				(pinfunction "Pin_6_6")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "20")
+			(name "/IMU_INT1")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "21")
+				(pinfunction "IO13_21")
+				(pintype "passive")
+			)
+			(node
+				(ref "J13")
+				(pin "7")
+				(pinfunction "Pin_7_7")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "21")
+			(name "/IMU_INT2")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "29")
+				(pinfunction "IO36_29")
+				(pintype "passive")
+			)
+			(node
+				(ref "J13")
+				(pin "8")
+				(pinfunction "Pin_8_8")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "22")
+			(name "/LOUDNESS")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "38")
+				(pinfunction "IO2_38")
+				(pintype "passive")
+			)
+			(node
+				(ref "J14")
+				(pin "4")
+				(pinfunction "Pin_4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q4")
+				(pin "1")
+				(pinfunction "G_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "23")
+			(name "/MISO")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "10")
+				(pinfunction "IO17_10")
+				(pintype "passive")
+			)
+			(node
+				(ref "J13")
+				(pin "9")
+				(pinfunction "Pin_9_9")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "24")
+			(name "/MOSI")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "11")
+				(pinfunction "IO18_11")
+				(pintype "passive")
+			)
+			(node
+				(ref "J13")
+				(pin "10")
+				(pinfunction "Pin_10_10")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "25")
+			(name "/OUT+5V")
+			(class "Default")
+			(node
+				(ref "IC8")
+				(pin "7")
+				(pinfunction "VDD_1_7")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC8")
+				(pin "8")
+				(pinfunction "VDD_2_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "J14")
+				(pin "3")
+				(pinfunction "Pin_3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "R16")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "S3")
+				(pin "3")
+				(pinfunction "NO_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "26")
+			(name "/OUT_N")
+			(class "Default")
+			(node
+				(ref "IC8")
+				(pin "10")
+				(pinfunction "OUTN_10")
+				(pintype "passive")
+			)
+			(node
+				(ref "J14")
+				(pin "13")
+				(pinfunction "Pin_13_13")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "27")
+			(name "/OUT_P")
+			(class "Default")
+			(node
+				(ref "IC8")
+				(pin "9")
+				(pinfunction "OUTP_9")
+				(pintype "passive")
+			)
+			(node
+				(ref "J14")
+				(pin "14")
+				(pinfunction "Pin_14_14")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "28")
+			(name "/PWRKEY")
+			(class "Default")
+			(node
+				(ref "IC2")
+				(pin "11")
+				(pinfunction "B3_11")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC2")
+				(pin "4")
+				(pinfunction "A3_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "31")
+				(pinfunction "IO38_31")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$1")
+				(pinfunction "PWRKEY_P$1")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "29")
+			(name "/RXD")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "20")
+				(pinfunction "TXD_20")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "5")
+				(pinfunction "IO5_5")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "30")
+			(name "/SCLK")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "12")
+				(pinfunction "IO8_12")
+				(pintype "passive")
+			)
+			(node
+				(ref "J13")
+				(pin "11")
+				(pinfunction "Pin_11_11")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "31")
+			(name "/STAT1")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "25")
+				(pinfunction "IO48_25")
+				(pintype "passive")
+			)
+			(node
+				(ref "J14")
+				(pin "7")
+				(pinfunction "Pin_7_7")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "32")
+			(name "/STAT2")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "35")
+				(pinfunction "IO42_35")
+				(pintype "passive")
+			)
+			(node
+				(ref "J14")
+				(pin "8")
+				(pinfunction "Pin_8_8")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "33")
+			(name "/STATUS")
+			(class "Default")
+			(node
+				(ref "IC2")
+				(pin "10")
+				(pinfunction "B4_10")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC2")
+				(pin "5")
+				(pinfunction "A4_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "32")
+				(pinfunction "IO39_32")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$66")
+				(pinfunction "STATUS_P$66")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "34")
+			(name "/Stationary/GSM_sheet/CARD_DETECT")
+			(class "Default")
+			(node
+				(ref "J6")
+				(pin "CD")
+				(pinfunction "CD_CD")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$34")
+				(pinfunction "SIM_DET_P$34")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "35")
+			(name "/Stationary/GSM_sheet/OUT1.8V")
+			(class "Default")
+			(node
+				(ref "IC2")
+				(pin "1")
+				(pinfunction "VCCA_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R19")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "TP6")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$15")
+				(pinfunction "VDD_EXT_P$15")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "36")
+			(name "/Stationary/GSM_sheet/SIM_CLK")
+			(class "Default")
+			(node
+				(ref "J6")
+				(pin "C3")
+				(pinfunction "CLK_C3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$32")
+				(pinfunction "SIM_CLK_P$32")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "37")
+			(name "/Stationary/GSM_sheet/SIM_DATA")
+			(class "Default")
+			(node
+				(ref "J6")
+				(pin "C7")
+				(pinfunction "I/O_C7")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$31")
+				(pinfunction "SIM_DATA_P$31")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "38")
+			(name "/Stationary/GSM_sheet/SIM_POWER")
+			(class "Default")
+			(node
+				(ref "C10")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J6")
+				(pin "C1")
+				(pinfunction "VCC_C1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$30")
+				(pinfunction "SIM_VDD_P$30")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "39")
+			(name "/Stationary/GSM_sheet/SIM_RST")
+			(class "Default")
+			(node
+				(ref "J6")
+				(pin "C2")
+				(pinfunction "RST_C2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$33")
+				(pinfunction "SIM_RST_P$33")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "40")
+			(name "/TIMEPULSE")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "3")
+				(pinfunction "TIMEPULSE_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "8")
+				(pinfunction "IO15_8")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "41")
+			(name "/TS{slash}CTRL")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "30")
+				(pinfunction "IO37_30")
+				(pintype "passive")
+			)
+			(node
+				(ref "J14")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "42")
+			(name "/TXD")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "21")
+				(pinfunction "RXD_21")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "4")
+				(pinfunction "IO4_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "43")
+			(name "/USB_D+")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "14")
+				(pinfunction "IO20_14")
+				(pintype "passive")
+			)
+			(node
+				(ref "J14")
+				(pin "5")
+				(pinfunction "Pin_5_5")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "44")
+			(name "/USB_D-")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "13")
+				(pinfunction "IO19_13")
+				(pintype "passive")
+			)
+			(node
+				(ref "J14")
+				(pin "6")
+				(pinfunction "Pin_6_6")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "45")
+			(name "/WCLK")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "18")
+				(pinfunction "IO10_18")
+				(pintype "passive")
+			)
+			(node
+				(ref "J13")
+				(pin "12")
+				(pinfunction "Pin_12_12")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "46")
+			(name "GND")
+			(class "Default")
+			(node
+				(ref "C1")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C10")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C12")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C13")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C2")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C22")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C23")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C24")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C25")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C26")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C3")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C8")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "D5")
+				(pin "1")
+				(pinfunction "K1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC1")
+				(pin "10")
+				(pinfunction "GND_1_10")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC1")
+				(pin "12")
+				(pinfunction "GND_2_12")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC1")
+				(pin "13")
+				(pinfunction "GND_3_13")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC1")
+				(pin "2")
+				(pinfunction "RESERVED_1_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC1")
+				(pin "24")
+				(pinfunction "GND_4_24")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC2")
+				(pin "7")
+				(pinfunction "GND_7")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "1")
+				(pinfunction "GND_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "40")
+				(pinfunction "GND_2_40")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "41")
+				(pinfunction "GND_3_41")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "42")
+				(pinfunction "GND_4_42")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "43")
+				(pinfunction "GND_5_43")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "44")
+				(pinfunction "GND_6_44")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "45")
+				(pinfunction "GND_7_45")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "46")
+				(pinfunction "GND_8_46")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "47")
+				(pinfunction "GND_9_47")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "48")
+				(pinfunction "GND_10_48")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "49")
+				(pinfunction "GND_11_49")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC6")
+				(pin "2")
+				(pinfunction "GND_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC8")
+				(pin "11")
+				(pinfunction "GND_2_11")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC8")
+				(pin "15")
+				(pinfunction "GND_3_15")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC8")
+				(pin "17")
+				(pinfunction "THERMAL_PAD_17")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC8")
+				(pin "3")
+				(pinfunction "GND_1_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "J4")
+				(pin "2")
+				(pinfunction "Ext_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J5")
+				(pin "2")
+				(pinfunction "Ext_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J6")
+				(pin "C4")
+				(pinfunction "SHIELD_C4")
+				(pintype "passive")
+			)
+			(node
+				(ref "J6")
+				(pin "C5")
+				(pinfunction "GND_C5")
+				(pintype "passive")
+			)
+			(node
+				(ref "J6")
+				(pin "C8")
+				(pinfunction "SHIELD_C8")
+				(pintype "passive")
+			)
+			(node
+				(ref "J7")
+				(pin "2")
+				(pinfunction "Ext_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q4")
+				(pin "2")
+				(pinfunction "S_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q5")
+				(pin "2")
+				(pinfunction "S_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "S1")
+				(pin "1")
+				(pinfunction "COM_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "S4")
+				(pin "1")
+				(pinfunction "COM_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$17")
+				(pinfunction "GND@2_P$17")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$18")
+				(pinfunction "GND@3_P$18")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$2")
+				(pinfunction "GND@1_P$2")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$29")
+				(pinfunction "GND@4_P$29")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$39")
+				(pinfunction "GND@5_P$39")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$45")
+				(pinfunction "GND@6_P$45")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$46")
+				(pinfunction "GND@7_P$46")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$54")
+				(pinfunction "GND@8_P$54")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$58")
+				(pinfunction "GND@9_P$58")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$59")
+				(pinfunction "GND@10_P$59")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$61")
+				(pinfunction "GND@11_P$61")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$62")
+				(pinfunction "GND@12_P$62")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$63")
+				(pinfunction "GND@13_P$63")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$64")
+				(pinfunction "GND@14_P$64")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$65")
+				(pinfunction "GND@15_P$65")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "47")
+			(name "Net-(C12-Pad2)")
+			(class "Default")
+			(node
+				(ref "C12")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R20")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R21")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "48")
+			(name "Net-(D4-A)")
+			(class "Default")
+			(node
+				(ref "D4")
+				(pin "2")
+				(pinfunction "A_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R18")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "49")
+			(name "Net-(D4-K)")
+			(class "Default")
+			(node
+				(ref "D4")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q5")
+				(pin "3")
+				(pinfunction "D_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "50")
+			(name "Net-(D5-K2)")
+			(class "Default")
+			(node
+				(ref "D5")
+				(pin "2")
+				(pinfunction "K2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "FB1")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "S2")
+				(pin "3")
+				(pinfunction "NO_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "51")
+			(name "Net-(IC1-RESET_N)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "8")
+				(pinfunction "RESET_N_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "R28")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "52")
+			(name "Net-(IC1-RF_IN)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "11")
+				(pinfunction "RF_IN_11")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC6")
+				(pin "5")
+				(pinfunction "RFC_5")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "53")
+			(name "Net-(IC1-VCC)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "23")
+				(pinfunction "VCC_23")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC6")
+				(pin "6")
+				(pinfunction "~{CTRL_OR_VDD}_6")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q3")
+				(pin "3")
+				(pinfunction "D_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "R28")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "54")
+			(name "Net-(IC2-OE)")
+			(class "Default")
+			(node
+				(ref "IC2")
+				(pin "8")
+				(pinfunction "OE_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "R19")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "55")
+			(name "Net-(IC3-EN)")
+			(class "Default")
+			(node
+				(ref "C1")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "IC3")
+				(pin "3")
+				(pinfunction "EN_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "R29")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "S1")
+				(pin "3")
+				(pinfunction "NO_1_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "56")
+			(name "Net-(IC3-IO0)")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "27")
+				(pinfunction "IO0_27")
+				(pintype "passive")
+			)
+			(node
+				(ref "R30")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "S4")
+				(pin "3")
+				(pinfunction "NO_1_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "57")
+			(name "Net-(IC6-RF1)")
+			(class "Default")
+			(node
+				(ref "IC6")
+				(pin "1")
+				(pinfunction "RF1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J5")
+				(pin "1")
+				(pinfunction "In_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "58")
+			(name "Net-(IC6-RF2)")
+			(class "Default")
+			(node
+				(ref "IC6")
+				(pin "3")
+				(pinfunction "RF2_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "J4")
+				(pin "1")
+				(pinfunction "In_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "59")
+			(name "Net-(IC8-GAIN_SLOT)")
+			(class "Default")
+			(node
+				(ref "IC8")
+				(pin "2")
+				(pinfunction "GAIN_SLOT_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R26")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "60")
+			(name "Net-(IC8-~{SD_MODE})")
+			(class "Default")
+			(node
+				(ref "IC8")
+				(pin "4")
+				(pinfunction "~{SD_MODE}_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "R16")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "61")
+			(name "Net-(J7-In)")
+			(class "Default")
+			(node
+				(ref "J7")
+				(pin "1")
+				(pinfunction "In_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R20")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "62")
+			(name "Net-(Q3-G)")
+			(class "Default")
+			(node
+				(ref "Q3")
+				(pin "1")
+				(pinfunction "G_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R17")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "63")
+			(name "Net-(Q4-D)")
+			(class "Default")
+			(node
+				(ref "Q4")
+				(pin "3")
+				(pinfunction "D_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "R26")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "64")
+			(name "Net-(Q5-G)")
+			(class "Default")
+			(node
+				(ref "Q5")
+				(pin "1")
+				(pinfunction "G_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$52")
+				(pinfunction "NETLIGHT_P$52")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "65")
+			(name "Net-(S2-COM)")
+			(class "Default")
+			(node
+				(ref "S2")
+				(pin "2")
+				(pinfunction "COM_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "S3")
+				(pin "2")
+				(pinfunction "COM_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "66")
+			(name "Net-(U2-BOOT_CFG)")
+			(class "Default")
+			(node
+				(ref "TP2")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$6")
+				(pinfunction "BOOT_CFG_P$6")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "67")
+			(name "Net-(U2-MDM_LOG_TX)")
+			(class "Default")
+			(node
+				(ref "TP5")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$23")
+				(pinfunction "MDM_LOG_TX_P$23")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "68")
+			(name "Net-(U2-RF_ANT)")
+			(class "Default")
+			(node
+				(ref "C13")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R21")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$60")
+				(pinfunction "RF_ANT_P$60")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "69")
+			(name "Net-(U2-USB_DM)")
+			(class "Default")
+			(node
+				(ref "TP3")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$28")
+				(pinfunction "USB_DM_P$28")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "70")
+			(name "Net-(U2-USB_DP)")
+			(class "Default")
+			(node
+				(ref "TP1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$27")
+				(pinfunction "USB_DP_P$27")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "71")
+			(name "Net-(U2-USB_VBUS)")
+			(class "Default")
+			(node
+				(ref "TP4")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$24")
+				(pinfunction "USB_VBUS_P$24")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "72")
+			(name "Net-(U2-VBAT@1)")
+			(class "Default")
+			(node
+				(ref "C22")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C23")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C24")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C25")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C26")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "FB1")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "P$55")
+				(pinfunction "VBAT@1_P$55")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$56")
+				(pinfunction "VBAT@2_P$56")
+				(pintype "bidirectional")
+			)
+			(node
+				(ref "U2")
+				(pin "P$57")
+				(pinfunction "VBAT@3_P$57")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "73")
+			(name "unconnected-(IC1-LNA_EN-Pad14)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "14")
+				(pinfunction "LNA_EN_14")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "74")
+			(name "unconnected-(IC1-RESERVED_2-Pad5)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "5")
+				(pinfunction "RESERVED_2_5")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "75")
+			(name "unconnected-(IC1-RESERVED_3-Pad6)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "6")
+				(pinfunction "RESERVED_3_6")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "76")
+			(name "unconnected-(IC1-RESERVED_4-Pad7)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "7")
+				(pinfunction "RESERVED_4_7")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "77")
+			(name "unconnected-(IC1-RESERVED_5-Pad15)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "15")
+				(pinfunction "RESERVED_5_15")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "78")
+			(name "unconnected-(IC1-RESERVED_6-Pad16)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "16")
+				(pinfunction "RESERVED_6_16")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "79")
+			(name "unconnected-(IC1-RESERVED_7-Pad17)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "17")
+				(pinfunction "RESERVED_7_17")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "80")
+			(name "unconnected-(IC1-RESERVED_8-Pad18)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "18")
+				(pinfunction "RESERVED_8_18")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "81")
+			(name "unconnected-(IC1-RESERVED_9-Pad19)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "19")
+				(pinfunction "RESERVED_9_19")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "82")
+			(name "unconnected-(IC1-SAFEBOOT_N-Pad1)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "1")
+				(pinfunction "SAFEBOOT_N_1")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "83")
+			(name "unconnected-(IC1-VCC_RF-Pad9)")
+			(class "Default")
+			(node
+				(ref "IC1")
+				(pin "9")
+				(pinfunction "VCC_RF_9")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "84")
+			(name "unconnected-(IC2-NC_1-Pad6)")
+			(class "Default")
+			(node
+				(ref "IC2")
+				(pin "6")
+				(pinfunction "NC_1_6")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "85")
+			(name "unconnected-(IC2-NC_2-Pad9)")
+			(class "Default")
+			(node
+				(ref "IC2")
+				(pin "9")
+				(pinfunction "NC_2_9")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "86")
+			(name "unconnected-(IC3-IO45-Pad26)")
+			(class "Default")
+			(node
+				(ref "IC3")
+				(pin "26")
+				(pinfunction "IO45_26")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "87")
+			(name "unconnected-(IC8-N.C._1-Pad5)")
+			(class "Default")
+			(node
+				(ref "IC8")
+				(pin "5")
+				(pinfunction "N.C._1_5")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "88")
+			(name "unconnected-(IC8-N.C._2-Pad6)")
+			(class "Default")
+			(node
+				(ref "IC8")
+				(pin "6")
+				(pinfunction "N.C._2_6")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "89")
+			(name "unconnected-(IC8-N.C._3-Pad12)")
+			(class "Default")
+			(node
+				(ref "IC8")
+				(pin "12")
+				(pinfunction "N.C._3_12")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "90")
+			(name "unconnected-(IC8-N.C._4-Pad13)")
+			(class "Default")
+			(node
+				(ref "IC8")
+				(pin "13")
+				(pinfunction "N.C._4_13")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "91")
+			(name "unconnected-(J6-VPP-PadC6)")
+			(class "Default")
+			(node
+				(ref "J6")
+				(pin "C6")
+				(pinfunction "VPP_C6")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "92")
+			(name "unconnected-(J13-Pin_13-Pad13)")
+			(class "Default")
+			(node
+				(ref "J13")
+				(pin "13")
+				(pinfunction "Pin_13_13")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "93")
+			(name "unconnected-(J13-Pin_14-Pad14)")
+			(class "Default")
+			(node
+				(ref "J13")
+				(pin "14")
+				(pinfunction "Pin_14_14")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "94")
+			(name "unconnected-(J13-Pin_15-Pad15)")
+			(class "Default")
+			(node
+				(ref "J13")
+				(pin "15")
+				(pinfunction "Pin_15_15")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "95")
+			(name "unconnected-(J14-Pin_15-Pad15)")
+			(class "Default")
+			(node
+				(ref "J14")
+				(pin "15")
+				(pinfunction "Pin_15_15")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "96")
+			(name "unconnected-(S1-COM_2-Pad2)")
+			(class "Default")
+			(node
+				(ref "S1")
+				(pin "2")
+				(pinfunction "COM_2_2")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "97")
+			(name "unconnected-(S1-NO_2-Pad4)")
+			(class "Default")
+			(node
+				(ref "S1")
+				(pin "4")
+				(pinfunction "NO_2_4")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "98")
+			(name "unconnected-(S2-NC-Pad1)")
+			(class "Default")
+			(node
+				(ref "S2")
+				(pin "1")
+				(pinfunction "NC_1")
+				(pintype "no_connect")
+			)
+		)
+		(net
+			(code "99")
+			(name "unconnected-(S3-NC-Pad1)")
+			(class "Default")
+			(node
+				(ref "S3")
+				(pin "1")
+				(pinfunction "NC_1")
+				(pintype "no_connect")
+			)
+		)
+		(net
+			(code "100")
+			(name "unconnected-(S4-COM_2-Pad2)")
+			(class "Default")
+			(node
+				(ref "S4")
+				(pin "2")
+				(pinfunction "COM_2_2")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "101")
+			(name "unconnected-(S4-NO_2-Pad4)")
+			(class "Default")
+			(node
+				(ref "S4")
+				(pin "4")
+				(pinfunction "NO_2_4")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "102")
+			(name "unconnected-(U2-ADC-PadP$25)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$25")
+				(pinfunction "ADC_P$25")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "103")
+			(name "unconnected-(U2-CTS-PadP$7)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$7")
+				(pinfunction "CTS_P$7")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "104")
+			(name "unconnected-(U2-DCD-PadP$5)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$5")
+				(pinfunction "DCD_P$5")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "105")
+			(name "unconnected-(U2-DTR-PadP$3)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$3")
+				(pinfunction "DTR_P$3")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "106")
+			(name "unconnected-(U2-GNSS_ANT-PadP$53)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$53")
+				(pinfunction "GNSS_ANT_P$53")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "107")
+			(name "unconnected-(U2-GPIO0{slash}UART3_TXD-PadP$50)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$50")
+				(pinfunction "GPIO0/UART3_TXD_P$50")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "108")
+			(name "unconnected-(U2-GPIO1{slash}UART3_RXD-PadP$49)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$49")
+				(pinfunction "GPIO1/UART3_RXD_P$49")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "109")
+			(name "unconnected-(U2-GPIO2-PadP$67)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$67")
+				(pinfunction "GPIO2_P$67")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "110")
+			(name "unconnected-(U2-GPIO3-PadP$68)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$68")
+				(pinfunction "GPIO3_P$68")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "111")
+			(name "unconnected-(U2-GPIO4-PadP$48)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$48")
+				(pinfunction "GPIO4_P$48")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "112")
+			(name "unconnected-(U2-I2C_SCL-PadP$38)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$38")
+				(pinfunction "I2C_SCL_P$38")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "113")
+			(name "unconnected-(U2-I2C_SDA-PadP$37)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$37")
+				(pinfunction "I2C_SDA_P$37")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "114")
+			(name "unconnected-(U2-NC@1-PadP$19)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$19")
+				(pinfunction "NC@1_P$19")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "115")
+			(name "unconnected-(U2-NC@2-PadP$20)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$20")
+				(pinfunction "NC@2_P$20")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "116")
+			(name "unconnected-(U2-NC@3-PadP$21)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$21")
+				(pinfunction "NC@3_P$21")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "117")
+			(name "unconnected-(U2-NC@4-PadP$22)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$22")
+				(pinfunction "NC@4_P$22")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "118")
+			(name "unconnected-(U2-NC@5-PadP$26)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$26")
+				(pinfunction "NC@5_P$26")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "119")
+			(name "unconnected-(U2-NC@6-PadP$35)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$35")
+				(pinfunction "NC@6_P$35")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "120")
+			(name "unconnected-(U2-NC@7-PadP$36)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$36")
+				(pinfunction "NC@7_P$36")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "121")
+			(name "unconnected-(U2-NC@8-PadP$40)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$40")
+				(pinfunction "NC@8_P$40")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "122")
+			(name "unconnected-(U2-NC@9-PadP$41)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$41")
+				(pinfunction "NC@9_P$41")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "123")
+			(name "unconnected-(U2-NC@10-PadP$42)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$42")
+				(pinfunction "NC@10_P$42")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "124")
+			(name "unconnected-(U2-NC@11-PadP$43)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$43")
+				(pinfunction "NC@11_P$43")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "125")
+			(name "unconnected-(U2-NC@12-PadP$44)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$44")
+				(pinfunction "NC@12_P$44")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "126")
+			(name "unconnected-(U2-NC@13-PadP$47)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$47")
+				(pinfunction "NC@13_P$47")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "127")
+			(name "unconnected-(U2-NC@14-PadP$51)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$51")
+				(pinfunction "NC@14_P$51")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "128")
+			(name "unconnected-(U2-NRESET-PadP$16)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$16")
+				(pinfunction "NRESET_P$16")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "129")
+			(name "unconnected-(U2-PCM_CLK-PadP$11)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$11")
+				(pinfunction "PCM_CLK_P$11")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "130")
+			(name "unconnected-(U2-PCM_DIN-PadP$13)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$13")
+				(pinfunction "PCM_DIN_P$13")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "131")
+			(name "unconnected-(U2-PCM_DOUT-PadP$14)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$14")
+				(pinfunction "PCM_DOUT_P$14")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "132")
+			(name "unconnected-(U2-PCM_SYNC-PadP$12)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$12")
+				(pinfunction "PCM_SYNC_P$12")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "133")
+			(name "unconnected-(U2-RI-PadP$4)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$4")
+				(pinfunction "RI_P$4")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "134")
+			(name "unconnected-(U2-RTS-PadP$8)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "P$8")
+				(pinfunction "RTS_P$8")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+	)
+)

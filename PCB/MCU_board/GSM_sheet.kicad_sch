@@ -3775,7 +3775,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "SLW-1276864-4A-D:SLW-1276864-4A-D"
+		(symbol "SS14MDP2:SS14MDP2"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -3792,7 +3792,7 @@
 					(justify left top)
 				)
 			)
-			(property "Value" "SLW-1276864-4A-D"
+			(property "Value" "SS14MDP2"
 				(at 19.05 5.08 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3803,7 +3803,7 @@
 					(justify left top)
 				)
 			)
-			(property "Footprint" "SLW12768644AD"
+			(property "Footprint" "SS14MDP2"
 				(at 19.05 -94.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3815,7 +3815,7 @@
 					(justify left top)
 				)
 			)
-			(property "Datasheet" "https://www.sameskydevices.com/product/resource/SLW-1276864-4A-D.pdf"
+			(property "Datasheet" "http://www.nkkswitches.com/pdf/SSnonilluminated.pdf"
 				(at 19.05 -194.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3827,7 +3827,7 @@
 					(justify left top)
 				)
 			)
-			(property "Description" "SLW-1276864-4A-D - 12.7 x 6.8 x 6.4 mm, 2 mm Raised Slide Actuator, Vertical, Through Hole, Slide Switch"
+			(property "Description" "PCB Slide Switch SP3T On-On-On 100 mA Top"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3838,7 +3838,7 @@
 					)
 				)
 			)
-			(property "Height" "10.6"
+			(property "Height" "6.5"
 				(at 19.05 -394.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3850,7 +3850,7 @@
 					(justify left top)
 				)
 			)
-			(property "Mouser Part Number" "179-SLW-1276864-4A-D"
+			(property "Mouser Part Number" "633-SS14MDP2"
 				(at 19.05 -494.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3862,7 +3862,7 @@
 					(justify left top)
 				)
 			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/SLW-1276864-4A-D?qs=1Kr7Jg1SGW90vOt02EYiag%3D%3D"
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/NKK-Switches/SS14MDP2?qs=tJRqkAIQG4xAbyvlpPIZ4A%3D%3D"
 				(at 19.05 -594.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3874,7 +3874,7 @@
 					(justify left top)
 				)
 			)
-			(property "Manufacturer_Name" "Same Sky"
+			(property "Manufacturer_Name" "NKK Switches"
 				(at 19.05 -694.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3886,7 +3886,7 @@
 					(justify left top)
 				)
 			)
-			(property "Manufacturer_Part_Number" "SLW-1276864-4A-D"
+			(property "Manufacturer_Part_Number" "SS14MDP2"
 				(at 19.05 -794.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3898,10 +3898,10 @@
 					(justify left top)
 				)
 			)
-			(symbol "SLW-1276864-4A-D_1_1"
+			(symbol "SS14MDP2_1_1"
 				(rectangle
 					(start 5.08 2.54)
-					(end 17.78 -7.62)
+					(end 17.78 -10.16)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -3910,10 +3910,10 @@
 						(type background)
 					)
 				)
-				(pin no_connect line
-					(at 0 0 0)
+				(pin passive line
+					(at 0 -7.62 0)
 					(length 5.08)
-					(name "NC"
+					(name "NO_1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3921,6 +3921,24 @@
 						)
 					)
 					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 0)
+					(length 5.08)
+					(name "NO_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3938,7 +3956,7 @@
 							)
 						)
 					)
-					(number "2"
+					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3946,17 +3964,17 @@
 						)
 					)
 				)
-				(pin passive line
-					(at 0 -5.08 0)
+				(pin no_connect line
+					(at 0 0 0)
 					(length 5.08)
-					(name "NO"
+					(name "NC"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "3"
+					(number "4"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4754,10 +4772,6 @@
 		(uuid "a479d87d-25ea-4f1e-b4d1-4e3cd5b997f0")
 	)
 	(no_connect
-		(at 276.86 57.15)
-		(uuid "a5195a90-90ce-4b6a-8d3f-5c8ab044359e")
-	)
-	(no_connect
 		(at 60.96 52.07)
 		(uuid "a8658656-fc1f-4f14-9f2b-9c88b4a86e10")
 	)
@@ -4955,16 +4969,6 @@
 	)
 	(wire
 		(pts
-			(xy 251.46 66.04) (xy 251.46 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1e400f1c-beda-4625-aca1-80ab91422d76")
-	)
-	(wire
-		(pts
 			(xy 255.27 36.83) (xy 262.89 36.83)
 		)
 		(stroke
@@ -4982,16 +4986,6 @@
 			(type default)
 		)
 		(uuid "25423ebc-627b-495b-bf27-a4a099fb12c1")
-	)
-	(wire
-		(pts
-			(xy 248.92 58.42) (xy 248.92 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "27bc3eb4-e667-4b3b-a15b-321489ef27a0")
 	)
 	(wire
 		(pts
@@ -5142,16 +5136,6 @@
 			(type default)
 		)
 		(uuid "42396eb6-bca1-47d1-8d71-f44505d67463")
-	)
-	(wire
-		(pts
-			(xy 274.32 52.07) (xy 260.35 52.07)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "47fed3d3-078a-4ca5-815c-7fa1a9591cd1")
 	)
 	(wire
 		(pts
@@ -5335,16 +5319,6 @@
 	)
 	(wire
 		(pts
-			(xy 260.35 52.07) (xy 260.35 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5d0a2d83-2a8a-482a-bd99-47adade681a2")
-	)
-	(wire
-		(pts
 			(xy 127 44.45) (xy 158.75 44.45)
 		)
 		(stroke
@@ -5352,16 +5326,6 @@
 			(type default)
 		)
 		(uuid "5d21b15f-fab3-43bb-9c02-7d58e7a506bc")
-	)
-	(wire
-		(pts
-			(xy 260.35 58.42) (xy 248.92 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5f40355f-ce60-4cd9-8182-aec1ecfb27c6")
 	)
 	(wire
 		(pts
@@ -5405,6 +5369,16 @@
 	)
 	(wire
 		(pts
+			(xy 271.78 34.29) (xy 271.78 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "642dc380-d25f-44ff-9b48-a70086d9862e")
+	)
+	(wire
+		(pts
 			(xy 60.96 166.37) (xy 44.45 166.37)
 		)
 		(stroke
@@ -5442,16 +5416,6 @@
 			(type default)
 		)
 		(uuid "682cb7ba-9008-40b2-8d91-90a8d78ab571")
-	)
-	(wire
-		(pts
-			(xy 271.78 57.15) (xy 271.78 34.29)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "68af0f4e-225a-4a12-ae55-7213dd7fef21")
 	)
 	(wire
 		(pts
@@ -6255,16 +6219,6 @@
 	)
 	(wire
 		(pts
-			(xy 246.38 66.04) (xy 246.38 67.31)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e9df436c-560f-4935-8bef-1897e7603e97")
-	)
-	(wire
-		(pts
 			(xy 132.08 163.83) (xy 132.08 167.64)
 		)
 		(stroke
@@ -6342,16 +6296,6 @@
 			(type default)
 		)
 		(uuid "f5d8d302-0624-4163-88b0-4f76af91b523")
-	)
-	(wire
-		(pts
-			(xy 274.32 52.07) (xy 274.32 57.15)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f98f07f7-4892-489b-80fd-19a3629d2d53")
 	)
 	(wire
 		(pts
@@ -6585,7 +6529,7 @@
 	)
 	(hierarchical_label "BAT+"
 		(shape input)
-		(at 251.46 66.04 90)
+		(at 269.24 60.96 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6629,7 +6573,7 @@
 	)
 	(hierarchical_label "OUT+5V"
 		(shape input)
-		(at 246.38 66.04 90)
+		(at 266.7 60.96 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7235,6 +7179,156 @@
 			(project "MCU_board"
 				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2"
 					(reference "TP4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "SS14MDP2:SS14MDP2")
+		(at 274.32 60.96 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "182acade-c613-4006-bb44-e6e5ddcc6e56")
+		(property "Reference" "S5"
+			(at 278.13 71.1199 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "SS14MDP2"
+			(at 278.13 73.6599 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "SS14MDP2:SS14MDP2"
+			(at 179.4 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "http://www.nkkswitches.com/pdf/SSnonilluminated.pdf"
+			(at 79.4 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "PCB Slide Switch SP3T On-On-On 100 mA Top"
+			(at 274.32 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "6.5"
+			(at -120.6 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "633-SS14MDP2"
+			(at -220.6 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/NKK-Switches/SS14MDP2?qs=tJRqkAIQG4xAbyvlpPIZ4A%3D%3D"
+			(at -320.6 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "NKK Switches"
+			(at -420.6 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "SS14MDP2"
+			(at -520.6 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "4"
+			(uuid "e79d5e9a-c674-49c4-ac81-c72a1f671cb8")
+		)
+		(pin "3"
+			(uuid "b21e0b33-932e-4a0d-b15a-ebb8016609dc")
+		)
+		(pin "1"
+			(uuid "d33b5ee8-6515-45e0-8d09-1ad5255cbca4")
+		)
+		(pin "2"
+			(uuid "e8da0be0-e14e-47bc-8cd9-31c4eca7092f")
+		)
+		(instances
+			(project "MCU_board"
+				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2"
+					(reference "S5")
 					(unit 1)
 				)
 			)
@@ -8426,153 +8520,6 @@
 			(project "MCU_board"
 				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2"
 					(reference "#PWR063")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "SLW-1276864-4A-D:SLW-1276864-4A-D")
-		(at 276.86 57.15 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "6cad66fb-9a46-46cc-96fe-969ec67bff14")
-		(property "Reference" "S2"
-			(at 280.67 67.3099 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "SLW-1276864-4A-D"
-			(at 280.67 69.8499 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "SLW-1276864-4A-D:SLW12768644AD"
-			(at 181.94 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Datasheet" "https://www.sameskydevices.com/product/resource/SLW-1276864-4A-D.pdf"
-			(at 81.94 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Description" "SLW-1276864-4A-D - 12.7 x 6.8 x 6.4 mm, 2 mm Raised Slide Actuator, Vertical, Through Hole, Slide Switch"
-			(at 276.86 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Height" "10.6"
-			(at -118.06 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" "179-SLW-1276864-4A-D"
-			(at -218.06 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/SLW-1276864-4A-D?qs=1Kr7Jg1SGW90vOt02EYiag%3D%3D"
-			(at -318.06 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Name" "Same Sky"
-			(at -418.06 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Part_Number" "SLW-1276864-4A-D"
-			(at -518.06 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(pin "2"
-			(uuid "7fff83c2-b17c-4b8a-9c9a-2140db0d992e")
-		)
-		(pin "1"
-			(uuid "89a02f04-06f9-4de4-9ff8-5bf410559d17")
-		)
-		(pin "3"
-			(uuid "4a4eb756-dfb6-4c14-a081-5313db46fe1d")
-		)
-		(instances
-			(project "MCU_board"
-				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2"
-					(reference "S2")
 					(unit 1)
 				)
 			)
@@ -10281,153 +10228,6 @@
 			(project "MCU_board"
 				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2"
 					(reference "TP5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "SLW-1276864-4A-D:SLW-1276864-4A-D")
-		(at 251.46 67.31 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ed8a937d-c09c-404f-8d9f-fb50b7e574fc")
-		(property "Reference" "S3"
-			(at 255.27 77.4699 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "SLW-1276864-4A-D"
-			(at 255.27 80.0099 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "SLW-1276864-4A-D:SLW12768644AD"
-			(at 156.54 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Datasheet" "https://www.sameskydevices.com/product/resource/SLW-1276864-4A-D.pdf"
-			(at 56.54 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Description" "SLW-1276864-4A-D - 12.7 x 6.8 x 6.4 mm, 2 mm Raised Slide Actuator, Vertical, Through Hole, Slide Switch"
-			(at 251.46 67.31 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Height" "10.6"
-			(at -143.46 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" "179-SLW-1276864-4A-D"
-			(at -243.46 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/SLW-1276864-4A-D?qs=1Kr7Jg1SGW90vOt02EYiag%3D%3D"
-			(at -343.46 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Name" "Same Sky"
-			(at -443.46 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Part_Number" "SLW-1276864-4A-D"
-			(at -543.46 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(pin "2"
-			(uuid "c96b0b0a-c068-475d-ab84-bdc3d1b3657b")
-		)
-		(pin "1"
-			(uuid "23be4e29-9bf3-446b-98f4-3d88052c410b")
-		)
-		(pin "3"
-			(uuid "42c84505-0f02-4d8b-9083-6f4fd3171d63")
-		)
-		(instances
-			(project "MCU_board"
-				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2"
-					(reference "S3")
 					(unit 1)
 				)
 			)

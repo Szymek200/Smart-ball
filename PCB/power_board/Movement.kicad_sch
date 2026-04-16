@@ -1645,7 +1645,7 @@
 		(uuid "45a698ff-d7b5-4bde-a15f-34d83459f4e0")
 	)
 	(hierarchical_label "VOUT_3V3"
-		(shape input)
+		(shape output)
 		(at 77.47 43.18 90)
 		(effects
 			(font
@@ -1667,7 +1667,7 @@
 		(uuid "54e9c932-060e-4d3e-8d6f-13f1ca77408b")
 	)
 	(hierarchical_label "VOUT_3V3"
-		(shape input)
+		(shape output)
 		(at 43.18 71.12 180)
 		(effects
 			(font
@@ -1722,7 +1722,7 @@
 		(uuid "97ef3e71-2208-4535-995c-78a683da471a")
 	)
 	(hierarchical_label "VOUT_3V3"
-		(shape input)
+		(shape output)
 		(at 187.96 104.14 270)
 		(effects
 			(font
@@ -1744,7 +1744,7 @@
 		(uuid "9e91d01f-83e1-43ea-ab64-3c04aff2b016")
 	)
 	(hierarchical_label "VOUT_3V3"
-		(shape input)
+		(shape output)
 		(at 218.44 77.47 0)
 		(effects
 			(font

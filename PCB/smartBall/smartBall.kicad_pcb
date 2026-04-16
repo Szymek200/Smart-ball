@@ -15302,7 +15302,7 @@
 	(footprint "UJ20-C-H-G-MSMT-R-4C-P16-TR:UJ20CHGMSMTR4CP16TR"
 		(layer "F.Cu")
 		(uuid "90ae639b-f81f-4f75-a691-9142e6c51e5a")
-		(at 133.38 191.925)
+		(at 113 251)
 		(descr "UJ20-C-H-G-MSMT-R-4C-P16-TR-3")
 		(tags "Connector")
 		(property "Reference" "J1"
@@ -19977,7 +19977,7 @@
 	(footprint "USBLC6-2SC6Y:SOT95P280X145-6N"
 		(layer "F.Cu")
 		(uuid "b705c256-708d-4661-8e20-b05f61aafba8")
-		(at 132.75 181)
+		(at 146.25 237.95)
 		(descr "<b>SOT23-6(ESDA6V1-5SC6Y)</b><br>")
 		(property "Reference" "D3"
 			(at 0 0 0)

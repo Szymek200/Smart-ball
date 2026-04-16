@@ -1,0 +1,9 @@
+Manufacturer=Connfly
+PartNumber=DS1013-40SSIB1-B-0
+PartCategory=Connector
+PackageCategory=Other
+PinCount=40
+Version=1.3
+Released=2024-05-04 04:05:38
+Downloaded=2026-04-16 10:27:51
+3D=Y

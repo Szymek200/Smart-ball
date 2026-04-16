@@ -1,0 +1,9 @@
+Manufacturer=Connfly
+PartNumber=DS1013-20SSIB1-B-0
+PartCategory=Connector
+PackageCategory=Header, Shrouded - Straight PTH Box
+PinCount=20
+Version=1.1
+Released=2022-01-22 05:00:04
+Downloaded=2026-04-16 10:28:23
+3D=Y

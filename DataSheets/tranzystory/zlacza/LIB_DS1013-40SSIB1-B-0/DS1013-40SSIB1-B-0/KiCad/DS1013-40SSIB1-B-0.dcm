@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP DS1013-40SSIB1-B-0
+D BOX HEADER 40PIN(2x20) 2.54mm THT V/T MALE BLACK
+K
+F https://www.tme.eu/Document/c6e6da985bd9c519d97c4924b5c8a047/DS1013.pdf
+$ENDCMP
+#
+#End Doc Library

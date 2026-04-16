@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP SS14MDP2
+D PCB Slide Switch SP3T On-On-On 100 mA Top
+K
+F http://www.nkkswitches.com/pdf/SSnonilluminated.pdf
+$ENDCMP
+#
+#End Doc Library

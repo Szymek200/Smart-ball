@@ -509,7 +509,7 @@
       "idf": "",
       "netlist": "",
       "plot": "",
-      "specctra_dsn": "",
+      "specctra_dsn": "power_board_rules.dsn",
       "vrml": ""
     },
     "page_layout_descr_file": ""
@@ -632,7 +632,7 @@
         "uuid": "f044e945-eb74-49fa-825d-5f99d2d7b949"
       }
     ],
-    "used_designators": "AC1-2,TH1-4,S1-2,BT1-2,R1-32,L1-4,Q1-2,#PWR19,#PWR24-29,#PWR31-46,#PWR53-57,#PWR68-71,D1-8,U1-2,C1-36,IC1-11,J1-11",
+    "used_designators": "J1-2",
     "variants": []
   },
   "sheets": [

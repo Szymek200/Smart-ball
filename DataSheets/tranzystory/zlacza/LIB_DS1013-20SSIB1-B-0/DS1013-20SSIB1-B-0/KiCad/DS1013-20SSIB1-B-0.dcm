@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP DS1013-20SSIB1-B-0
+D Socket; IDC; male; PIN: 20; straight; THT; gold-plated; 2.54mm
+K
+F https://www.tme.eu/Document/e9117e1c80532ff2c20cc520b4694ed9/DS1013.pdf
+$ENDCMP
+#
+#End Doc Library

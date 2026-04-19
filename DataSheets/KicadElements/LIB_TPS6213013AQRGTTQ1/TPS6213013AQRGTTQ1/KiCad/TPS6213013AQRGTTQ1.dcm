@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP TPS6213013AQRGTTQ1
+D 3V - 17V 3A AUTOMOTIVE Step-Down Converter In 3X3 QFN Package
+K
+F http://www.ti.com/lit/gpn/TPS6213013A-Q1
+$ENDCMP
+#
+#End Doc Library

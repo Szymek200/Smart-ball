@@ -1693,7 +1693,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "PESD3V3L1BSLZ:PESD3V3L1BSLZ"
+		(symbol "PESD5V0C1BSFYL:PESD5V0C1BSFYL"
 			(pin_names
 				(hide yes)
 			)
@@ -1713,7 +1713,7 @@
 					(justify left bottom)
 				)
 			)
-			(property "Value" "PESD3V3L1BSLZ"
+			(property "Value" "PESD5V0C1BSFYL"
 				(at 15.24 6.35 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1724,7 +1724,7 @@
 					(justify left bottom)
 				)
 			)
-			(property "Footprint" "PESD3V3L1BSLZ"
+			(property "Footprint" "PMEG3005AESFYL"
 				(at 15.24 -93.65 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1736,7 +1736,7 @@
 					(justify left bottom)
 				)
 			)
-			(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD3V3L1BSL.pdf"
+			(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0C1BSF.pdf"
 				(at 15.24 -193.65 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1748,7 +1748,7 @@
 					(justify left bottom)
 				)
 			)
-			(property "Description" "11.3V Clamp 7.5A (8/20s) Ipp Tvs Diode Surface Mount DFN1006-2"
+			(property "Description" "PESD5V0C1BSF - Ultra low capacitance bidirectional ESD protection diode"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1759,7 +1759,7 @@
 					)
 				)
 			)
-			(property "Height" "0.45"
+			(property "Height" ""
 				(at 15.24 -393.65 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1771,7 +1771,7 @@
 					(justify left bottom)
 				)
 			)
-			(property "Mouser Part Number" "771-PESD3V3L1BSLZ"
+			(property "Mouser Part Number" "771-PESD5V0C1BSFYL"
 				(at 15.24 -493.65 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1783,7 +1783,7 @@
 					(justify left bottom)
 				)
 			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nexperia/PESD3V3L1BSLZ?qs=Li%252BoUPsLEnsrB%2FnSgNrAWw%3D%3D"
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nexperia/PESD5V0C1BSFYL?qs=Pve5fMu%2FDEv%252BAQF4BlT7Aw%3D%3D"
 				(at 15.24 -593.65 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1807,7 +1807,7 @@
 					(justify left bottom)
 				)
 			)
-			(property "Manufacturer_Part_Number" "PESD3V3L1BSLZ"
+			(property "Manufacturer_Part_Number" "PESD5V0C1BSFYL"
 				(at 15.24 -793.65 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1819,7 +1819,7 @@
 					(justify left bottom)
 				)
 			)
-			(symbol "PESD3V3L1BSLZ_1_1"
+			(symbol "PESD5V0C1BSFYL_1_1"
 				(polyline
 					(pts
 						(xy 5.08 2.54) (xy 5.08 -2.54)
@@ -3775,216 +3775,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "SS14MDP2:SS14MDP2"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "S"
-				(at 19.05 7.62 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Value" "SS14MDP2"
-				(at 19.05 5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Footprint" "SS14MDP2"
-				(at 19.05 -94.92 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Datasheet" "http://www.nkkswitches.com/pdf/SSnonilluminated.pdf"
-				(at 19.05 -194.92 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Description" "PCB Slide Switch SP3T On-On-On 100 mA Top"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Height" "6.5"
-				(at 19.05 -394.92 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Mouser Part Number" "633-SS14MDP2"
-				(at 19.05 -494.92 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/NKK-Switches/SS14MDP2?qs=tJRqkAIQG4xAbyvlpPIZ4A%3D%3D"
-				(at 19.05 -594.92 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Manufacturer_Name" "NKK Switches"
-				(at 19.05 -694.92 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Manufacturer_Part_Number" "SS14MDP2"
-				(at 19.05 -794.92 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(symbol "SS14MDP2_1_1"
-				(rectangle
-					(start 5.08 2.54)
-					(end 17.78 -10.16)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin passive line
-					(at 0 -7.62 0)
-					(length 5.08)
-					(name "NO_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -5.08 0)
-					(length 5.08)
-					(name "NO_2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -2.54 0)
-					(length 5.08)
-					(name "COM"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin no_connect line
-					(at 0 0 0)
-					(length 5.08)
-					(name "NC"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "TXB0104PWR:TXB0104PWR"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -5289,6 +5079,16 @@
 	)
 	(wire
 		(pts
+			(xy 271.78 34.29) (xy 271.78 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "575028fb-27c9-4e24-a919-650d2fd804a0")
+	)
+	(wire
+		(pts
 			(xy 106.68 35.56) (xy 111.76 35.56)
 		)
 		(stroke
@@ -5366,16 +5166,6 @@
 			(type default)
 		)
 		(uuid "629f8cdf-3992-452a-982f-b098be16b4c7")
-	)
-	(wire
-		(pts
-			(xy 271.78 34.29) (xy 271.78 60.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "642dc380-d25f-44ff-9b48-a70086d9862e")
 	)
 	(wire
 		(pts
@@ -6527,17 +6317,6 @@
 		)
 		(uuid "f94ef597-acef-42d3-8d6a-201eec13a221")
 	)
-	(hierarchical_label "BAT+"
-		(shape input)
-		(at 269.24 60.96 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "12928b7e-fcc0-482e-98e4-cf5297f3f651")
-	)
 	(hierarchical_label "GSM_TXD"
 		(shape output)
 		(at 228.6 132.08 0)
@@ -6571,17 +6350,6 @@
 		)
 		(uuid "6ba327d8-d0bb-41c7-a315-69897f5134a6")
 	)
-	(hierarchical_label "OUT+5V"
-		(shape input)
-		(at 266.7 60.96 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "74c7ea88-3650-4595-901d-2e31ef3e23f6")
-	)
 	(hierarchical_label "VOUT_3V3"
 		(shape input)
 		(at 153.67 34.29 180)
@@ -6614,6 +6382,17 @@
 			(justify left)
 		)
 		(uuid "b3b6832b-9e9e-4adc-8317-c0edb6801537")
+	)
+	(hierarchical_label "3V8"
+		(shape output)
+		(at 271.78 44.45 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ed6d9667-c89d-4607-a7c0-5c65080eaf63")
 	)
 	(symbol
 		(lib_id "Connector:Conn_Coaxial")
@@ -7106,6 +6885,148 @@
 		)
 	)
 	(symbol
+		(lib_id "PESD5V0C1BSFYL:PESD5V0C1BSFYL")
+		(at 229.87 24.13 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0df6e8b5-cfd3-40fb-b592-4df59e6ac9ad")
+		(property "Reference" "D1"
+			(at 240.03 13.97 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PESD5V0C1BSFYL"
+			(at 240.03 16.51 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "PMEG3005AESFYL"
+			(at 245.11 117.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD5V0C1BSF.pdf"
+			(at 245.11 217.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Description" "PESD5V0C1BSF - Ultra low capacitance bidirectional ESD protection diode"
+			(at 229.87 24.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" ""
+			(at 245.11 417.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Mouser Part Number" "771-PESD5V0C1BSFYL"
+			(at 245.11 517.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nexperia/PESD5V0C1BSFYL?qs=Pve5fMu%2FDEv%252BAQF4BlT7Aw%3D%3D"
+			(at 245.11 617.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Manufacturer_Name" "Nexperia"
+			(at 245.11 717.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Manufacturer_Part_Number" "PESD5V0C1BSFYL"
+			(at 245.11 817.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(pin "2"
+			(uuid "8f14274c-bc0c-4d6a-8e65-aa46852bc734")
+		)
+		(pin "1"
+			(uuid "e59952cc-2984-4701-841f-7e4f3d7b4653")
+		)
+		(instances
+			(project "MCU_board"
+				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2"
+					(reference "D1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:TestPoint")
 		(at 91.44 170.18 180)
 		(unit 1)
@@ -7185,156 +7106,6 @@
 		)
 	)
 	(symbol
-		(lib_id "SS14MDP2:SS14MDP2")
-		(at 274.32 60.96 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "182acade-c613-4006-bb44-e6e5ddcc6e56")
-		(property "Reference" "S5"
-			(at 278.13 71.1199 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "SS14MDP2"
-			(at 278.13 73.6599 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "SS14MDP2:SS14MDP2"
-			(at 179.4 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Datasheet" "http://www.nkkswitches.com/pdf/SSnonilluminated.pdf"
-			(at 79.4 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Description" "PCB Slide Switch SP3T On-On-On 100 mA Top"
-			(at 274.32 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Height" "6.5"
-			(at -120.6 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" "633-SS14MDP2"
-			(at -220.6 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/NKK-Switches/SS14MDP2?qs=tJRqkAIQG4xAbyvlpPIZ4A%3D%3D"
-			(at -320.6 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Name" "NKK Switches"
-			(at -420.6 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Part_Number" "SS14MDP2"
-			(at -520.6 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(pin "4"
-			(uuid "e79d5e9a-c674-49c4-ac81-c72a1f671cb8")
-		)
-		(pin "3"
-			(uuid "b21e0b33-932e-4a0d-b15a-ebb8016609dc")
-		)
-		(pin "1"
-			(uuid "d33b5ee8-6515-45e0-8d09-1ad5255cbca4")
-		)
-		(pin "2"
-			(uuid "e8da0be0-e14e-47bc-8cd9-31c4eca7092f")
-		)
-		(instances
-			(project "MCU_board"
-				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2"
-					(reference "S5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Polarized")
 		(at 255.27 44.45 0)
 		(unit 1)
@@ -7357,7 +7128,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100µF"
+		(property "Value" "1000µF"
 			(at 259.08 44.8309 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9925,148 +9696,6 @@
 			(project "MCU_board"
 				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2"
 					(reference "#PWR042")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "PESD3V3L1BSLZ:PESD3V3L1BSLZ")
-		(at 229.87 24.13 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "dbfa9442-3e51-4947-a3f3-2cb983e7eecd")
-		(property "Reference" "D5"
-			(at 240.03 13.97 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "PESD3V3L1BSLZ"
-			(at 240.03 16.51 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "PESD3V3L1BSLZ:PESD3V3L1BSLZ"
-			(at 245.11 117.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Datasheet" "https://assets.nexperia.com/documents/data-sheet/PESD3V3L1BSL.pdf"
-			(at 245.11 217.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Description" "11.3V Clamp 7.5A (8/20s) Ipp Tvs Diode Surface Mount DFN1006-2"
-			(at 229.87 24.13 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Height" "0.45"
-			(at 245.11 417.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Mouser Part Number" "771-PESD3V3L1BSLZ"
-			(at 245.11 517.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nexperia/PESD3V3L1BSLZ?qs=Li%252BoUPsLEnsrB%2FnSgNrAWw%3D%3D"
-			(at 245.11 617.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Manufacturer_Name" "Nexperia"
-			(at 245.11 717.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Manufacturer_Part_Number" "PESD3V3L1BSLZ"
-			(at 245.11 817.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(pin "2"
-			(uuid "bda5837e-7cda-42e9-8d1f-66ab53c63265")
-		)
-		(pin "1"
-			(uuid "e73a4b81-802c-423d-bbd7-bb24427854c8")
-		)
-		(instances
-			(project "MCU_board"
-				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8/ea4c8736-f392-459d-9b84-ce09c609ead2"
-					(reference "D5")
 					(unit 1)
 				)
 			)

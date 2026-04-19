@@ -251,333 +251,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "BSS138:BSS138"
-			(pin_names
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "Q"
-				(at 11.43 3.81 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Value" "BSS138"
-				(at 11.43 1.27 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Footprint" "SOT95P240X120-3N"
-				(at 11.43 -98.73 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Datasheet" "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF"
-				(at 11.43 -198.73 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Description" "Compact industry standard SOT-23 surface mount package.; 0.22 A, 50 V. RDS(ON) = 3.5  @ VGS = 10 V. RDS(ON) = 6.0  @ VGS = 4.5 V; Rugged and Reliable.; High density cell design for extremely low RDS(ON)."
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Height" "1.2"
-				(at 11.43 -398.73 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Mouser Part Number" "512-BSS138"
-				(at 11.43 -498.73 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi-Fairchild/BSS138?qs=HK%252BeIG1iaahCeqBvjB4arg%3D%3D"
-				(at 11.43 -598.73 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Manufacturer_Name" "onsemi"
-				(at 11.43 -698.73 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Manufacturer_Part_Number" "BSS138"
-				(at 11.43 -798.73 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(symbol "BSS138_1_1"
-				(polyline
-					(pts
-						(xy 2.54 0) (xy 5.08 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 5.08) (xy 5.08 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.842 5.588) (xy 5.842 4.572)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.842 2.54) (xy 6.858 3.048) (xy 6.858 2.032) (xy 5.842 2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.842 2.032) (xy 5.842 3.048)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.842 0) (xy 7.62 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.842 -0.508) (xy 5.842 0.508)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 6.35 2.54)
-					(radius 3.81)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 7.62 5.08) (xy 5.842 5.08)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 7.62 5.08) (xy 7.62 7.62)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 7.62 2.54) (xy 5.842 2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 7.62 2.54) (xy 7.62 -2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at 0 0 0)
-					(length 2.54)
-					(name "G"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 7.62 -5.08 90)
-					(length 2.54)
-					(name "S"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 7.62 10.16 270)
-					(length 2.54)
-					(name "D"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Connector:Conn_Coaxial"
 			(pin_names
 				(offset 1.016)
@@ -2529,12 +2202,6 @@
 		(uuid "04dd751f-8cb8-4cf7-af77-54e97269d13c")
 	)
 	(junction
-		(at 33.02 57.15)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "0714a70c-b1a6-4f7e-a59b-8534bbbbb721")
-	)
-	(junction
 		(at 238.76 93.98)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2551,6 +2218,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "23fda9ad-83c8-4b5f-a208-4446e33beff6")
+	)
+	(junction
+		(at 33.02 57.15)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5abfe3f1-bfee-4f2d-8753-8b2f58959939")
 	)
 	(junction
 		(at 233.68 31.75)
@@ -2575,6 +2248,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7b2ca7fc-d92f-4305-ab8e-46455ef56121")
+	)
+	(junction
+		(at 30.48 59.69)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a3bc835e-cae5-44ea-b819-55de0376395b")
 	)
 	(junction
 		(at 119.38 60.96)
@@ -2684,23 +2363,13 @@
 	)
 	(wire
 		(pts
-			(xy 200.66 77.47) (xy 200.66 82.55)
+			(xy 30.48 57.15) (xy 30.48 59.69)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "05509123-d125-4c84-b5cd-3e8154e6fae3")
-	)
-	(wire
-		(pts
-			(xy 29.21 57.15) (xy 33.02 57.15)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "07dbe0fa-01ec-452a-a702-a5c3a9a4bad9")
+		(uuid "0919fc27-51b8-4a31-aedf-3e3eab75ecfc")
 	)
 	(wire
 		(pts
@@ -3054,6 +2723,16 @@
 	)
 	(wire
 		(pts
+			(xy 200.66 77.47) (xy 200.66 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "73abb4a1-6a6a-4f80-8a75-c9ceb0ef8d52")
+	)
+	(wire
+		(pts
 			(xy 33.02 73.66) (xy 33.02 81.28)
 		)
 		(stroke
@@ -3194,16 +2873,6 @@
 	)
 	(wire
 		(pts
-			(xy 189.23 92.71) (xy 193.04 92.71)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a55133ab-16d7-4885-b19d-1ce019407c27")
-	)
-	(wire
-		(pts
 			(xy 58.42 173.99) (xy 62.23 173.99)
 		)
 		(stroke
@@ -3211,6 +2880,16 @@
 			(type default)
 		)
 		(uuid "a676c6fd-0526-4b4d-a391-a2d27899801f")
+	)
+	(wire
+		(pts
+			(xy 33.02 57.15) (xy 30.48 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a69fb0e3-fdfd-4d34-aa1c-45753a8f4678")
 	)
 	(wire
 		(pts
@@ -3354,6 +3033,16 @@
 	)
 	(wire
 		(pts
+			(xy 58.42 160.02) (xy 62.23 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d001dbe2-116d-4833-ae61-170da829c9e0")
+	)
+	(wire
+		(pts
 			(xy 39.37 101.6) (xy 46.99 101.6)
 		)
 		(stroke
@@ -3361,16 +3050,6 @@
 			(type default)
 		)
 		(uuid "db4381fd-9dcc-4bed-9338-f08599fc6c2d")
-	)
-	(wire
-		(pts
-			(xy 200.66 97.79) (xy 200.66 100.33)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dcc98d82-0a5c-46bb-8ec2-3fe6b7a52246")
 	)
 	(wire
 		(pts
@@ -3560,17 +3239,6 @@
 		)
 		(uuid "5ca14b49-73f8-4340-bfc6-595a4346d8f7")
 	)
-	(hierarchical_label "LOUDNESS"
-		(shape input)
-		(at 189.23 92.71 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "6cbcdcc0-1119-4217-9f9b-81051401968e")
-	)
 	(hierarchical_label "G_LRCLK"
 		(shape input)
 		(at 241.3 34.29 90)
@@ -3626,6 +3294,17 @@
 		)
 		(uuid "9fcffb6f-b812-4241-811d-1d23d45ffec1")
 	)
+	(hierarchical_label "3V8"
+		(shape output)
+		(at 62.23 160.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a38f9575-c390-4881-b624-b7e54a965fd2")
+	)
 	(hierarchical_label "PWRKEY"
 		(shape input)
 		(at 69.85 167.64 0)
@@ -3647,17 +3326,6 @@
 			(justify left)
 		)
 		(uuid "b7206379-3f4a-4e6a-b0fe-79df30f1f330")
-	)
-	(hierarchical_label "+3V3"
-		(shape input)
-		(at 29.21 57.15 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "cb5af6bc-6c67-4a43-a06b-adfd6f60b93f")
 	)
 	(hierarchical_label "TIMEPULSE"
 		(shape output)
@@ -3737,7 +3405,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "680kΩ"
+		(property "Value" "100kΩ"
 			(at 219.71 87.6299 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3938,84 +3606,6 @@
 			(project "MCU_board"
 				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8"
 					(reference "Q3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 200.66 100.33 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "291f15d0-d8f6-4e09-849d-36be851a750d")
-		(property "Reference" "#PWR036"
-			(at 200.66 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 200.66 105.41 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 200.66 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 200.66 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 200.66 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0dd3fcbb-c58c-4c9c-95ef-fcca11227cef")
-		)
-		(instances
-			(project "MCU_board"
-				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8"
-					(reference "#PWR036")
 					(unit 1)
 				)
 			)
@@ -4361,6 +3951,84 @@
 			(project "MCU_board"
 				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8"
 					(reference "#PWR035")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 200.66 86.36 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4793e8ac-17c3-4528-8ae2-19c0af63505b")
+		(property "Reference" "#PWR04"
+			(at 200.66 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 200.66 91.44 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 200.66 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 200.66 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 200.66 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5273a05f-2fe7-4db7-a333-5272b46091f1")
+		)
+		(instances
+			(project "MCU_board"
+				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8"
+					(reference "#PWR04")
 					(unit 1)
 				)
 			)
@@ -4989,153 +4657,6 @@
 			(project "MCU_board"
 				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8"
 					(reference "R28")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "BSS138:BSS138")
-		(at 193.04 92.71 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "b4d070e9-92fa-475d-89f0-91e410d8adfd")
-		(property "Reference" "Q4"
-			(at 204.47 88.8999 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "BSS138"
-			(at 204.47 91.4399 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "BSS138:SOT95P240X120-3N"
-			(at 204.47 191.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/BSS138-D.PDF"
-			(at 204.47 291.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Description" "Compact industry standard SOT-23 surface mount package.; 0.22 A, 50 V. RDS(ON) = 3.5  @ VGS = 10 V. RDS(ON) = 6.0  @ VGS = 4.5 V; Rugged and Reliable.; High density cell design for extremely low RDS(ON)."
-			(at 193.04 92.71 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Height" "1.2"
-			(at 204.47 491.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" "512-BSS138"
-			(at 204.47 591.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi-Fairchild/BSS138?qs=HK%252BeIG1iaahCeqBvjB4arg%3D%3D"
-			(at 204.47 691.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Name" "onsemi"
-			(at 204.47 791.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Part_Number" "BSS138"
-			(at 204.47 891.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(pin "3"
-			(uuid "3c7127ae-80c2-4f8e-b64d-c5b294cf0352")
-		)
-		(pin "2"
-			(uuid "ae3766ab-5ee5-4bf1-8900-4e77f65b7672")
-		)
-		(pin "1"
-			(uuid "1d4c4d03-c10b-4d96-98ad-647dd317b42c")
-		)
-		(instances
-			(project "MCU_board"
-				(path "/498aac81-136e-41bd-a3ff-29bc0732936d/cfe949ab-0502-475b-aed9-50a88bd6f7c8"
-					(reference "Q4")
 					(unit 1)
 				)
 			)
@@ -5852,6 +5373,16 @@
 		(pin "STATUS" output
 			(at 58.42 165.1 0)
 			(uuid "d33085f2-44b7-44bf-a1e7-fbb40448c4f9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "3V8" output
+			(at 58.42 160.02 0)
+			(uuid "029435b8-be85-4c8e-b616-26fde7bb89fe")
 			(effects
 				(font
 					(size 1.27 1.27)

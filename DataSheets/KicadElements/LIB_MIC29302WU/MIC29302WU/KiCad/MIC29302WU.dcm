@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP MIC29302WU
+D LDO Voltage Regulators 3.0A LDO Adj. + Shutdown
+K
+F https://www.mouser.in/datasheet/2/268/MIC2915x_30x_50x_75x_High_Current_Low_Dropout_Regu-1889172.pdf
+$ENDCMP
+#
+#End Doc Library

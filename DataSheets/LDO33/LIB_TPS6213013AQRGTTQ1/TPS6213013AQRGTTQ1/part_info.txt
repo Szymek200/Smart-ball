@@ -1,0 +1,9 @@
+Manufacturer=Texas Instruments
+PartNumber=TPS6213013AQRGTTQ1
+PartCategory=Integrated Circuit
+PackageCategory=Quad Flat No-Lead
+PinCount=17
+Version=2.1
+Released=2021-11-17 06:49:22
+Downloaded=2026-04-19 20:28:19
+3D=Y

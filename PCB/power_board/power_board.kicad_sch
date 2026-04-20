@@ -5126,7 +5126,7 @@
 					)
 				)
 			)
-			(property "Description" "Low Cap. ESD Protection Auto SOT-23-6 STMicroelectronics USBLC6-2SC6Y, Dual Uni-Directional TVS Diode Array, 6-Pin SOT-23"
+			(property "Description" "17V Clamp 5A (8/20µs) Ipp Tvs Diode Surface Mount SOT-23-6"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -5271,18 +5271,6 @@
 				)
 			)
 			(property "ARROW_PART_NUMBER" "USBLC6-2SC6Y"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "Description_1" "17V Clamp 5A (8/20µs) Ipp Tvs Diode Surface Mount SOT-23-6"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -5556,6 +5544,121 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "power:PWR_FLAG"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "flag power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(junction
 		(at 52.07 147.32)
@@ -5804,6 +5907,12 @@
 		(uuid "c127872e-3212-4d3c-911c-94b168f8a1ba")
 	)
 	(junction
+		(at 127 172.72)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c2bd799d-e7f9-4db7-8c84-20aa721bd33f")
+	)
+	(junction
 		(at 118.11 64.77)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5844,6 +5953,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d20cb640-2ee9-4f11-81ac-9fdc4fad13dc")
+	)
+	(junction
+		(at 64.77 16.51)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d566f21e-d81e-4fb6-b686-ce70a5926bf7")
 	)
 	(junction
 		(at 229.87 44.45)
@@ -7345,16 +7460,6 @@
 	)
 	(wire
 		(pts
-			(xy 127 151.13) (xy 134.62 151.13)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "74ba7a4b-d6e9-4249-a198-dde1f2de350f")
-	)
-	(wire
-		(pts
 			(xy 44.45 80.01) (xy 49.53 80.01)
 		)
 		(stroke
@@ -7462,6 +7567,16 @@
 			(type default)
 		)
 		(uuid "7dda6426-43e3-4988-a6f2-5fa81c7ea411")
+	)
+	(wire
+		(pts
+			(xy 127 151.13) (xy 134.62 151.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7e524480-2128-44a1-9e41-5ee011ef3de0")
 	)
 	(wire
 		(pts
@@ -7682,6 +7797,16 @@
 			(type default)
 		)
 		(uuid "8be3ef7b-b77f-431b-9853-5a8076036eb7")
+	)
+	(wire
+		(pts
+			(xy 64.77 16.51) (xy 72.39 16.51)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8cf6d6e8-7381-443d-82c3-36aad4bb4054")
 	)
 	(wire
 		(pts
@@ -8285,6 +8410,16 @@
 	)
 	(wire
 		(pts
+			(xy 64.77 21.59) (xy 64.77 16.51)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ca752d94-23f0-49fc-aedd-b45c4f61ea39")
+	)
+	(wire
+		(pts
 			(xy 115.57 71.12) (xy 115.57 74.93)
 		)
 		(stroke
@@ -8385,7 +8520,7 @@
 	)
 	(wire
 		(pts
-			(xy 59.69 16.51) (xy 72.39 16.51)
+			(xy 59.69 16.51) (xy 64.77 16.51)
 		)
 		(stroke
 			(width 0)
@@ -8565,6 +8700,16 @@
 	)
 	(wire
 		(pts
+			(xy 127 172.72) (xy 130.81 172.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "def7d9a6-6fb2-42fc-82fe-3397682223d1")
+	)
+	(wire
+		(pts
 			(xy 52.07 165.1) (xy 52.07 147.32)
 		)
 		(stroke
@@ -8602,6 +8747,16 @@
 			(type default)
 		)
 		(uuid "e05591ac-dd36-413f-8969-0968a95b78b9")
+	)
+	(wire
+		(pts
+			(xy 130.81 171.45) (xy 130.81 172.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e057af4b-0a87-4dc5-a4f5-025a604a697e")
 	)
 	(wire
 		(pts
@@ -9395,7 +9550,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Diode_THT:D_DO-41_SOD81_P7.62mm_Horizontal"
 			(at 99.06 154.94 0)
 			(hide yes)
 			(show_name no)
@@ -9949,7 +10104,7 @@
 				)
 			)
 		)
-		(property "Description" "Low Cap. ESD Protection Auto SOT-23-6 STMicroelectronics USBLC6-2SC6Y, Dual Uni-Directional TVS Diode Array, 6-Pin SOT-23"
+		(property "Description" "17V Clamp 5A (8/20µs) Ipp Tvs Diode Surface Mount SOT-23-6"
 			(at 153.67 72.39 0)
 			(hide yes)
 			(show_name no)
@@ -10948,6 +11103,84 @@
 			(project "power_board"
 				(path "/f044e945-eb74-49fa-825d-5f99d2d7b949"
 					(reference "R20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 130.81 171.45 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "37bfb533-caae-41df-bb8d-0f52bb5fabc6")
+		(property "Reference" "#FLG02"
+			(at 130.81 169.545 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 130.81 166.37 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 130.81 171.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 130.81 171.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 130.81 171.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0da0c3a3-7895-4be7-a858-00798c0b2572")
+		)
+		(instances
+			(project "power_board"
+				(path "/f044e945-eb74-49fa-825d-5f99d2d7b949"
+					(reference "#FLG02")
 					(unit 1)
 				)
 			)
@@ -14625,6 +14858,84 @@
 		)
 	)
 	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 64.77 21.59 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d57618d0-2978-4fe5-bf5f-d279998a3126")
+		(property "Reference" "#FLG03"
+			(at 64.77 23.495 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 64.77 26.67 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 64.77 21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 64.77 21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 64.77 21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "bd4e5d2f-f999-4c5b-b0ff-9fb882476c2f")
+		)
+		(instances
+			(project "power_board"
+				(path "/f044e945-eb74-49fa-825d-5f99d2d7b949"
+					(reference "#FLG03")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 41.91 173.99 0)
 		(unit 1)
@@ -14977,7 +15288,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "SOT95P240X120-3N"
+		(property "Footprint" "BSS138:SOT95P240X120-3N"
 			(at 68.58 201.6 0)
 			(hide yes)
 			(show_name no)

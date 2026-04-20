@@ -2202,12 +2202,6 @@
 		(uuid "04dd751f-8cb8-4cf7-af77-54e97269d13c")
 	)
 	(junction
-		(at 238.76 93.98)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "1058d1c6-d9ba-47f2-8b70-446f08735e52")
-	)
-	(junction
 		(at 240.03 93.98)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2553,16 +2547,6 @@
 	)
 	(wire
 		(pts
-			(xy 58.42 179.07) (xy 62.23 179.07)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "56563d6d-9ecd-458d-ac23-6062cdd3b6b9")
-	)
-	(wire
-		(pts
 			(xy 127 95.25) (xy 134.62 95.25)
 		)
 		(stroke
@@ -2620,26 +2604,6 @@
 			(type default)
 		)
 		(uuid "5d7d4108-3bbd-4090-8bc5-4b30fbe09822")
-	)
-	(wire
-		(pts
-			(xy 58.42 176.53) (xy 62.23 176.53)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5f60d158-1198-40b3-97e5-2e173e62f038")
-	)
-	(wire
-		(pts
-			(xy 217.17 93.98) (xy 238.76 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "636e1b34-3677-4e4c-9ce9-970b1def8214")
 	)
 	(wire
 		(pts
@@ -3151,6 +3115,16 @@
 		)
 		(uuid "fc0938af-e87c-42da-839d-9632faf60d53")
 	)
+	(wire
+		(pts
+			(xy 217.17 93.98) (xy 219.71 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fdd34cc3-5af8-4ed0-9e08-774cb2e71d65")
+	)
 	(hierarchical_label "RXD"
 		(shape input)
 		(at 31.75 54.61 180)
@@ -3184,6 +3158,17 @@
 		)
 		(uuid "13be6be1-7a0a-40dc-8bf7-80145747324d")
 	)
+	(hierarchical_label "LOUDNESS"
+		(shape input)
+		(at 219.71 93.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "22d5216b-5094-4954-9993-7943db58bd21")
+	)
 	(hierarchical_label "G_DIN"
 		(shape input)
 		(at 213.36 63.5 180)
@@ -3194,17 +3179,6 @@
 			(justify right)
 		)
 		(uuid "354a27c2-5183-4fe1-a0f5-4ff05fe948eb")
-	)
-	(hierarchical_label "OUT+5V"
-		(shape input)
-		(at 62.23 176.53 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "38d34989-8aea-4211-b8d9-4ab0425ffa41")
 	)
 	(hierarchical_label "ANTENA_SW"
 		(shape input)
@@ -3249,17 +3223,6 @@
 			(justify left)
 		)
 		(uuid "7d07c904-fc99-4176-b97f-16000d729ed3")
-	)
-	(hierarchical_label "BAT+"
-		(shape input)
-		(at 62.23 179.07 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "86fa0351-c180-4249-ab39-060f709e09f5")
 	)
 	(hierarchical_label "GSM_TXD"
 		(shape output)
@@ -5310,16 +5273,6 @@
 				(justify left top)
 			)
 		)
-		(pin "BAT+" input
-			(at 58.42 179.07 0)
-			(uuid "e8aeecaf-7941-4c28-84b6-2226174ba76a")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
 		(pin "GSM_RXD" input
 			(at 58.42 171.45 0)
 			(uuid "24b813da-0ee6-45d0-9638-ebcc1dc7a901")
@@ -5333,16 +5286,6 @@
 		(pin "GSM_TXD" output
 			(at 58.42 173.99 0)
 			(uuid "c26fb5f9-8929-4f88-a98f-4aea907c156c")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "OUT+5V" input
-			(at 58.42 176.53 0)
-			(uuid "fa8a7635-643d-45b3-a6ae-3c9bebdfe0d9")
 			(effects
 				(font
 					(size 1.27 1.27)

@@ -3453,16 +3453,6 @@
 	)
 	(wire
 		(pts
-			(xy 45.72 50.8) (xy 40.64 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "79d60ca9-fd3e-49f1-897d-2798692b5df1")
-	)
-	(wire
-		(pts
 			(xy 168.91 182.88) (xy 165.1 182.88)
 		)
 		(stroke
@@ -3583,16 +3573,6 @@
 	)
 	(wire
 		(pts
-			(xy 111.76 167.64) (xy 111.76 171.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8f3ada34-785c-45f8-8efc-c6eea296fc75")
-	)
-	(wire
-		(pts
 			(xy 60.96 76.2) (xy 72.39 76.2)
 		)
 		(stroke
@@ -3610,6 +3590,16 @@
 			(type default)
 		)
 		(uuid "9c2a7956-4e20-4d8f-8470-a2ff1a25a1cd")
+	)
+	(wire
+		(pts
+			(xy 40.64 50.8) (xy 45.72 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a04f63b3-8fda-4a61-9d65-c1da9f1dbc7c")
 	)
 	(wire
 		(pts
@@ -4070,16 +4060,6 @@
 			(justify left bottom)
 		)
 		(uuid "0306b30f-bd3d-4eb7-bffc-8352ffc3dd0a")
-	)
-	(label "BAT+"
-		(at 111.76 167.64 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "0780d014-5574-4654-8293-0801bc6b8fc0")
 	)
 	(label "WCLK"
 		(at 274.32 38.1 0)
@@ -5530,7 +5510,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
 			(at 46.6852 35.56 0)
 			(hide yes)
 			(show_name no)
@@ -6566,16 +6546,6 @@
 		(pin "ANTENA_SW" input
 			(at 119.38 171.45 90)
 			(uuid "ca59b20c-2934-4376-92f3-8ee7df20da7b")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "BAT+" input
-			(at 111.76 171.45 90)
-			(uuid "4a6a51c4-f9c0-4b46-b4ff-0e439b6286ea")
 			(effects
 				(font
 					(size 1.27 1.27)

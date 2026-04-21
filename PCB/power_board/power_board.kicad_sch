@@ -15491,7 +15491,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e6f4940c-ca3e-4669-9936-e906b9c2aa2e")
-		(property "Reference" "J7"
+		(property "Reference" "indukcja1"
 			(at 55.88 30.4799 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -15555,7 +15555,7 @@
 		(instances
 			(project "power_board"
 				(path "/f044e945-eb74-49fa-825d-5f99d2d7b949"
-					(reference "J7")
+					(reference "indukcja1")
 					(unit 1)
 				)
 			)

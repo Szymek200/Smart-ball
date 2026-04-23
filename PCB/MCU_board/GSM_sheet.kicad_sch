@@ -5891,7 +5891,7 @@
 		)
 		(uuid "072731f2-5b32-464d-bd3f-b6b992e6adab")
 	)
-	(label "PWRKEY"
+	(label "PWRKEY_1V8"
 		(at 196.85 134.62 180)
 		(effects
 			(font
@@ -5951,7 +5951,7 @@
 		)
 		(uuid "6b3bb66f-cb3a-4ef8-8b4e-23a5a14452f6")
 	)
-	(label "GSM_RXD"
+	(label "GSM_RXD_1V8"
 		(at 191.77 129.54 180)
 		(effects
 			(font
@@ -5971,7 +5971,7 @@
 		)
 		(uuid "76c847d5-d301-4e65-a718-4babcc1ff24e")
 	)
-	(label "PWRKEY"
+	(label "PWRKEY_1V8"
 		(at 30.48 67.31 180)
 		(effects
 			(font
@@ -6011,7 +6011,7 @@
 		)
 		(uuid "b4c6e180-b466-4223-bc58-c07ac5391585")
 	)
-	(label "GSM_RXD"
+	(label "GSM_RXD_1V8"
 		(at 39.37 113.03 180)
 		(effects
 			(font
@@ -6031,7 +6031,7 @@
 		)
 		(uuid "df653efc-9d46-471a-9564-0ba25cbb28c6")
 	)
-	(label "GSM_TXD"
+	(label "GSM_TXD_1V8"
 		(at 191.77 132.08 180)
 		(effects
 			(font
@@ -6041,7 +6041,7 @@
 		)
 		(uuid "e0d24369-7a24-461d-95b9-061bd63f55cb")
 	)
-	(label "GSM_TXD"
+	(label "GSM_TXD_1V8"
 		(at 39.37 107.95 180)
 		(effects
 			(font
@@ -6051,7 +6051,7 @@
 		)
 		(uuid "e526ead0-4415-4afa-835b-192169a6dc65")
 	)
-	(label "STATUS"
+	(label "STATUS_1V8"
 		(at 71.12 46.99 90)
 		(effects
 			(font
@@ -6071,7 +6071,7 @@
 		)
 		(uuid "f778b547-d85e-4c7f-9765-a65d781bf5c1")
 	)
-	(label "STATUS"
+	(label "STATUS_1V8"
 		(at 196.85 137.16 180)
 		(effects
 			(font

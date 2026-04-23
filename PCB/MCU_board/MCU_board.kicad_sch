@@ -2814,6 +2814,10 @@
 		(uuid "558bdf36-17b1-48b5-8b42-a858db4a833a")
 	)
 	(no_connect
+		(at 251.46 50.8)
+		(uuid "59d74c79-5961-42b5-886d-9e45a171868c")
+	)
+	(no_connect
 		(at 274.32 86.36)
 		(uuid "62eb6737-8b53-4f14-9abd-3150824c3157")
 	)
@@ -2830,10 +2834,6 @@
 		(uuid "7442a1d9-1175-4276-baa7-c367bd5196fb")
 	)
 	(no_connect
-		(at 251.46 83.82)
-		(uuid "790384af-469e-41a9-90df-579cd6f1cd90")
-	)
-	(no_connect
 		(at 105.41 35.56)
 		(uuid "874c2acd-6b8f-415f-9561-94a4ff790262")
 	)
@@ -2842,8 +2842,8 @@
 		(uuid "8a47a727-8377-44c8-943b-a0de92a2ff37")
 	)
 	(no_connect
-		(at 251.46 86.36)
-		(uuid "953f689a-b8ce-4f66-a756-bc00e8fa368a")
+		(at 251.46 48.26)
+		(uuid "9160979d-e11d-4eea-93bc-995f232f8fe6")
 	)
 	(no_connect
 		(at 274.32 81.28)
@@ -4051,26 +4051,6 @@
 		)
 		(uuid "fab36d78-a439-4198-affe-cc64749d128e")
 	)
-	(label "MISO"
-		(at 274.32 45.72 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "0306b30f-bd3d-4eb7-bffc-8352ffc3dd0a")
-	)
-	(label "WCLK"
-		(at 274.32 38.1 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "08367ef3-ced8-4881-8ebf-cb9e5940db28")
-	)
 	(label "STATUS"
 		(at 110.49 50.8 0)
 		(effects
@@ -4141,6 +4121,16 @@
 		)
 		(uuid "22769564-dda2-49fa-9bfa-880e52c13d01")
 	)
+	(label "MISO"
+		(at 274.32 43.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "23adb5f6-5412-4fd9-b6f0-6f4408dc453f")
+	)
 	(label "STATUS"
 		(at 161.29 166.37 90)
 		(effects
@@ -4170,6 +4160,16 @@
 			(justify left bottom)
 		)
 		(uuid "2ce4516c-af2a-465d-a7a7-426a7b9a0bfe")
+	)
+	(label "USB_D+"
+		(at 251.46 83.82 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "30b6a194-675c-45e5-bdfa-aa8120aabb28")
 	)
 	(label "G_BCLK"
 		(at 60.96 73.66 180)
@@ -4211,16 +4211,6 @@
 		)
 		(uuid "3aa705bd-1e6d-4b81-baa9-c0644360c411")
 	)
-	(label "USB_D+"
-		(at 251.46 48.26 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "3f3b6238-0f10-40a7-9dae-c6473abaa397")
-	)
 	(label "IMU_INT2"
 		(at 274.32 48.26 0)
 		(effects
@@ -4260,6 +4250,16 @@
 			(justify left bottom)
 		)
 		(uuid "4c7bf54c-a49e-4f34-810c-e961fd170b58")
+	)
+	(label "3V8"
+		(at 274.32 38.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4ca0b730-cc9f-485c-928e-3b0eef58c650")
 	)
 	(label "G_LRCLK"
 		(at 107.95 68.58 0)
@@ -4491,6 +4491,16 @@
 		)
 		(uuid "8c11f2f6-0c14-4e08-b472-6144195dd12b")
 	)
+	(label "MOSI"
+		(at 274.32 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8d2a4d53-9bf6-4b68-b7e3-a781b54f5dc1")
+	)
 	(label "OUT+5V"
 		(at 251.46 43.18 180)
 		(effects
@@ -4500,6 +4510,16 @@
 			(justify right bottom)
 		)
 		(uuid "907277b7-219b-41cd-8bad-a8b0254bf7b4")
+	)
+	(label "WCLK"
+		(at 274.32 68.58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9219df0d-3a02-49ff-b394-553645715d0e")
 	)
 	(label "I2C_SDA"
 		(at 111.76 63.5 0)
@@ -4611,6 +4631,16 @@
 		)
 		(uuid "bd75234e-c178-4146-a8c1-54d669a81c72")
 	)
+	(label "ACCEL_INT2"
+		(at 274.32 63.5 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c0cb1b6b-605c-473d-8c1a-3b7c514beb5a")
+	)
 	(label "IMU_INT2"
 		(at 110.49 43.18 0)
 		(effects
@@ -4661,16 +4691,6 @@
 		)
 		(uuid "c943693e-914e-4a58-acdc-779fb60b16c8")
 	)
-	(label "3V8"
-		(at 274.32 68.58 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "cbb0a09d-07e8-452b-aaa6-7ed48789ac2f")
-	)
 	(label "BAT+"
 		(at 251.46 66.04 180)
 		(effects
@@ -4691,16 +4711,6 @@
 		)
 		(uuid "cdc33392-35e5-4cb9-9458-be00ff259965")
 	)
-	(label "USB_D-"
-		(at 251.46 50.8 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "ce53ea20-5142-4851-b88b-0c6505a99f54")
-	)
 	(label "OUT_N"
 		(at 248.92 68.58 180)
 		(effects
@@ -4711,6 +4721,16 @@
 		)
 		(uuid "cedec5f7-0cc7-4722-96ff-8b37d7131f46")
 	)
+	(label "USB_D-"
+		(at 251.46 86.36 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "cfae1154-eac6-4a88-97f7-7dba07f6df56")
+	)
 	(label "G_LRCLK"
 		(at 137.16 167.64 90)
 		(effects
@@ -4720,16 +4740,6 @@
 			(justify left bottom)
 		)
 		(uuid "cfd63fbc-0738-4795-acec-345e470e0ded")
-	)
-	(label "ACCEL_INT1"
-		(at 274.32 63.5 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "d1cb9a93-f72b-41dc-870c-d805cd208386")
 	)
 	(label "OUT_P"
 		(at 248.92 71.12 180)
@@ -4791,6 +4801,16 @@
 		)
 		(uuid "de3aea2b-bd61-4647-8b07-02f10e289b66")
 	)
+	(label "ACCEL_INT1"
+		(at 274.32 60.96 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e455e1b4-8bec-46be-a3f4-e4880ed6af12")
+	)
 	(label "GSM_INT"
 		(at 121.92 167.64 90)
 		(effects
@@ -4801,16 +4821,6 @@
 		)
 		(uuid "ebcc65be-1209-4eea-8a44-044869d3f96d")
 	)
-	(label "MOSI"
-		(at 274.32 43.18 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "f4a54d82-1f45-4a16-ba7c-079fa6d53a51")
-	)
 	(label "TXD"
 		(at 66.04 43.18 180)
 		(effects
@@ -4820,16 +4830,6 @@
 			(justify right bottom)
 		)
 		(uuid "f8a15a58-4061-42d4-82e9-12b494535a2a")
-	)
-	(label "ACCEL_INT2"
-		(at 274.32 60.96 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "fa6e3092-9ad6-4bce-a5e8-34b32ffc0969")
 	)
 	(label "OUT+5V"
 		(at 143.51 167.64 90)

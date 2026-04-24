@@ -2917,10 +2917,6 @@
 		(uuid "59d74c79-5961-42b5-886d-9e45a171868c")
 	)
 	(no_connect
-		(at 274.32 86.36)
-		(uuid "62eb6737-8b53-4f14-9abd-3150824c3157")
-	)
-	(no_connect
 		(at 251.46 73.66)
 		(uuid "6818a84a-956a-4163-b20c-9db22fcc81fb")
 	)
@@ -3952,6 +3948,16 @@
 	)
 	(wire
 		(pts
+			(xy 275.59 86.36) (xy 275.59 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d42b32a4-cbfe-4f7b-b03c-3918d9b1efa6")
+	)
+	(wire
+		(pts
 			(xy 45.72 35.56) (xy 45.72 38.1)
 		)
 		(stroke
@@ -4119,6 +4125,16 @@
 			(type default)
 		)
 		(uuid "f06104f5-2526-420c-8d78-08539f55e570")
+	)
+	(wire
+		(pts
+			(xy 274.32 86.36) (xy 275.59 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f43201d9-c99e-4004-833a-0b93a62bdaf3")
 	)
 	(wire
 		(pts
@@ -5348,6 +5364,84 @@
 			(project "MCU_board"
 				(path "/498aac81-136e-41bd-a3ff-29bc0732936d"
 					(reference "#PWR01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 275.59 87.63 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3207c664-8dc4-4912-9ba4-e23eb76a2dde")
+		(property "Reference" "#PWR05"
+			(at 275.59 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 275.59 92.71 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 275.59 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 275.59 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 275.59 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5e76e1af-c841-4464-b0bb-9c1e157acc07")
+		)
+		(instances
+			(project "MCU_board"
+				(path "/498aac81-136e-41bd-a3ff-29bc0732936d"
+					(reference "#PWR05")
 					(unit 1)
 				)
 			)

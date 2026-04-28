@@ -13454,7 +13454,7 @@
 		(descr "0603_4")
 		(tags "Capacitor")
 		(property "Reference" "C10"
-			(at 0 1.65 90)
+			(at 0.06 1.35 90)
 			(layer "B.SilkS")
 			(uuid "cd020296-6aa0-48f1-9104-0b60404c6660")
 			(effects

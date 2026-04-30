@@ -2917,6 +2917,10 @@
 		(uuid "59d74c79-5961-42b5-886d-9e45a171868c")
 	)
 	(no_connect
+		(at 274.32 68.58)
+		(uuid "5b9d3dec-f2c0-427a-b6d8-abb7d0c1c7d2")
+	)
+	(no_connect
 		(at 251.46 73.66)
 		(uuid "6818a84a-956a-4163-b20c-9db22fcc81fb")
 	)
@@ -2939,6 +2943,10 @@
 	(no_connect
 		(at 251.46 48.26)
 		(uuid "9160979d-e11d-4eea-93bc-995f232f8fe6")
+	)
+	(no_connect
+		(at 72.39 83.82)
+		(uuid "94b99c4f-7673-48b2-83c9-927b3b393105")
 	)
 	(no_connect
 		(at 274.32 81.28)
@@ -3758,16 +3766,6 @@
 	)
 	(wire
 		(pts
-			(xy 59.69 83.82) (xy 72.39 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a59035fd-af02-4852-b874-cc36d2e03da3")
-	)
-	(wire
-		(pts
 			(xy 29.21 40.64) (xy 45.72 40.64)
 		)
 		(stroke
@@ -4296,16 +4294,6 @@
 		)
 		(uuid "312a9f9b-ef82-46ca-8190-65dc70278015")
 	)
-	(label "DATA_IN"
-		(at 274.32 55.88 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "33d5458d-6dfd-4550-b704-084b4cff1149")
-	)
 	(label "TXD"
 		(at 152.4 167.64 90)
 		(effects
@@ -4345,6 +4333,16 @@
 			(justify left bottom)
 		)
 		(uuid "45f922c2-423c-4410-ade1-57dc2f6d7439")
+	)
+	(label "SDX"
+		(at 274.32 58.42 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "470f20de-129c-4b61-9434-ca67afc3adbf")
 	)
 	(label "OUT_P"
 		(at 101.6 166.37 90)
@@ -4516,16 +4514,6 @@
 		)
 		(uuid "6cb2e179-949b-4f14-a865-de3b5bfbf217")
 	)
-	(label "BCLK"
-		(at 274.32 58.42 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "7314998f-8774-4850-a156-67e5e2477c9d")
-	)
 	(label "SCLK"
 		(at 64.77 63.5 180)
 		(effects
@@ -4565,16 +4553,6 @@
 			(justify right bottom)
 		)
 		(uuid "7d7aa2f7-c282-4a6e-a98b-63e54aeed88e")
-	)
-	(label "BCLK"
-		(at 60.96 81.28 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "83d8769d-040c-4f22-bb55-4ad0b7115b5a")
 	)
 	(label "IMU_INT1"
 		(at 274.32 50.8 0)
@@ -4626,15 +4604,15 @@
 		)
 		(uuid "907277b7-219b-41cd-8bad-a8b0254bf7b4")
 	)
-	(label "WCLK"
-		(at 274.32 68.58 0)
+	(label "SCX"
+		(at 274.32 55.88 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "9219df0d-3a02-49ff-b394-553645715d0e")
+		(uuid "953d9f60-fb52-4302-9cba-6d333c9b9352")
 	)
 	(label "I2C_SDA"
 		(at 111.76 63.5 0)
@@ -4645,16 +4623,6 @@
 			(justify left bottom)
 		)
 		(uuid "9b12384d-d15b-406d-ae86-9b08b166e043")
-	)
-	(label "WCLK"
-		(at 60.96 78.74 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "9b1566c2-58d9-4837-84b1-f27efa67b495")
 	)
 	(label "RXD"
 		(at 149.86 167.64 90)
@@ -4866,16 +4834,6 @@
 		)
 		(uuid "d4caaaa2-fb54-411d-9357-6b50adaf92b8")
 	)
-	(label "DATA_IN"
-		(at 59.69 83.82 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "d7410f5b-cda7-4687-93e3-5120e1ea3e30")
-	)
 	(label "ACCEL_CS"
 		(at 274.32 66.04 0)
 		(effects
@@ -4935,6 +4893,26 @@
 			(justify left bottom)
 		)
 		(uuid "ebcc65be-1209-4eea-8a44-044869d3f96d")
+	)
+	(label "SCX"
+		(at 60.96 78.74 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ef8cba91-be5c-42bf-ad4a-e63f87714c34")
+	)
+	(label "SDX"
+		(at 60.96 81.28 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f323b17c-ddbc-4b15-a641-9fc50948e198")
 	)
 	(label "TXD"
 		(at 66.04 43.18 180)

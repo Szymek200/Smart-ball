@@ -6125,6 +6125,10 @@
 		(uuid "2da4b631-a1c1-4dd5-bf91-4a8f76fa4287")
 	)
 	(no_connect
+		(at 261.62 137.16)
+		(uuid "31143c95-fc65-4583-aea4-dd82eedcf5ee")
+	)
+	(no_connect
 		(at 238.76 149.86)
 		(uuid "4753ea08-f1ee-49da-8566-21d867245d7e")
 	)
@@ -7031,16 +7035,6 @@
 			(type default)
 		)
 		(uuid "48820e18-6467-4139-b84f-dd147b695fcf")
-	)
-	(wire
-		(pts
-			(xy 261.62 137.16) (xy 267.97 137.16)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "48c07ff9-8177-41ad-a9ba-c0f4a0de4ea1")
 	)
 	(wire
 		(pts
@@ -16953,19 +16947,9 @@
 				(justify right)
 			)
 		)
-		(pin "BCLK" input
-			(at 267.97 127 180)
-			(uuid "b396a414-1851-4108-bcd0-827a91307d5e")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "DATA_IN" input
+		(pin "SCX" input
 			(at 267.97 124.46 180)
-			(uuid "c5d71132-99b5-4088-8531-e7576c672f4e")
+			(uuid "0721e67d-6dd0-4de8-a136-9cc8528e5384")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16973,9 +16957,9 @@
 				(justify left)
 			)
 		)
-		(pin "WCLK" input
-			(at 267.97 137.16 180)
-			(uuid "3e3e0e59-0350-4657-ac54-891caf15e9ec")
+		(pin "SDX" input
+			(at 267.97 127 180)
+			(uuid "01a08224-0cfe-4fb2-96e8-2a0fe39227cb")
 			(effects
 				(font
 					(size 1.27 1.27)

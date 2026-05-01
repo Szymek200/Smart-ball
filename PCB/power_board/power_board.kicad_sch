@@ -6141,6 +6141,10 @@
 		(uuid "504fecc8-e087-42ce-b26d-06b5b86b56a6")
 	)
 	(no_connect
+		(at 241.3 38.1)
+		(uuid "61e2b87a-03d5-44d8-86dd-df54c478e8d0")
+	)
+	(no_connect
 		(at 261.62 144.78)
 		(uuid "6bbb931c-22ed-45ba-9e93-61d2d9665d84")
 	)
@@ -6153,8 +6157,16 @@
 		(uuid "7c884b50-1b96-45c6-a482-ab9b398e2fda")
 	)
 	(no_connect
+		(at 261.62 106.68)
+		(uuid "95fb319a-ec4f-4471-981d-f612ec42563c")
+	)
+	(no_connect
 		(at 205.74 43.18)
 		(uuid "b0761144-1b4a-419e-8a9a-c3b834249634")
+	)
+	(no_connect
+		(at 241.3 40.64)
+		(uuid "b247673d-1862-4820-a803-b1713c299675")
 	)
 	(no_connect
 		(at 261.62 147.32)
@@ -6385,16 +6397,6 @@
 			(type default)
 		)
 		(uuid "1603430a-acf2-41ab-b8f4-353ac57a54bf")
-	)
-	(wire
-		(pts
-			(xy 241.3 40.64) (xy 243.84 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1694f746-bba4-4b53-9aa3-7e66c1e7b0e5")
 	)
 	(wire
 		(pts
@@ -6858,16 +6860,6 @@
 	)
 	(wire
 		(pts
-			(xy 227.33 85.09) (xy 227.33 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3f3d8e42-e05b-4b98-891e-2f103d757078")
-	)
-	(wire
-		(pts
 			(xy 41.91 41.91) (xy 50.8 41.91)
 		)
 		(stroke
@@ -7268,16 +7260,6 @@
 	)
 	(wire
 		(pts
-			(xy 264.16 106.68) (xy 261.62 106.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5d05d6fe-7676-4097-8e2c-b037fe314921")
-	)
-	(wire
-		(pts
 			(xy 152.4 138.43) (xy 147.32 138.43)
 		)
 		(stroke
@@ -7515,16 +7497,6 @@
 			(type default)
 		)
 		(uuid "6a3bd2b8-afd5-439a-a9bc-cbdb445a7eaa")
-	)
-	(wire
-		(pts
-			(xy 264.16 104.14) (xy 264.16 106.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6ad1029a-cccf-4fa3-8086-b6cf2904b37a")
 	)
 	(wire
 		(pts
@@ -8165,16 +8137,6 @@
 			(type default)
 		)
 		(uuid "9dc3574e-c461-4bec-ac1d-8356868bbbfc")
-	)
-	(wire
-		(pts
-			(xy 241.3 38.1) (xy 243.84 38.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9e0c3952-b468-4ad0-bbc5-38c57bbbe28e")
 	)
 	(wire
 		(pts
@@ -9417,26 +9379,6 @@
 		(uuid "fcd74c6e-24f7-4144-97ed-46dbab02f91d")
 	)
 	(label "USB_D-"
-		(at 243.84 40.64 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "02fc6dbe-b375-436f-ac4a-a98f83f4a93e")
-	)
-	(label "3V8"
-		(at 264.16 104.14 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "034d2943-9b1c-4ca7-822d-6603d8df5ecc")
-	)
-	(label "USB_D-"
 		(at 175.26 41.91 180)
 		(effects
 			(font
@@ -9666,16 +9608,6 @@
 		)
 		(uuid "b24d6a71-e00a-4bb2-b1e8-d246352ff415")
 	)
-	(label "3V8"
-		(at 227.33 88.9 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "b4808288-054a-43a6-9111-3aef17a59c49")
-	)
 	(label "STAT2"
 		(at 111.76 162.56 0)
 		(effects
@@ -9725,16 +9657,6 @@
 			(justify right bottom)
 		)
 		(uuid "ce60a8e0-ad32-486a-8083-8c36bda8306e")
-	)
-	(label "USB_D+"
-		(at 243.84 38.1 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "de611124-4563-4a63-939c-3375977e5e8d")
 	)
 	(label "USB_D+"
 		(at 175.26 39.37 180)
@@ -9788,7 +9710,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_THT:D_DO-41_SOD81_P7.62mm_Horizontal"
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
 			(at 99.06 154.94 0)
 			(hide yes)
 			(show_name no)
@@ -10593,7 +10515,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 64.77 47.9552 0)
 			(hide yes)
 			(show_name no)
@@ -11058,7 +10980,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 39.37 65.7352 0)
 			(hide yes)
 			(show_name no)
@@ -11140,7 +11062,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 191.262 124.46 90)
 			(hide yes)
 			(show_name no)
@@ -11220,7 +11142,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 91.44 57.912 90)
 			(hide yes)
 			(show_name no)
@@ -11534,7 +11456,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 39.0652 91.44 0)
 			(hide yes)
 			(show_name no)
@@ -11616,7 +11538,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 96.2152 90.17 0)
 			(hide yes)
 			(show_name no)
@@ -11696,7 +11618,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 110.49 73.152 90)
 			(hide yes)
 			(show_name no)
@@ -11778,7 +11700,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 37.592 138.43 90)
 			(hide yes)
 			(show_name no)
@@ -12314,7 +12236,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 37.592 128.27 90)
 			(hide yes)
 			(show_name no)
@@ -12396,7 +12318,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 47.752 163.83 90)
 			(hide yes)
 			(show_name no)
@@ -12478,7 +12400,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 14.2748 64.77 0)
 			(hide yes)
 			(show_name no)
@@ -12558,7 +12480,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 33.02 74.422 90)
 			(hide yes)
 			(show_name no)
@@ -12640,7 +12562,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 104.902 172.72 90)
 			(hide yes)
 			(show_name no)
@@ -12930,7 +12852,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 200.152 137.16 90)
 			(hide yes)
 			(show_name no)
@@ -13012,7 +12934,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 207.772 147.32 90)
 			(hide yes)
 			(show_name no)
@@ -13232,7 +13154,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 88.9 70.8152 0)
 			(hide yes)
 			(show_name no)
@@ -13645,7 +13567,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 93.98 68.2752 0)
 			(hide yes)
 			(show_name no)
@@ -13727,7 +13649,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 116.5352 140.97 0)
 			(hide yes)
 			(show_name no)
@@ -13885,7 +13807,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 162.052 43.18 90)
 			(hide yes)
 			(show_name no)
@@ -14042,7 +13964,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 33.02 73.3552 0)
 			(hide yes)
 			(show_name no)
@@ -14121,7 +14043,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 39.37 70.8152 0)
 			(hide yes)
 			(show_name no)
@@ -14203,7 +14125,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 116.84 49.53 0)
 			(hide yes)
 			(show_name no)
@@ -14363,7 +14285,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 94.742 168.91 90)
 			(hide yes)
 			(show_name no)
@@ -14679,7 +14601,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Diode_THT:D_DO-41_SOD81_P7.62mm_Horizontal"
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
 			(at 27.94 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -14772,7 +14694,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 56.8452 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -14854,7 +14776,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 102.5652 135.89 0)
 			(hide yes)
 			(show_name no)
@@ -14936,7 +14858,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 143.2052 157.48 0)
 			(hide yes)
 			(show_name no)
@@ -15016,7 +14938,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 111.76 153.162 90)
 			(hide yes)
 			(show_name no)
@@ -15323,7 +15245,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 34.29 40.9448 0)
 			(hide yes)
 			(show_name no)
@@ -15405,7 +15327,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 33.782 160.02 90)
 			(hide yes)
 			(show_name no)
@@ -15643,7 +15565,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 47.752 128.27 90)
 			(hide yes)
 			(show_name no)
@@ -15722,7 +15644,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 96.52 73.3552 0)
 			(hide yes)
 			(show_name no)
@@ -15802,7 +15724,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 110.49 62.992 90)
 			(hide yes)
 			(show_name no)
@@ -16486,7 +16408,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 28.702 151.13 90)
 			(hide yes)
 			(show_name no)
@@ -16646,7 +16568,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 271.272 35.56 90)
 			(hide yes)
 			(show_name no)
@@ -17046,16 +16968,6 @@
 		(pin "+3V3" output
 			(at 218.44 85.09 270)
 			(uuid "47185900-926f-434a-9af0-53eda8b69860")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "3V8" input
-			(at 227.33 85.09 270)
-			(uuid "c25390f5-c014-45a4-a511-1066d46fa2c8")
 			(effects
 				(font
 					(size 1.27 1.27)

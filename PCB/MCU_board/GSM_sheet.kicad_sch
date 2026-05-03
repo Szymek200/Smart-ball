@@ -6081,6 +6081,30 @@
 		)
 		(uuid "f94ef597-acef-42d3-8d6a-201eec13a221")
 	)
+	(global_label "BAT+"
+		(shape input)
+		(at 271.78 44.45 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "94d29d34-1d3a-41d5-a86f-7ac86600f901")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 279.6638 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
 	(hierarchical_label "GSM_TXD"
 		(shape output)
 		(at 228.6 132.08 0)
@@ -6146,17 +6170,6 @@
 			(justify left)
 		)
 		(uuid "b3b6832b-9e9e-4adc-8317-c0edb6801537")
-	)
-	(hierarchical_label "3V8"
-		(shape output)
-		(at 271.78 44.45 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "ed6d9667-c89d-4607-a7c0-5c65080eaf63")
 	)
 	(symbol
 		(lib_id "Connector:Conn_Coaxial")
@@ -6600,7 +6613,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 228.2952 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -6903,7 +6916,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 256.2352 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -7696,7 +7709,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_SMD:CP_Elec_6.3x5.4"
 			(at 103.8352 26.67 0)
 			(hide yes)
 			(show_name no)
@@ -7856,7 +7869,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_SMD:CP_Elec_6.3x5.4"
 			(at 216.8652 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -7936,7 +7949,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_SMD:CP_Elec_6.3x5.4"
 			(at 228.6 87.3252 0)
 			(hide yes)
 			(show_name no)
@@ -8252,7 +8265,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 170.942 140.97 90)
 			(hide yes)
 			(show_name no)
@@ -8332,7 +8345,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 80.01 31.242 90)
 			(hide yes)
 			(show_name no)
@@ -8496,7 +8509,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 242.2652 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -8892,7 +8905,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_SMD:CP_Elec_6.3x5.4"
 			(at 204.1652 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -9050,7 +9063,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 160.02 32.512 90)
 			(hide yes)
 			(show_name no)
@@ -9277,7 +9290,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 93.98 31.242 90)
 			(hide yes)
 			(show_name no)
@@ -9437,7 +9450,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_SMD:CP_Elec_6.3x5.4"
 			(at 87.3252 29.21 0)
 			(hide yes)
 			(show_name no)
@@ -9674,7 +9687,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Diode_THT:D_DO-41_SOD81_P7.62mm_Horizontal"
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
 			(at 170.18 34.29 0)
 			(hide yes)
 			(show_name no)

@@ -2905,6 +2905,10 @@
 		(uuid "1b1d5241-31df-4710-915e-2bd995108af9")
 	)
 	(no_connect
+		(at 251.46 66.04)
+		(uuid "27f70e64-8fa6-4d4d-aa94-617fecc2b9f8")
+	)
+	(no_connect
 		(at 274.32 71.12)
 		(uuid "3301d11b-faba-4929-aa31-f62d42d6836c")
 	)
@@ -3553,16 +3557,6 @@
 			(type default)
 		)
 		(uuid "7978bd07-3db5-4b4b-a6cf-8389ed1a87b5")
-	)
-	(wire
-		(pts
-			(xy 168.91 182.88) (xy 165.1 182.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7a83ae36-059e-45c1-a422-88d8e87e3ac1")
 	)
 	(wire
 		(pts
@@ -4364,16 +4358,6 @@
 		)
 		(uuid "4c7bf54c-a49e-4f34-810c-e961fd170b58")
 	)
-	(label "3V8"
-		(at 274.32 38.1 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "4ca0b730-cc9f-485c-928e-3b0eef58c650")
-	)
 	(label "G_LRCLK"
 		(at 107.95 68.58 0)
 		(effects
@@ -4754,16 +4738,6 @@
 		)
 		(uuid "c72fb234-3a5f-4859-b991-a830dda03ead")
 	)
-	(label "3V8"
-		(at 168.91 182.88 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "c7e7829b-ba60-4b71-9475-d9c000199993")
-	)
 	(label "PWRKEY"
 		(at 110.49 48.26 0)
 		(effects
@@ -4773,16 +4747,6 @@
 			(justify left bottom)
 		)
 		(uuid "c943693e-914e-4a58-acdc-779fb60b16c8")
-	)
-	(label "BAT+"
-		(at 251.46 66.04 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "cd48ec4e-bd6c-432b-8a70-04dddcfa97f2")
 	)
 	(label "LOUDNESS"
 		(at 140.97 167.64 90)
@@ -4954,6 +4918,30 @@
 		)
 		(uuid "fc8930d6-ff31-4ef8-a1d3-54c839fd2b1c")
 	)
+	(global_label "BAT+"
+		(shape input)
+		(at 274.32 38.1 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "850ed45a-4900-429d-a97a-4333550c576d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 282.2038 38.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
 	(symbol
 		(lib_id "Device:R")
 		(at 22.86 40.64 270)
@@ -4986,7 +4974,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 22.86 38.862 90)
 			(hide yes)
 			(show_name no)
@@ -5221,7 +5209,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_SMD:CP_Elec_6.3x5.4"
 			(at 33.9852 35.56 0)
 			(hide yes)
 			(show_name no)
@@ -5757,7 +5745,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_Tantal_D5.0mm_P2.50mm"
+		(property "Footprint" "Capacitor_Tantalum_SMD:CP_EIA-3216-18_Kemet-A"
 			(at 46.6852 35.56 0)
 			(hide yes)
 			(show_name no)
@@ -6840,7 +6828,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm"
+		(property "Footprint" "Capacitor_SMD:CP_Elec_6.3x5.4"
 			(at 46.6852 49.53 0)
 			(hide yes)
 			(show_name no)
@@ -6922,7 +6910,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 126.238 27.94 90)
 			(hide yes)
 			(show_name no)
@@ -7168,7 +7156,7 @@
 				(justify right)
 			)
 		)
-		(pin "OUTP" output
+		(pin "OUTP" input
 			(at 101.6 171.45 90)
 			(uuid "d69d20b7-16a8-4f2a-91e8-65f9bb7e2127")
 			(effects
@@ -7178,19 +7166,9 @@
 				(justify right)
 			)
 		)
-		(pin "OUT_N" output
+		(pin "OUT_N" input
 			(at 104.14 171.45 90)
 			(uuid "97d447ed-be21-4aca-b19a-39bb8ec58241")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "3V8" output
-			(at 165.1 182.88 0)
-			(uuid "1ed3ebbe-45c7-4f13-a1bc-8541dfc7a911")
 			(effects
 				(font
 					(size 1.27 1.27)

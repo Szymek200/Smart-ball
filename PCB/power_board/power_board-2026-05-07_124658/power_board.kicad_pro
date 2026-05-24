@@ -39,9 +39,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.0,
-          "height": 0.7,
-          "width": 0.5
+          "drill": 0.8,
+          "height": 1.27,
+          "width": 2.54
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -130,7 +130,7 @@
       },
       "rules": {
         "max_error": 0.005,
-        "min_clearance": 0.15,
+        "min_clearance": 0.076,
         "min_connection": 0.0,
         "min_copper_edge_clearance": 0.5,
         "min_groove_width": 0.0,
@@ -197,7 +197,6 @@
         0.0,
         0.2,
         0.3,
-        0.35,
         0.4,
         0.5,
         1.0,
@@ -500,14 +499,14 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "MCU_board.kicad_pro",
+    "filename": "power_board.kicad_pro",
     "version": 3
   },
   "net_settings": {
     "classes": [
       {
         "bus_width": 12,
-        "clearance": 0.15,
+        "clearance": 0.076,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -523,17 +522,6 @@
         "via_diameter": 0.6,
         "via_drill": 0.3,
         "wire_width": 6
-      },
-      {
-        "clearance": 0.15,
-        "name": "MySignals",
-        "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 0,
-        "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.25,
-        "tuning_profile": "",
-        "via_diameter": 0.6,
-        "via_drill": 0.3
       }
     ],
     "meta": {
@@ -541,23 +529,14 @@
     },
     "net_colors": null,
     "netclass_assignments": null,
-    "netclass_patterns": [
-      {
-        "netclass": "MySignals",
-        "pattern": "ffs"
-      },
-      {
-        "netclass": "Default",
-        "pattern": "csd"
-      }
-    ]
+    "netclass_patterns": []
   },
   "pcbnew": {
     "last_paths": {
       "idf": "",
       "netlist": "",
-      "plot": "gerbers_mcu/",
-      "specctra_dsn": "",
+      "plot": "Gerbers_power/",
+      "specctra_dsn": "power_board_rules.dsn",
       "vrml": ""
     },
     "page_layout_descr_file": ""
@@ -633,6 +612,18 @@
         },
         {
           "group_by": false,
+          "label": "ARROW_PRICE-STOCK",
+          "name": "ARROW_PRICE-STOCK",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Availability",
+          "name": "Availability",
+          "show": false
+        },
+        {
+          "group_by": false,
           "label": "Check_prices",
           "name": "Check_prices",
           "show": false
@@ -645,26 +636,44 @@
         },
         {
           "group_by": false,
+          "label": "HEIGHT",
+          "name": "HEIGHT",
+          "show": false
+        },
+        {
+          "group_by": false,
           "label": "Height",
           "name": "Height",
           "show": false
         },
         {
           "group_by": false,
-          "label": "MANUFACTURER",
-          "name": "MANUFACTURER",
+          "label": "MANUFACTURER_NAME",
+          "name": "MANUFACTURER_NAME",
           "show": false
         },
         {
           "group_by": false,
-          "label": "MAXIMUM_PACKAGE_HEIGHT",
-          "name": "MAXIMUM_PACKAGE_HEIGHT",
+          "label": "MANUFACTURER_PART_NUMBER",
+          "name": "MANUFACTURER_PART_NUMBER",
           "show": false
         },
         {
           "group_by": false,
           "label": "MF",
           "name": "MF",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MOUSER_PART_NUMBER",
+          "name": "MOUSER_PART_NUMBER",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MOUSER_PRICE-STOCK",
+          "name": "MOUSER_PRICE-STOCK",
           "show": false
         },
         {
@@ -699,12 +708,6 @@
         },
         {
           "group_by": false,
-          "label": "PARTREV",
-          "name": "PARTREV",
-          "show": false
-        },
-        {
-          "group_by": false,
           "label": "Package",
           "name": "Package",
           "show": false
@@ -717,14 +720,20 @@
         },
         {
           "group_by": false,
-          "label": "STANDARD",
-          "name": "STANDARD",
+          "label": "Sim.Device",
+          "name": "Sim.Device",
           "show": false
         },
         {
           "group_by": false,
           "label": "Sim.Pins",
           "name": "Sim.Pins",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Type",
+          "name": "Sim.Type",
           "show": false
         },
         {
@@ -747,8 +756,8 @@
         },
         {
           "group_by": false,
-          "label": "Availability",
-          "name": "Availability",
+          "label": "ARROW_PART_NUMBER",
+          "name": "ARROW_PART_NUMBER",
           "show": false
         },
         {
@@ -807,26 +816,26 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "MCU_board.kicad_sch",
+        "filename": "power_board.kicad_sch",
         "name": "Root",
-        "uuid": "498aac81-136e-41bd-a3ff-29bc0732936d"
+        "uuid": "f044e945-eb74-49fa-825d-5f99d2d7b949"
       }
     ],
-    "used_designators": "",
+    "used_designators": "IC1",
     "variants": []
   },
   "sheets": [
     [
-      "498aac81-136e-41bd-a3ff-29bc0732936d",
+      "f044e945-eb74-49fa-825d-5f99d2d7b949",
       "Root"
     ],
     [
-      "cfe949ab-0502-475b-aed9-50a88bd6f7c8",
-      "Stationary"
+      "d6c8d843-cac0-4b90-8917-643ce8dd6c2c",
+      "Movement"
     ],
     [
-      "ea4c8736-f392-459d-9b84-ce09c609ead2",
-      "GSM_sheet"
+      "ffe405b2-78da-4851-81d5-f45dbb795d0e",
+      "STEP_UP"
     ]
   ],
   "text_variables": {},

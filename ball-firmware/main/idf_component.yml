@@ -1,5 +1,7 @@
 ## IDF Component Manager Manifest File
 dependencies:
+  espressif/esp_modem: "^1.1.0"
+  igrr/libnmea: "^0.2.1"
   ## Required IDF version
   idf:
     version: ">=4.1.0"

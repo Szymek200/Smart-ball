@@ -70,12 +70,11 @@ static void tcp_server_task(void * pvParameters)
     int ip_protocol = IPPROTO_IP;
     struct sockaddr_in dest_addr_ip4;
 
-  
     dest_addr_ip4.sin_addr.s_addr = htonl(INADDR_ANY); 
     dest_addr_ip4.sin_family = AF_INET;
     dest_addr_ip4.sin_port = htons(PORT);
 
-    int listen_sock = socket(addr_family, SOCK_STREAM, ip_protocol); // Poprawione SOCK_STREAM
+    int listen_sock = socket(addr_family, SOCK_STREAM, ip_protocol);
     if (listen_sock < 0) {
         ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
         vTaskDelete(NULL);
@@ -94,8 +93,7 @@ static void tcp_server_task(void * pvParameters)
     
     listen(listen_sock, 1);
 
-    // Zmienne do obsługi logowania co 2 sekundy
-    uint32_t log_timer = 0;
+    bool is_client_connected = false;
 
     while(1)
     {
@@ -103,37 +101,59 @@ static void tcp_server_task(void * pvParameters)
         struct sockaddr_in source_addr;
         socklen_t addr_len = sizeof(source_addr);
         
+        // Zabezpieczenie: Zanim utoniesz w accept(), opróżnij kolejkę, 
+        // żeby nie trzymać starych śmieci z czasu, kiedy klient się rozłączał.
+        xQueueReset(data_queue);
+        is_client_connected = false;
+
         int sock = accept(listen_sock, (struct sockaddr *)&source_addr, &addr_len);
         if (sock < 0) {
             ESP_LOGE(TAG, "Unable to accept connection: errno %d", errno);
             break;
         }
-      ESP_LOGI(TAG, "Phone connected! Transmission started.");
+        
+        ESP_LOGI(TAG, "Phone connected! Transmission started.");
+        is_client_connected = true;
 
-        while(1)
+        while(is_client_connected)
         {
             global_data_t data_to_send;
             
-            // 1. Oczekiwanie na dane z kolejki (blokuje się, aż coś się pojawi)
+            // Pobieramy dane z kolejki
             if (xQueueReceive(data_queue, &data_to_send, portMAX_DELAY) == pdTRUE) 
             {
-                // 2. Wysyłanie danych binarnie przez TCP
-                int sent = send(sock, &data_to_send, sizeof(data_to_send), 0);
-                if(sent < 0)
-                {
-                    ESP_LOGE(TAG, "Error sending data. errno %d", errno);
-                    break; // Przerwij wewnętrzną pętlę i czekaj na nowe połączenie
+                // Pętla gwarantująca wysłanie KAŻDEGO bajtu struktury (zabezpieczenie przed partial send)
+                size_t total_sent = 0;
+                size_t to_send = sizeof(global_data_t);
+                uint8_t *data_ptr = (uint8_t *)&data_to_send;
+
+                while (total_sent < to_send) {
+                    int sent = send(sock, data_ptr + total_sent, to_send - total_sent, 0);
+                    if (sent <= 0) {
+                        ESP_LOGE(TAG, "Error sending data. Client probably disconnected. errno %d", errno);
+                        is_client_connected = false;
+                        break;
+                    }
+                    total_sent += sent;
                 }
 
-                // (Opcjonalnie) Odbiór danych z telefonu nieblokujący
+                if (!is_client_connected) break;
+
+                // Nieblokujący odbiór (ping kontrolny z telefonu)
                 int len = recv(sock, rx_buffer, sizeof(rx_buffer), MSG_DONTWAIT);
-                if(len == 0) {
-                    ESP_LOGI(TAG, "Phone disconnected");
+                if (len == 0) {
+                    ESP_LOGI(TAG, "Phone disconnected gracefully");
+                    is_client_connected = false;
+                    break;
+                } else if (len < 0 && errno != EAGAIN && errno != EWOULDBLOCK) {
+                    ESP_LOGE(TAG, "Recv error: errno %d", errno);
+                    is_client_connected = false;
                     break;
                 }
             }
         }
         
+        // Sprzątanie po rozłączeniu klienta
         shutdown(sock, 0);
         close(sock);
     }

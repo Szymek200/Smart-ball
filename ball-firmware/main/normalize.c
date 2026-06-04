@@ -1,6 +1,9 @@
 #include "normalize.h"
+#include "measure.h"
+//#include "nmea_parser.h"
 
-
+//funkcja z measure.c
+void get_last_gps_data(float *lat, float *lon, bool *fix);
 
 static vector3d_t rotate_vector_by_quaternion(vector3d_t v, imu_data imu)
 {
@@ -32,6 +35,12 @@ global_data_t convert_to_global_frame(void)
     imu_data raw_imu = imu_get();
 
     global_data_t global = {0};
+
+    // czas z esp
+    //global.timestamp_ms = xTaskGetTickCount() * portTICK_PERIOD_MS;
+
+    // dane gps
+    get_last_gps_data(&global.latitude, &global.longitude, &global.gps_fix);
 
     // Konwersja jednostek do pełnych G
     vector3d_t local_h3lis = { .x = raw_h3lis.x / 1000.0f, .y = raw_h3lis.y / 1000.0f, .z = raw_h3lis.z / 1000.0f };

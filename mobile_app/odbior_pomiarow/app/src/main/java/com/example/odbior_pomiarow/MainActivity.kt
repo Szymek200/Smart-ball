@@ -1,7 +1,6 @@
 package com.example.odbior_pomiarow
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.net.wifi.WifiManager
 import android.os.Bundle
@@ -15,109 +14,440 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import android.content.Intent
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileWriter
-import java.net.DatagramPacket
-import java.net.DatagramSocket
-import java.net.InetAddress
+import java.io.InputStream
+import java.net.ServerSocket
+import java.net.Socket
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.sqrt
-import com.github.mikephil.charting.formatter.ValueFormatter
 
 class MainActivity : AppCompatActivity() {
 
-
     companion object {
-        // Lista statyczna dostępna dla HistoryActivity - przechowuje całą historię sesji
+        // Lista statyczna dostępna dla HistoryActivity
         val fullHitHistory = mutableListOf<HistoryEntry>()
     }
 
     // Stałe konfiguracyjne
-    private val UDP_PORT = 5000               // Port nasłuchu UDP
-    private val UDP_HOST = "0.0.0.0"          // Nasłuch na wszystkich interfejsach
-    private val LOG_TAG = "UDP_LOGGER"        // Tag do logów w konsoli Android Studio
-    private val LOG_FILE_PREFIX = "pomiary"   // Prefiks nazwy pliku CSV
-    private val UI_UPDATE_INTERVAL_MS = 50L   // Ograniczenie odświeżania UI (20 FPS)
-    private val HEARTBEAT_TIMEOUT_MS = 5000L  // Czas po którym uznajemy utratę połączenia
+    private val TCP_PORT = 3333               // Port zgodny z ESP32
+    private val LOG_TAG = "TCP_LOGGER"
+    private val LOG_FILE_PREFIX = "pomiary"
+    private val UI_UPDATE_INTERVAL_MS = 50L
+    private val HEARTBEAT_TIMEOUT_MS = 5000L
+
+    // Rozmiar struktury global_data_t z ESP32 (45 bajtów)
+    private val STRUCT_SIZE = 45
 
     // --- ELEMENTY UI (WIDOKI) ---
-    private lateinit var collisionChart: LineChart     // Wykres uderzeń
-    private lateinit var flightChart: LineChart        // Wykres lotu
-    private lateinit var lastHitTextView: TextView     // Tekst ostatniego zdarzenia
-    private lateinit var statusTextView: TextView      // Status operacji (np. "Odbieram dane")
-    private lateinit var connectionStatusTextView: TextView // Status połączenia (Online/Offline)
+    private lateinit var collisionChart: LineChart
+    private lateinit var flightChart: LineChart
+    private lateinit var lastHitTextView: TextView
+    private lateinit var statusTextView: TextView
+    private lateinit var connectionStatusTextView: TextView
 
-    // Pola tekstowe z wartościami sensorów na żywo
+    // Pola tekstowe dla Akcelerometru Uderzeniowego H3LIS
+    private lateinit var h3AccelX: TextView; private lateinit var h3AccelY: TextView; private lateinit var h3AccelZ: TextView
+
+    // Pola tekstowe dla Akcelerometru IMU
+    private lateinit var imuAccelX: TextView; private lateinit var imuAccelY: TextView; private lateinit var imuAccelZ: TextView
+
+    // Pola tekstowe dla Żyroskopu IMU
+
+    // Pola tekstowe dla GPS
+    private lateinit var gpsLat: TextView; private lateinit var gpsLon: TextView; private lateinit var gpsFix: TextView
+
     private lateinit var accelX: TextView; private lateinit var accelY: TextView; private lateinit var accelZ: TextView
     private lateinit var gyroX: TextView; private lateinit var gyroY: TextView; private lateinit var gyroZ: TextView
 
-    private lateinit var hitHistoryContainer: LinearLayout // Kontener na miniaturową listę historii
-    private lateinit var logSwitch: Switch                 // Przełącznik zapisu do pliku
+    private lateinit var hitHistoryContainer: LinearLayout
+    private lateinit var logSwitch: Switch
 
-    // --- ZMIENNE LOGIKI APLIKACJI ---
-
-    // Bufory danych
+    // --- BUFORY I STANY (ZDEKLAROWANE TYLKO RAZ) ---
     private val eventSamples = mutableListOf<SampleData>()          // Bufor na próbki uderzenia
-    private val currentIntervalSamples = mutableListOf<SampleData>() // Bufor na próbki lotu (między uderzeniami)
+    private val currentIntervalSamples = mutableListOf<SampleData>() // Bufor na próbki lotu (wsteczna historia)
 
-    // Stan maszyny stanów
-    private var receiveState = ReceiveState.NORMAL     // Aktualny stan odbioru
-    private var expectedEventSize = 0                  // Oczekiwana liczba próbek w zdarzeniu
-    private var eventDurationMs = 0L                   // Czas trwania uderzenia (z nagłówka)
-    private var eventStartTimeMs = 0L                  // Czas startu (systemowy)
+    private var receiveState = ReceiveState.NORMAL
+    private val TOTAL_EVENT_SAMPLES = 200              // 100 przed i 100 po zderzeniu
 
-    // Zmienne pomocnicze
-    private var lastUiUpdateTime = 0L                  // Do limitowania FPS interfejsu
-    private var lastPacketTime = 0L                    // Czas ostatniego pakietu (do heartbeat)
+    private var lastUiUpdateTime = 0L
+    private var lastPacketTime = 0L
 
-    // ZMIENNE SIECIOWE I PLIKOWE
-    private var multicastLock: WifiManager.MulticastLock? = null // Blokada, aby system nie ubijał UDP
-    private val scope = CoroutineScope(Dispatchers.IO)           // Scope dla wątków tła (sieć/dysk)
-    private var receiveJob: Job? = null                          // Uchwyt do wątku nasłuchu UDP
+    // Współbieżność Coroutines
+    private val scope = CoroutineScope(Dispatchers.IO)
+    private var tcpServerJob: Job? = null
+    private var clientSocket: Socket? = null
 
-    // Logowanie do pliku
-    private var logWriter: FileWriter? = null          // Uchwyt do pliku
-    private var isLoggingEnabled = false               // Flaga czy zapisywać
-    private var logFile: File? = null                  // Obiekt pliku
-    private var logHeaderWritten = false               // Czy nagłówek CSV został już zapisany
+    // Logowanie do pliku CSV
+    private var logWriter: FileWriter? = null
+    private var isLoggingEnabled = false
+    private var logFile: File? = null
 
-    // Dynamiczna nazwa pliku (generowana przy dostępie)
     private val logFileName: String
         get() = "${LOG_FILE_PREFIX}_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}.csv"
 
-    // CYKL ŻYCIA AKTYWNOŚCI
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() // Włączenie trybu pełnoekranowego
+        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        // Obsługa marginesów systemowych
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        initializeViews()     // Przypisanie widoków
-        setupChart()          // Konfiguracja wykresu uderzeń
-        setupFlightChart()    // Konfiguracja wykresu lotu
+        initializeViews()
+        setupChart()
+        setupFlightChart()
 
-        startUdpListener()            // Start wątku sieciowego
-        startConnectionStatusChecker() // Start monitora połączenia
+        startTcpServer()
+        startConnectionStatusChecker()
     }
 
-    //Przypisuje elementy z pliku XML do zmiennych w kodzie i ustawia listenery przycisków.
+    // --- URUCHOMIENIE SERWERA TCP ---
+    private fun startTcpServer() { // Pozostawiamy starą nazwę metody, żeby nie psuć wywołań w onCreate
+        tcpServerJob = scope.launch {
+            val espIpAddress = "192.168.4.1" // Stały, domyślny IP dla SoftAP w ESP-IDF
+
+            while (isActive) {
+                try {
+                    Log.i(LOG_TAG, "Próba połączenia z ESP32 pod adresem $espIpAddress:$TCP_PORT...")
+                    runOnUiThread {
+                        statusTextView.text = "Status: Łączenie z urządzeniem..."
+                    }
+
+                    // Tworzymy gniazdo klienta — ta linia próbuje połączyć się z ESP32
+                    clientSocket = Socket(espIpAddress, TCP_PORT)
+
+                    Log.i(LOG_TAG, "Połączono pomyślnie z ESP32!")
+                    updateHeartbeat()
+
+                    // Obsługa strumienia danych (blokuje wątek dopóki połączenie trwa)
+                    handleClientStream(clientSocket!!)
+
+                } catch (e: Exception) {
+                    Log.w(LOG_TAG, "Nie udało się połączyć z ESP32: ${e.message}. Ponowna próba za 3 sekundy...")
+                    runOnUiThread {
+                        statusTextView.text = "Status: Oczekiwanie na urządzenie..."
+                    }
+                    delay(3000L) // Odczekaj 3 sekundy przed kolejną próbą nawiązania sesji
+                }
+            }
+        }
+    }
+
+    private suspend fun handleClientStream(socket: Socket) {
+        withContext(Dispatchers.IO) {
+            val inputStream = socket.getInputStream()
+            val buffer = ByteArray(STRUCT_SIZE)
+
+            try {
+                // Czytamy ze strumienia dopóki połączenie nie zostanie przerwane
+                while (isActive && !socket.isClosed && socket.isConnected) {
+                    readFully(inputStream, buffer)
+                    updateHeartbeat()
+
+                    val byteBuffer = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN)
+                    parseTcpStruct(byteBuffer)
+                }
+            } catch (e: Exception) {
+                Log.w(LOG_TAG, "Błąd transmisji lub rozłączenie: ${e.message}")
+            } finally {
+                try { socket.close() } catch (e: Exception) {}
+                runOnUiThread {
+                    connectionStatusTextView.text = "Status: Rozłączono"
+                    connectionStatusTextView.setBackgroundColor(Color.parseColor("#FFB3B3"))
+                }
+            }
+        }
+    }
+
+    private fun readFully(inputStream: InputStream, buffer: ByteArray) {
+        var offset = 0
+        var bytesToRead = buffer.size
+        while (bytesToRead > 0) {
+            val bytesRead = inputStream.read(buffer, offset, bytesToRead)
+            if (bytesRead == -1) throw Exception("Koniec strumienia TCP")
+            offset += bytesRead
+            bytesToRead -= bytesRead
+        }
+    }
+
+    // --- PARSER STRUMIENIA TCP ---
+    private fun parseTcpStruct(buffer: ByteBuffer) {
+        buffer.position(0)
+
+        // 1. Accel H3LIS (Pobieramy czyste wartości G przysłane z ESP32)
+        val h3_ax = buffer.getFloat()
+        val h3_ay = buffer.getFloat()
+        val h3_az = buffer.getFloat()
+
+        // 2. Accel IMU
+        val imu_ax = buffer.getFloat()
+        val imu_ay = buffer.getFloat()
+        val imu_az = buffer.getFloat()
+
+        // 3. Gyro IMU
+        val imu_gx = buffer.getFloat()
+        val imu_gy = buffer.getFloat()
+        val imu_gz = buffer.getFloat()
+
+        // 4. GPS
+        val lat = buffer.getFloat()
+        val lon = buffer.getFloat()
+        val gpsFix = buffer.get() != 0.toByte()
+
+        val ts = System.currentTimeMillis()
+
+        // Do rysowania wykresu lotu i wyświetlania na ekranie konwertujemy IMU na jednostki [mg] (mnożymy * 1000)
+        val currentSample = SampleData(
+            imu_ax * 1000f, imu_ay * 1000f, imu_az * 1000f,
+            imu_gx, imu_gy, imu_gz, ts
+        )
+
+        // Zapis do pliku CSV (zapisujemy czyste, czytelne wartości)
+        if (isLoggingEnabled) {
+            writeSampleToCsv(h3_ax, h3_ay, h3_az, imu_ax * 1000f, imu_ay * 1000f, imu_az * 1000f, imu_gx, imu_gy, imu_gz, lat, lon, gpsFix)
+        }
+
+        // ====================================================================
+        // POPRAWIONA DETEKCJA ZDERZENIA BAZUJĄCA NA AKCELEROMETRZE 400G
+        // ====================================================================
+        // Wypadkowa siła G (wektor 3D) wyliczona bezpośrednio z wartości G
+        val totalG = sqrt((h3_ax * h3_ax + h3_ay * h3_ay + h3_az * h3_az).toDouble()).toFloat()
+
+        if (receiveState == ReceiveState.NORMAL) {
+            // Na ekranie telefonu pokazujemy wartości w mg
+            displaySensorData(
+                h3_ax, h3_ay, h3_az,
+                imu_ax * 1000f, imu_ay * 1000f, imu_az * 1000f,
+                imu_gx, imu_gy, imu_gz,
+                lat, lon, gpsFix
+            )
+            analyzeFlight(currentSample)
+
+            // Jeśli wypadkowe przeciążenie na czujniku uderzeniowym przekroczy próg 4.5G -> aktywuj zderzenie
+            // Gdy urządzenie leży, totalG wynosi około 1.0f (grawitacja ziemska).
+            if (totalG > 4.5f) {
+                triggerEventTransition()
+            }
+        } else if (receiveState == ReceiveState.EVENT_RECEIVING) {
+            eventSamples.add(currentSample.copy(isLive = false))
+
+            if (eventSamples.size >= TOTAL_EVENT_SAMPLES) {
+                finalizeEventProcessing()
+            }
+        }
+    }
+
+    private fun triggerEventTransition() {
+        receiveState = ReceiveState.EVENT_RECEIVING
+        eventSamples.clear()
+
+        // Przepisz ostatnie 100 pomiarów z lotu jako czas "PRZED" uderzeniem
+        val preHistoryCount = minOf(currentIntervalSamples.size, 100)
+        if (preHistoryCount > 0) {
+            val preSamples = currentIntervalSamples.takeLast(preHistoryCount)
+            eventSamples.addAll(preSamples.map { it.copy(isLive = false) })
+        }
+        currentIntervalSamples.clear()
+
+        runOnUiThread {
+            statusTextView.text = "!!! WYKRYTO ZDERZENIE: POBIERANIE PACZKI !!!"
+            statusTextView.setTextColor(Color.RED)
+        }
+    }
+
+    private fun finalizeEventProcessing() {
+        val samplesToDraw = ArrayList(eventSamples)
+        receiveState = ReceiveState.NORMAL
+        currentIntervalSamples.clear()
+
+        if (samplesToDraw.isEmpty()) return
+
+        val duration = samplesToDraw.size * 10L // 200 pomiarów * 10ms delay na ESP = 2 sekundy
+        val peakForce = samplesToDraw.maxOf {
+            sqrt((it.ax * it.ax + it.ay * it.ay + it.az * it.az).toDouble()).toFloat()
+        }
+
+        runOnUiThread {
+            addHitToHistory(Date(), duration, peakForce, samplesToDraw)
+            drawCollisionChart(samplesToDraw)
+            statusTextView.text = "Zderzenie przetworzone pomyślnie (200 próbek)"
+            statusTextView.setTextColor(Color.BLACK)
+        }
+        eventSamples.clear()
+    }
+
+    private fun analyzeFlight(sample: SampleData) {
+        currentIntervalSamples.add(sample)
+        if (currentIntervalSamples.size > 300) {
+            currentIntervalSamples.removeAt(0)
+        }
+        if (currentIntervalSamples.size % 100 == 0) {
+            processFlightData()
+        }
+    }
+
+    private fun processFlightData() {
+        if (currentIntervalSamples.size < 10) return
+        val flightSegment = ArrayList(currentIntervalSamples)
+
+        val avgRotation = flightSegment.map {
+            sqrt((it.gx * it.gx + it.gy * it.gy + it.gz * it.gz).toDouble()).toFloat()
+        }.average().toFloat()
+
+        runOnUiThread {
+            drawFlightChart(flightSegment)
+            lastHitTextView.text = String.format("Lot na żywo... Śr. obrót: %.1f dps", avgRotation)
+            lastHitTextView.setBackgroundColor(Color.CYAN)
+        }
+    }
+
+    // --- WIZUALIZACJA I WYKRESY ---
+    private fun drawCollisionChart(samples: List<SampleData>) {
+        val accelEntries = mutableListOf<Entry>()
+        val gyroEntries = mutableListOf<Entry>()
+        if (samples.isEmpty()) return
+
+        samples.forEachIndexed { index, s ->
+            val x = index * 0.010f // Każda próbka to 10ms
+
+            // s.ax jest już w miligrawitacjach [mg], więc dzielimy przez 1000f, aby na wykresie mieć czyste jednostki G
+            val aMag = sqrt((s.ax * s.ax + s.ay * s.ay + s.az * s.az).toDouble()).toFloat() / 1000f
+            accelEntries.add(Entry(x, aMag))
+
+            val gMag = sqrt((s.gx * s.gx + s.gy * s.gy + s.gz * s.gz).toDouble()).toFloat()
+            gyroEntries.add(Entry(x, gMag))
+        }
+
+        val setA = LineDataSet(accelEntries, "Siła [G]").apply {
+            color = Color.RED; axisDependency = com.github.mikephil.charting.components.YAxis.AxisDependency.LEFT
+            setDrawCircles(false); lineWidth = 2.5f; setDrawValues(false)
+        }
+        val setG = LineDataSet(gyroEntries, "Rotacja [dps]").apply {
+            color = Color.BLUE; axisDependency = com.github.mikephil.charting.components.YAxis.AxisDependency.RIGHT
+            setDrawCircles(false); lineWidth = 2.5f; setDrawValues(false)
+        }
+
+        collisionChart.data = LineData(setA, setG)
+        collisionChart.invalidate()
+    }
+
+    private fun drawFlightChart(samples: List<SampleData>) {
+        if (samples.isEmpty()) return
+        val gyroEntries = ArrayList<Entry>()
+
+        samples.forEachIndexed { index, s ->
+            val timeSec = index * 0.010f
+            val gMag = sqrt((s.gx * s.gx + s.gy * s.gy + s.gz * s.gz).toDouble()).toFloat()
+            gyroEntries.add(Entry(timeSec, gMag))
+        }
+
+        val setG = LineDataSet(gyroEntries, "Rotacja [dps]").apply {
+            color = Color.BLUE; lineWidth = 2f; setDrawCircles(false); setDrawValues(false)
+            mode = LineDataSet.Mode.CUBIC_BEZIER; setDrawFilled(true); fillAlpha = 50; fillColor = Color.BLUE
+        }
+
+        flightChart.data = LineData(setG)
+        flightChart.invalidate()
+    }
+
+    private fun displaySensorData(
+        h3x: Float, h3y: Float, h3z: Float,
+        ax: Float, ay: Float, az: Float,
+        gx: Float, gy: Float, gz: Float,
+        lat: Float, lon: Float, fix: Boolean
+    ) {
+        val now = System.currentTimeMillis()
+        if (now - lastUiUpdateTime < UI_UPDATE_INTERVAL_MS) return // Ograniczenie narzutu na UI
+        lastUiUpdateTime = now
+
+        runOnUiThread {
+            // 1. Aktualizacja H3LIS331DL (wartości przekazywane są w G)
+            h3AccelX.text = String.format("X: %.2f G", h3x)
+            h3AccelY.text = String.format("Y: %.2f G", h3y)
+            h3AccelZ.text = String.format("Z: %.2f G", h3z)
+
+            // 2. Aktualizacja Akcelerometru IMU (konwertujemy na mg dla precyzji profilu)
+            imuAccelX.text = String.format("X: %.1f mg", ax)
+            imuAccelY.text = String.format("Y: %.1f mg", ay)
+            imuAccelZ.text = String.format("Z: %.1f mg", az)
+
+            // 3. Aktualizacja Żyroskopu IMU (w dps)
+            gyroX.text = String.format("X: %.1f dps", gx)
+            gyroY.text = String.format("Y: %.1f dps", gy)
+            gyroZ.text = String.format("Z: %.1f dps", gz)
+
+            // 4. Aktualizacja sekcji GPS
+            gpsLat.text = String.format("Szer: %.5f°", lat)
+            gpsLon.text = String.format("Dług: %.5f°", lon)
+            if (fix) {
+                gpsFix.text = "FIX: TAK"
+                gpsFix.setTextColor(Color.parseColor("#006400")) // Ciemnozielony
+            } else {
+                gpsFix.text = "FIX: BRAK"
+                gpsFix.setTextColor(Color.RED)
+            }
+
+            statusTextView.text = "Status: Odbieram dane..."
+            statusTextView.setTextColor(Color.BLACK)
+        }
+    }
+
+    private fun addHitToHistory(hitDate: Date, durationMs: Long, peakForce: Float, currentSamples: List<SampleData>) {
+        val newHit = HistoryEntry(EntryType.HIT, hitDate, durationMs, currentSamples, peakValue = peakForce)
+        fullHitHistory.add(0, newHit)
+
+        runOnUiThread {
+            val forceInG = peakForce / 1000f
+            lastHitTextView.text = String.format("Ostatnie: %.2f G (%d ms)", forceInG, durationMs)
+            lastHitTextView.setBackgroundColor(Color.parseColor("#FFD700"))
+
+            val quickSummary = TextView(this).apply {
+                text = String.format("💥 %.2f G | %d ms", forceInG, durationMs)
+                textSize = 14f
+            }
+            hitHistoryContainer.addView(quickSummary, 0)
+        }
+    }
+
+    // --- MONITOR POŁĄCZENIA (HEARTBEAT) ---
+    private fun updateHeartbeat() {
+        lastPacketTime = System.currentTimeMillis()
+        runOnUiThread {
+            connectionStatusTextView.text = "Status: Połączono"
+            connectionStatusTextView.setTextColor(Color.BLACK)
+            connectionStatusTextView.setBackgroundColor(Color.parseColor("#B3FFB3"))
+        }
+    }
+
+    private fun startConnectionStatusChecker() {
+        scope.launch(Dispatchers.Main) {
+            while (isActive) {
+                delay(1000L)
+                if (System.currentTimeMillis() - lastPacketTime > HEARTBEAT_TIMEOUT_MS) {
+                    connectionStatusTextView.text = "Status: Rozłączono"
+                    connectionStatusTextView.setTextColor(Color.RED)
+                    connectionStatusTextView.setBackgroundColor(Color.parseColor("#FFB3B3"))
+                }
+            }
+        }
+    }
+
+    // --- INICJALIZACJA UI I ZAPISU CSV ---
     private fun initializeViews() {
-        // Przypisanie elementów z layoutu XML do zmiennych
         findViewById<Button>(R.id.btnSettings).setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
@@ -131,321 +461,49 @@ class MainActivity : AppCompatActivity() {
         statusTextView = findViewById(R.id.statusTextView)
         connectionStatusTextView = findViewById(R.id.connectionStatusTextView)
 
-        accelX = findViewById(R.id.accelX); accelY = findViewById(R.id.accelY); accelZ = findViewById(R.id.accelZ)
-        gyroX = findViewById(R.id.gyroX); gyroY = findViewById(R.id.gyroY); gyroZ = findViewById(R.id.gyroZ)
+        // 1. Akcelerometr Uderzeniowy H3LIS
+        h3AccelX = findViewById(R.id.h3AccelX)
+        h3AccelY = findViewById(R.id.h3AccelY)
+        h3AccelZ = findViewById(R.id.h3AccelZ)
+
+        // 2. Akcelerometr IMU
+        imuAccelX = findViewById(R.id.imuAccelX)
+        imuAccelY = findViewById(R.id.imuAccelY)
+        imuAccelZ = findViewById(R.id.imuAccelZ)
+
+        // 3. Żyroskop IMU
+        gyroX = findViewById(R.id.gyroX)
+        gyroY = findViewById(R.id.gyroY)
+        gyroZ = findViewById(R.id.gyroZ)
+
+        // 4. GPS
+        gpsLat = findViewById(R.id.gpsLat)
+        gpsLon = findViewById(R.id.gpsLon)
+        gpsFix = findViewById(R.id.gpsFix)
+
+
 
         hitHistoryContainer = findViewById(R.id.hitHistoryContainer)
         logSwitch = findViewById(R.id.logSwitch)
 
-        // Obsługa przełącznika logowania do pliku
         logSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) initLogFile() // Włącz
-            else {                       // Wyłącz
+            if (isChecked) initLogFile()
+            else {
                 isLoggingEnabled = false
                 logWriter?.close()
                 logWriter = null
-                Log.i(LOG_TAG, "Logowanie wyłączone.")
+                Log.i(LOG_TAG, "Logowanie CSV wyłączone.")
             }
         }
     }
 
-    // --- OBSŁUGA SIECI (UDP) ---
-
-    //uruchamia wątek w tle (Coroutine), który nasłuchuje pakietów UDP na porcie 5000.
-    private fun startUdpListener() {
-        // Pobranie menedżera Wi-Fi i założenie blokady Multicast
-        val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        multicastLock = wifiManager.createMulticastLock("udp_lock")
-        multicastLock?.setReferenceCounted(true)
-        multicastLock?.acquire()
-
-        receiveJob = scope.launch {
-            try {
-                // Utworzenie gniazda UDP
-                val socket = DatagramSocket(UDP_PORT, InetAddress.getByName(UDP_HOST))
-                socket.broadcast = true // Zezwolenie na pakiety rozgłoszeniowe
-
-                val buffer = ByteArray(2048) // Bufor odbiorczy
-                val packet = DatagramPacket(buffer, buffer.size)
-
-                while (isActive) {
-                    socket.receive(packet) // Blokuje wątek do momentu nadejścia pakietu
-                    updateHeartbeat()      // Zaktualizuj status "Połączono"
-
-                    // Kopia faktycznych danych (bez pustych bajtów na końcu bufora)
-                    val rawData = packet.data.copyOfRange(0, packet.length)
-                    processBinaryData(rawData) // Parsowanie danych
-                }
-            } catch (e: Exception) {
-                Log.e(LOG_TAG, "Błąd UDP: ${e.message}")
-            }
-        }
-    }
-
-    //Główny parser danych. Rozpoznaje nagłówki (SMPL, DEADBEEF) i kieruje dane do odpowiedniej funkcji.
-    private fun processBinaryData(data: ByteArray) {
-        if (data.size < 4) return
-
-        // Opakowanie bajtów w ByteBuffer dla łatwiejszego odczytu (Little Endian jak w ESP32)
-        val buffer = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN)
-        val firstInt = buffer.getInt(0)
-        // Sprawdzenie czy pakiet zaczyna się od napisu "SMPL"
-        val firstFourChars = if (data.size >= 4) String(data.take(4).toByteArray()) else ""
-
-        when {
-            //LIVE STREAM: Nagłówek "SMPL"
-            firstFourChars == "SMPL" -> {
-                if (data.size >= 32) decodeSample(buffer, 4, isLive = true)
-            }
-            //START ZDARZENIA: Nagłówek 0xDEADBEEF
-            firstInt == 0xDEADBEEF.toInt() -> {
-                handleBinaryEventStart(buffer)
-            }
-            //KONIEC ZDARZENIA: Nagłówek 0xEEEEEEEE
-            firstInt == 0xEEEEEEEE.toInt() -> {
-                handleEventEnd()
-            }
-            //DANE ZDARZENIA: Brak nagłówka, ale jesteśmy w trybie EVENT_ACTIVE
-            receiveState == ReceiveState.EVENT_ACTIVE -> {
-                // Oblicz ile próbek mieści się w pakiecie
-                val numSamples = data.size / 28
-                for (i in 0 until numSamples) {
-                    decodeSample(buffer, i * 28, isLive = false)
-                }
-                // Zabezpieczenie: jeśli mamy już komplet danych, zakończ
-                if (eventSamples.size >= expectedEventSize) {
-                    handleEventEnd()
-                }
-            }
-        }
-    }
-
-    // Dekodowanie pojedynczej próbki z bajtów na liczby
-    private fun decodeSample(buffer: ByteBuffer, offset: Int, isLive: Boolean) {
-        buffer.position(offset)
-        // Odczyt floatów i konwersja jednostek
-        val ax = buffer.getFloat() * 1000f // g -> mg
-        val ay = buffer.getFloat() * 1000f
-        val az = buffer.getFloat() * 1000f
-        // Radiany na stopnie (rad -> deg)
-        val radToDeg = (180f / Math.PI.toFloat())
-        val gx = buffer.getFloat() * radToDeg
-        val gy = buffer.getFloat() * radToDeg
-        val gz = buffer.getFloat() * radToDeg
-
-        // Timestamp (rzutowanie na Long unsigned)
-        val ts = buffer.getInt().toLong() and 0xFFFFFFFFL
-
-        val currentSample = SampleData(ax, ay, az, gx, gy, gz, ts)
-
-        if (isLive) {
-            // Aktualizacja UI na żywo
-            displaySensorData(ax, ay, az, gx, gy, gz)
-            // Analiza lotu tylko gdy NIE trwa uderzenie
-            if (receiveState == ReceiveState.NORMAL) {
-                analyzeFlight(currentSample)
-            }
-        } else {
-            // Zbieranie danych do analizy uderzenia po fakcie
-            if (receiveState == ReceiveState.EVENT_ACTIVE && eventSamples.isEmpty()) {
-                eventStartTimeMs = System.currentTimeMillis() // Ustalenie czasu początkowego
-            }
-            eventSamples.add(currentSample)
-        }
-    }
-
-    //LOGIKA ZDARZEŃ (LOT I UDERZENIE)
-
-    //Inicjuje zbieranie danych uderzenia.
-    private fun handleBinaryEventStart(buffer: ByteBuffer) {
-        if (receiveState != ReceiveState.NORMAL) return
-
-        // Jeśli zgromadziliśmy dane lotu przed uderzeniem -> przetwórz je teraz
-        if (currentIntervalSamples.size > 10) {
-            processFlightData()
-        }
-        currentIntervalSamples.clear() // Czyść bufor lotu
-
-        // Odczyt parametrów z nagłówka START
-        buffer.position(4)
-        expectedEventSize = buffer.getInt()    // Ile próbek
-        eventDurationMs = buffer.getInt().toLong() // Czas trwania wg ESP
-        eventStartTimeMs = 0L
-        eventSamples.clear()
-
-        // Zmiana stanu na odbiór zdarzenia
-        receiveState = ReceiveState.EVENT_ACTIVE
-
-        runOnUiThread {
-            statusTextView.text = "!!! ZDARZENIE UDERZENIA WYKRYTE !!!"
-            statusTextView.setTextColor(Color.RED)
-        }
-    }
-
-    //Liczy statystyki i aktualizuje UI.
-    private fun handleEventEnd() {
-        val samplesToDraw = ArrayList(eventSamples) // Kopia danych
-        receiveState = ReceiveState.NORMAL          // Powrót do nasłuchu
-
-        if (samplesToDraw.size < 5) {
-            eventSamples.clear()
-            return
-        }
-
-        // Obliczenia statystyk uderzenia
-        val startTimeUs = samplesToDraw.first().timestamp
-        val endTimeUs = samplesToDraw.last().timestamp
-        val realDurationMs = (endTimeUs - startTimeUs) / 1000L
-        // Obliczenie max siły wypadkowej
-        val peakForce = samplesToDraw.maxOf {
-            sqrt((it.ax * it.ax + it.ay * it.ay + it.az * it.az).toDouble()).toFloat()
-        }
-
-        runOnUiThread {
-            addHitToHistory(Date(eventStartTimeMs), realDurationMs, peakForce, samplesToDraw)
-            drawCollisionChart(samplesToDraw)
-            statusTextView.text = "Zderzenie przetworzone"
-        }
-        eventSamples.clear()
-    }
-
-    //Zbiera próbki do bufora "lotu" w czasie rzeczywistym, gdy nie ma zderzenia
-    private fun analyzeFlight(sample: SampleData) {
-        // Dodaj próbkę do bufora lotu (zbieranie danych "w tle")
-        currentIntervalSamples.add(sample)
-    }
-
-    //Przetwarza zebrane dane lotu (przed zderzeniem), oblicza rotację i zapisuje w historii
-    private fun processFlightData() {
-        if (currentIntervalSamples.isEmpty()) return
-
-        val flightSegment = ArrayList(currentIntervalSamples)
-        val startTime = flightSegment.first().timestamp
-        val duration = (flightSegment.last().timestamp - startTime) / 1000L
-
-        // Oblicz średnią rotację
-        val avgRotation = flightSegment.map {
-            sqrt((it.gx * it.gx + it.gy * it.gy + it.gz * it.gz).toDouble()).toFloat()
-        }.average().toFloat()
-
-        // Dodaj wpis LOTU do historii
-        val newEntry = HistoryEntry(EntryType.FLIGHT, Date(), duration, flightSegment, peakValue = avgRotation)
-        MainActivity.fullHitHistory.add(0, newEntry)
-
-        runOnUiThread {
-            drawFlightChart(flightSegment)
-            lastHitTextView.text = String.format("Ostatni lot: %d ms | Obrót: %.1f dps", duration, avgRotation)
-            lastHitTextView.setBackgroundColor(Color.CYAN)
-        }
-    }
-
-    //RYSOWANIE WYKRESÓW I UI
-
-    //Rysowanie wykresow uderzenia
-    private fun drawCollisionChart(samples: List<SampleData>) {
-        // Przygotowanie list punktów (Entry) dla biblioteki MPAndroidChart
-        val accelEntries = mutableListOf<Entry>()
-        val gyroEntries = mutableListOf<Entry>()
-        val startTs = samples.first().timestamp
-
-        samples.forEach { s ->
-            val x = (s.timestamp - startTs) / 1000000f // Czas w sekundach
-            // Siła wypadkowa akcelerometru
-            val aMag = sqrt((s.ax * s.ax + s.ay * s.ay + s.az * s.az).toDouble()).toFloat() / 1000f
-            accelEntries.add(Entry(x, aMag))
-
-            // Siła wypadkowa żyroskopu
-            val gMag = sqrt((s.gx * s.gx + s.gy * s.gy + s.gz * s.gz).toDouble()).toFloat()
-            gyroEntries.add(Entry(x, gMag))
-        }
-
-        // Konfiguracja linii wykresu
-        val setA = LineDataSet(accelEntries, "Siła [G]").apply {
-            color = Color.RED; axisDependency = com.github.mikephil.charting.components.YAxis.AxisDependency.LEFT
-            setDrawCircles(false); lineWidth = 2.5f; setDrawValues(false)
-        }
-        val setG = LineDataSet(gyroEntries, "Rotacja [dps]").apply {
-            color = Color.BLUE; axisDependency = com.github.mikephil.charting.components.YAxis.AxisDependency.RIGHT
-            setDrawCircles(false); lineWidth = 2.5f; setDrawValues(false)
-        }
-
-        collisionChart.data = LineData(setA, setG)
-        collisionChart.invalidate() // Odświeżenie widoku
-    }
-
-    // Funkcja dodająca wpis do historii (UI) i listy
-    private fun addHitToHistory(hitDate: Date, durationMs: Long, peakForce: Float, currentSamples: List<SampleData>) {
-
-        val newHit = HistoryEntry(EntryType.HIT, hitDate, durationMs, currentSamples, peakValue = peakForce)
-        fullHitHistory.add(0, newHit) // Dodanie na początek listy
-
-        runOnUiThread {
-            val forceInG = peakForce / 1000f
-            lastHitTextView.text = String.format("Ostatnie: %.2f G (%d ms)", forceInG, durationMs)
-            lastHitTextView.setBackgroundColor(Color.parseColor("#FFD700"))
-
-            // Dodanie małego elementu tekstowego do listy na ekranie głównym
-            val quickSummary = TextView(this).apply {
-                text = String.format("💥 %.2f G | %d ms", forceInG, durationMs)
-                textSize = 14f
-            }
-            hitHistoryContainer.addView(quickSummary, 0)
-        }
-    }
-
-    //Aktualizuje tekstowe pola wartości sensorów
-    private fun displaySensorData(ax: Float?, ay: Float?, az: Float?, gx: Float?, gy: Float?, gz: Float?) {
-        val now = System.currentTimeMillis()
-        // Limitowanie odświeżania UI dla wydajności
-        if (now - lastUiUpdateTime < UI_UPDATE_INTERVAL_MS) return
-        lastUiUpdateTime = now
-
-        runOnUiThread {
-            ax?.let { accelX.text = String.format("AX: %.2f mg", it) }
-            ay?.let { accelY.text = String.format("AY: %.2f mg", it) }
-            az?.let { accelZ.text = String.format("AZ: %.2f mg", it) }
-            gx?.let { gyroX.text = String.format("GX: %.2f dps", it) }
-            gy?.let { gyroY.text = String.format("GY: %.2f dps", it) }
-            gz?.let { gyroZ.text = String.format("GZ: %.2f dps", it) }
-            statusTextView.text = "Status: Odbieram dane..."
-            statusTextView.setTextColor(Color.BLACK)
-        }
-    }
-
-    //OBSŁUGA POŁĄCZENIA
-
-    //Odświeża czas ostatniego pakietu i ustawia status na "Połączono".
-    private fun updateHeartbeat() {
-        lastPacketTime = System.currentTimeMillis()
-        runOnUiThread {
-            connectionStatusTextView.text = "Status: Połączono"
-            connectionStatusTextView.setTextColor(Color.BLACK)
-            connectionStatusTextView.setBackgroundColor(Color.parseColor("#B3FFB3"))
-        }
-    }
-
-    //Wątek monitorujący aktywność sieci. Jeśli brak pakietów > 5s, ustawia status "Rozłączono".
-    private fun startConnectionStatusChecker() {
-        scope.launch(Dispatchers.Main) {
-            while (isActive) {
-                delay(1000L) // Sprawdzanie co sekundę
-                if (System.currentTimeMillis() - lastPacketTime > HEARTBEAT_TIMEOUT_MS) {
-                    connectionStatusTextView.text = "Status: Rozłączono"
-                    connectionStatusTextView.setTextColor(Color.RED)
-                    connectionStatusTextView.setBackgroundColor(Color.parseColor("#FFB3B3"))
-                }
-            }
-        }
-    }
-
-    // OBSŁUGA PLIKU
     private fun initLogFile() {
-        val appDirectory = getExternalFilesDir(null)
-        if (appDirectory == null) return
-
+        val appDirectory = getExternalFilesDir(null) ?: return
         logFile = File(appDirectory, logFileName)
         try {
             logWriter = FileWriter(logFile, true)
+            // Zapisz nagłówek jeśli plik jest pusty
+            logWriter?.write("Timestamp,H3_AX,H3_AY,H3_AZ,IMU_AX,IMU_AY,IMU_AZ,IMU_GX,IMU_GY,IMU_GZ,Lat,Lon,Fix\n")
             isLoggingEnabled = true
             Toast.makeText(this, "Zapis do: ${logFile?.name}", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
@@ -454,116 +512,58 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // SETUP WYKRESÓW
-    // 1. Konfiguracja wykresu ZDERZEŃ (Collision Chart)
+    private fun writeSampleToCsv(h3x: Float, h3y: Float, h3z: Float, ax: Float, ay: Float, az: Float, gx: Float, gy: Float, gz: Float, lat: Float, lon: Float, fix: Boolean) {
+        scope.launch(Dispatchers.IO) {
+            try {
+                logWriter?.write("${System.currentTimeMillis()},$h3x,$h3y,$h3z,$ax,$ay,$az,$gx,$gy,$gz,$lat,$lon,${if(fix) 1 else 0}\n")
+                logWriter?.flush()
+            } catch (e: Exception) {
+                Log.e(LOG_TAG, "Błąd zapisu wiersza CSV: ${e.message}")
+            }
+        }
+    }
+
     private fun setupChart() {
         collisionChart.apply {
-            description.isEnabled = false
-            setTouchEnabled(true)
-            isDragEnabled = true
-            setScaleEnabled(true)
-            setPinchZoom(true)
-            setBackgroundColor(Color.WHITE)
-
-            // Konfiguracja osi X (Czas)
+            description.isEnabled = false; setTouchEnabled(true); isDragEnabled = true
+            setScaleEnabled(true); setPinchZoom(true); setBackgroundColor(Color.WHITE)
             xAxis.apply {
                 position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
                 setDrawGridLines(true)
-                // Formatowanie czasu: np. "0.50s"
                 valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String {
-                        return String.format(Locale.getDefault(), "%.2fs", value)
-                    }
+                    override fun getFormattedValue(value: Float): String = String.format(Locale.getDefault(), "%.2fs", value)
                 }
             }
-
-            // Oś Y lewa (Czerwona) -> Akcelerometr (Siła G)
-            axisLeft.apply {
-                textColor = Color.RED
-                axisMinimum = 0f
-                setDrawGridLines(true)
-            }
-
-            // Oś Y prawa (Niebieska) -> Żyroskop (Rotacja dps)
-            axisRight.apply {
-                isEnabled = true
-                textColor = Color.BLUE
-                axisMinimum = 0f
-                setDrawGridLines(false)
-            }
-
+            axisLeft.apply { textColor = Color.RED; axisMinimum = 0f; setDrawGridLines(true) }
+            axisRight.apply { isEnabled = true; textColor = Color.BLUE; axisMinimum = 0f; setDrawGridLines(false) }
             legend.isEnabled = true
         }
     }
 
-    //Konfiguracja wykresu LOTU (Flight Chart)
     private fun setupFlightChart() {
         flightChart.apply {
-            description.text = "Analiza rotacji w locie"
-            description.textColor = Color.BLACK
-            setTouchEnabled(true)
-            setPinchZoom(true)
-            setBackgroundColor(Color.parseColor("#F0F8FF")) // Lekko niebieskie tło dla lotu
-
+            description.text = "Analiza rotacji w locie"; description.textColor = Color.BLACK
+            setTouchEnabled(true); setPinchZoom(true); setBackgroundColor(Color.parseColor("#F0F8FF"))
             xAxis.apply {
                 position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
                 setDrawGridLines(true)
                 valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String {
-                        return String.format(Locale.getDefault(), "%.1fs", value)
-                    }
+                    override fun getFormattedValue(value: Float): String = String.format(Locale.getDefault(), "%.1fs", value)
                 }
             }
-
-
-            axisLeft.apply {
-                textColor = Color.BLUE
-                axisMinimum = 0f
-            }
-
-            axisRight.isEnabled = false
-            legend.isEnabled = true
+            axisLeft.apply { textColor = Color.BLUE; axisMinimum = 0f }
+            axisRight.isEnabled = false; legend.isEnabled = true
         }
     }
 
-    //Rysowanie danych LOTU (Tylko żyroskop)
-    private fun drawFlightChart(samples: List<SampleData>) {
-        if (samples.isEmpty()) return
-
-        val gyroEntries = ArrayList<Entry>()
-        val startTs = samples.first().timestamp
-
-        // Przetwarzanie próbek
-        samples.forEach { s ->
-
-            val timeSec = (s.timestamp - startTs) / 1000000f
-
-
-            val gMag = sqrt((s.gx * s.gx + s.gy * s.gy + s.gz * s.gz).toDouble()).toFloat()
-
-            gyroEntries.add(Entry(timeSec, gMag))
-        }
-
-
-        val setG = LineDataSet(gyroEntries, "Rotacja [dps]").apply {
-            color = Color.BLUE
-            lineWidth = 2f
-            setDrawCircles(false)
-            setDrawValues(false)
-            mode = LineDataSet.Mode.CUBIC_BEZIER
-            setDrawFilled(true)
-            fillColor = Color.BLUE
-            fillAlpha = 50
-        }
-
-        // Przypisanie danych do wykresu i odświeżenie
-        flightChart.data = LineData(setG)
-        flightChart.invalidate()
-        flightChart.animateX(500)
-    }
     override fun onDestroy() {
         super.onDestroy()
-        multicastLock?.release() // Zwolnienie blokady Wi-Fi
-        receiveJob?.cancel()     // Zatrzymanie wątku
+        try {
+            clientSocket?.close() // Zmiana z serverSocket na clientSocket
+            logWriter?.close()
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "Błąd zamykania zasobów: ${e.message}")
+        }
+        tcpServerJob?.cancel()
     }
 }

@@ -5,10 +5,8 @@ import java.util.Date
 
 // Definicja stanów maszyny odbierającej dane przez UDP
 enum class ReceiveState {
-    NORMAL,//strumieniowania danych na żywo
-    EVENT_ACTIVE, //Wykryto nagłówek zdarzenia
-
-    EVENT_RECEIVING_DATA //Pobieranie probek
+    NORMAL,
+    EVENT_RECEIVING
 }
 
 
@@ -32,5 +30,6 @@ data class HistoryEntry(
 data class SampleData(
     val ax: Float, val ay: Float, val az: Float,
     val gx: Float, val gy: Float, val gz: Float,
-    val timestamp: Long
+    val timestamp: Long,
+    val isLive: Boolean = true
 )

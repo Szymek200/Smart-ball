@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="12dp"
-        android:background="#424242"
+        android:background="#F5F5F5"
         android:elevation="4dp"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -39,27 +39,92 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
-        <GridLayout
+        <LinearLayout
+            android:id="@+id/sensorDataPanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="3"
-            android:rowCount="2"
+            android:orientation="horizontal"
             android:layout_marginTop="8dp">
 
-            <TextView android:id="@+id/accelX" android:text="AX: 0.0" android:layout_columnWeight="1" android:textSize="13sp"/>
-            <TextView android:id="@+id/accelY" android:text="AY: 0.0" android:layout_columnWeight="1" android:textSize="13sp"/>
-            <TextView android:id="@+id/accelZ" android:text="AZ: 0.0" android:layout_columnWeight="1" android:textSize="13sp"/>
-            <TextView android:id="@+id/gyroX"  android:text="GX: 0.0" android:layout_columnWeight="1" android:textSize="13sp"/>
-            <TextView android:id="@+id/gyroY"  android:text="GY: 0.0" android:layout_columnWeight="1" android:textSize="13sp"/>
-            <TextView android:id="@+id/gyroZ"  android:text="GZ: 0.0" android:layout_columnWeight="1" android:textSize="13sp"/>
-        </GridLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="H3LIS (400G)"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textColor="#8B0000"/>
+                <TextView android:id="@+id/h3AccelX" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="X: 0.00 G" android:textSize="11sp" android:textColor="#212121"/>
+                <TextView android:id="@+id/h3AccelY" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Y: 0.00 G" android:textSize="11sp" android:textColor="#212121"/>
+                <TextView android:id="@+id/h3AccelZ" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Z: 0.00 G" android:textSize="11sp" android:textColor="#212121"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IMU ACCEL"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textColor="#4682B4"/>
+                <TextView android:id="@+id/imuAccelX" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="X: 0 mg" android:textSize="11sp" android:textColor="#212121"/>
+                <TextView android:id="@+id/imuAccelY" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Y: 0 mg" android:textSize="11sp" android:textColor="#212121"/>
+                <TextView android:id="@+id/imuAccelZ" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Z: 0 mg" android:textSize="11sp" android:textColor="#212121"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IMU GYRO"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textColor="#00008B"/>
+                <TextView android:id="@+id/gyroX" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="X: 0.0 dps" android:textSize="11sp" android:textColor="#212121"/>
+                <TextView android:id="@+id/gyroY" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Y: 0.0 dps" android:textSize="11sp" android:textColor="#212121"/>
+                <TextView android:id="@+id/gyroZ" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Z: 0.0 dps" android:textSize="11sp" android:textColor="#212121"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GPS SYSTEM"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textColor="#2E8B57"/>
+                <TextView android:id="@+id/gpsLat" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Szer: 0.00000°" android:textSize="10sp" android:textColor="#212121"/>
+                <TextView android:id="@+id/gpsLon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Dług: 0.00000°" android:textSize="10sp" android:textColor="#212121"/>
+                <TextView android:id="@+id/gpsFix" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="FIX: BRAK" android:textStyle="bold" android:textSize="10sp" android:textColor="#FF0000"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/fixedHeader"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fixedHeader">
 
         <LinearLayout
             android:layout_width="match_parent"

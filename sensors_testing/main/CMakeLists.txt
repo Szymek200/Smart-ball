@@ -13,6 +13,7 @@ idf_component_register(
         esp_event       
         esp_netif       
         nmea0183_parser_main  
+        esp_driver_ledc
     PRIV_REQUIRES
         esp_driver_spi
         esp_driver_gpio
@@ -25,4 +26,9 @@ idf_component_register(
         nvs_flash
         lis331
         lsm6
+        esp_driver_i2s
+        spiffs
 )
+
+
+#spiffs_register_flash_partition(storage "../spiffs_image" FLASH_IN_PROJECT)

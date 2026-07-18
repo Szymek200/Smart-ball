@@ -8,13 +8,20 @@
 #include "esp_event.h"     
 #include "nmea_parser.h"  
 #include <string.h> 
+#include "esp_sleep.h"
+#include "esp_wifi.h"
+#include "freertos/queue.h"
+#include "driver/uart.h"
 
 #include "normalize.h" 
 #include <math.h> 
 
+#define BUF_SIZE (1024)
+
 static const char *TAG = "Sensors_Engine";
-static const char *AccelTAG = "Accel";
-static const char *ImuTAG = "IMU";
+
+static void gps_event_handler(void *event_handler_arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
+
 
 #define GPS_UART_NUM UART_NUM_1 
 
@@ -22,6 +29,7 @@ static const char *ImuTAG = "IMU";
 #define PRE_HIT_BUFFER_SIZE  100
 #define POST_HIT_SAMPLES     100
 
+bool config_enable_sleep = false; // Domyślnie uśpienie jest włączone. Zmień na false, aby wyłączyć.
 
 static stmdev_ctx_t accel_ctx;
 static stmdev_ctx_t imu_ctx;
@@ -44,17 +52,25 @@ static int pre_hit_count = 0;
 
 static nmea_parser_handle_t nmea_hdl = NULL;
 
+static TaskHandle_t sensors_task_handle = NULL;
+
 // zmienne konfiguracyjne
 float CRASH_THRESHOLD_G = 4.5f;   // prog zderzneia
-float config_wake_ths_g = 1.5f;   // prog wybudzenia 
+float config_wake_ths_g = 1.2f;   // prog wybudzenia 
 float config_sleep_ths_g = 0.05f; // prog uspiennia
-int config_idle_time_s = 120;      // Wymagany czas bezruchu w sekundach
+int config_idle_time_s = 60;      // Wymagany czas bezruchu w sekundach
+
+int config_sensor_loop_ms = 30;
 
 // Zmienne stanu zasilania i liczników
-static bool is_device_sleeping = false;
+
 static int seconds_in_immobility = 0;
 //dzielnik czestotliwosci
 static int loop_counter_1s = 0;
+
+
+
+
 
 //zwraca najswiezsze dane z GPS
 void get_last_gps_data(float *lat, float *lon, bool *fix) {
@@ -63,22 +79,109 @@ void get_last_gps_data(float *lat, float *lon, bool *fix) {
     *fix = current_fix;
 }
 
+/*
 //aktualizacja dannych z gps
 static void gps_event_handler(void *event_handler_arg, esp_event_base_t event_base, int32_t event_id, void *event_data)
 {
+    //ESP_LOGW(TAG, "GPS/NMEA parser jest już uruchomiony.");
+
     gps_t *gps = (gps_t *)event_data;
     switch (event_id) {
         case GPS_UPDATE:
             current_lat = gps->latitude;
             current_lon = gps->longitude;
             current_fix = gps->fix;
+
+            if (gps->fix >= 1) { // 1 = Fix Standardowy, 2 = Differential, itp.
+                ESP_LOGI(TAG, "--- NOWA POZYCJA GPS ---");
+                ESP_LOGI(TAG, "Status FIX:  %d", gps->fix);
+                ESP_LOGI(TAG, "Szerokość:   %.6f %c", gps->latitude, gps->latitude > 0 ? 'N' : 'S');
+                ESP_LOGI(TAG, "Długość:     %.6f %c", gps->longitude, gps->longitude > 0 ? 'E' : 'W');
+                ESP_LOGI(TAG, "Wysokość:    %.1f m", gps->altitude);
+                ESP_LOGI(TAG, "Prędkość:    %.2f km/h", gps->speed);
+                ESP_LOGI(TAG, "Satelity:    %d", gps->sats_in_use);
+                ESP_LOGI(TAG, "Czas (UTC):  %02d:%02d:%02d", gps->tim.hour, gps->tim.minute, gps->tim.second);
+                ESP_LOGI(TAG, "------------------------");
+            } else {
+                ESP_LOGW(TAG, "Brak poprawnego FIX (Satelity w użyciu: %d)", gps->sats_in_use);
+            }
+        
             break;
         case GPS_UNKNOWN:
             break;
         default:
             break;
     }
+}*/
+
+void lsm6dsv16x_configure_wakeup_threshold(float threshold_g)
+{
+    // Zakładamy, że imu_ctx jest wskaźnikiem typu stmdev_ctx_t* lub bezpośrednio obiektem contextu.
+    // Jeśli imu_ctx to globalna struktura, przekazujemy jej adres: &imu_ctx
+    const stmdev_ctx_t *ctx = &imu_ctx; 
+
+    // KROK 1: Powrót do głównego banku rejestrów (User Bank 0)
+    lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
+
+    // KROK 2: Włączenie osi XYZ dla detekcji Tap/Wake-up
+    lsm6dsv16x_tap_detection_t tap_axes = {
+        .tap_x_en = PROPERTY_ENABLE,
+        .tap_y_en = PROPERTY_ENABLE,
+        .tap_z_en = PROPERTY_ENABLE
+    };
+    lsm6dsv16x_tap_detection_set(ctx, tap_axes);
+
+    // Aktywacja filtru cyfrowego (SLOPE_FDS) kierowanego do bloku Wake-Up
+    lsm6dsv16x_filt_wkup_act_feed_set(ctx, LSM6DSV16X_WK_FEED_HIGH_PASS); // Wybór High-Pass / Slope
+
+    // KROK 3 & 2 (cd.): Konfiguracja trybu przerwań (Włączenie przerwań globalnych oraz trybu LATCHED)
+    lsm6dsv16x_interrupt_mode_t int_mode = {
+        .enable = PROPERTY_ENABLE,
+        .lir = PROPERTY_ENABLE // Włączenie trybu Latched (Zatrzask)
+    };
+    lsm6dsv16x_interrupt_enable_set(ctx, int_mode);
+
+    // KROK 4: Wyłączenie trybu impulsowego danych (tryb ciągły/latched)
+    lsm6dsv16x_data_ready_mode_set(ctx, LSM6DSV16X_DRDY_LATCHED);
+
+    // KROK 5 & 6: Ustawienie progu Wake-Up oraz czasu trwania (Duration = 0)
+    // Obliczenie wartości progu (1 LSB = 31.25 mg)
+    uint8_t ths_val = (uint8_t)((threshold_g * 1000.0f) / 31.25f);
+    if (ths_val > 63) ths_val = 63;
+
+    lsm6dsv16x_act_thresholds_t act_ths = {
+        .threshold = ths_val,
+        .duration = 2, // Natychmiastowa reakcja (0 dur)
+        .inactivity_ths = 0 // Inactivity nas w tym miejscu nie interesuje, zostawiamy 0
+    };
+    lsm6dsv16x_act_thresholds_set(ctx, &act_ths);
+
+    // KROK 7: Przekierowanie sygnału Wake-Up na pin sprzętowy INT1
+    lsm6dsv16x_pin_int_route_t int1_route;
+    // Dobrą praktyką jest odczyt aktualnej konfiguracji pinu, by nie nadpisać innych przerwań (np. FIFO)
+    lsm6dsv16x_pin_int1_route_get(ctx, &int1_route);
+    int1_route.wakeup = PROPERTY_ENABLE; // Włączenie routingu Wake-Up na INT1
+    lsm6dsv16x_pin_int1_route_set(ctx, &int1_route);
+
+    // KROK KRYTYCZNY DLA TRYBU LATCHED: Czytanie źródeł przerwań w celu skasowania flagi startowej
+    lsm6dsv16x_all_sources_t dummy_clear;
+    lsm6dsv16x_all_sources_get(ctx, &dummy_clear);
+
+    ESP_LOGI(TAG, "LSM6DSV16X: Skonfigurowano LATCHED Wake-Up za pomocą API. Próg = %.2f G", threshold_g);
+
+    // Sekcja diagnostyczna (Dump rejestrów) zostaje bez zmian, 
+    // ponieważ bezpośredni odczyt pętli jest najwygodniejszy do surowego zrzutu pamięci.
+    ESP_LOGI(TAG, "=== LSM REGISTER DUMP ===");
+    uint8_t val;
+    for(uint8_t reg = 0x45; reg <= 0x5E; reg++)
+    {
+        lsm6dsv16x_read_reg(ctx, reg, &val, 1);
+        ESP_LOGI(TAG, "REG[0x%02X] = 0x%02X", reg, val);
+    }
+
+    lsm6dsv16x_all_sources_get(ctx, &dummy_clear);
 }
+
 
 static int32_t sensor_write(void *handle, uint8_t header, const uint8_t *bufp, uint16_t len)
 {
@@ -192,14 +295,14 @@ void sensors_set(bool GPS_on)
 
     uint8_t whoamI = 0;
     h3lis331dl_device_id_get(&accel_ctx, &whoamI);
-    if(whoamI != H3LIS331DL_ID) {
+    if(whoamI != H3LIS331DL_ID) { // Zmiana makra na H3LIS200DL_ID (wartość to wciąż 0x32)
         ESP_LOGE(TAG, "Accelerometer wasn't found. Received id: 0x%02X", whoamI);
     } else {
         ESP_LOGI(TAG,"Accelerometer was found");
     }
 
     h3lis331dl_data_rate_set(&accel_ctx, H3LIS331DL_ODR_100Hz); 
-    h3lis331dl_full_scale_set(&accel_ctx, H3LIS331DL_400g); 
+    h3lis331dl_full_scale_set(&accel_ctx, H3LIS331DL_200g);
 
     lsm6dsv16x_device_id_get(&imu_ctx, &whoamI);
     if(whoamI != LSM6DSV16X_ID) {
@@ -218,30 +321,97 @@ void sensors_set(bool GPS_on)
     //sila grawitacji to liwelowania dryfu grawitacyjnego 
     lsm6dsv16x_sflp_game_rotation_set(&imu_ctx, PROPERTY_ENABLE);
 
+    //USYPIANIE ESP
+
+    gpio_config_t io_conf = {
+        .intr_type = GPIO_INTR_DISABLE,            // BRAK przerwń ISR w trybie normalnym
+        .pin_bit_mask = (1ULL << PIIN_IMU_INT1),  // Pin 13
+        .mode = GPIO_MODE_INPUT,
+        .pull_up_en = GPIO_PULLUP_DISABLE,
+        .pull_down_en = GPIO_PULLDOWN_ENABLE       // Ściąganie do masy, zapobiega pływaniu pinu
+    };
+    gpio_config(&io_conf);
+    
+    // 2. Instalacja serwisu przerwań GPIO (jeśli nie był instalowany wcześniej w main.c)
+    // ESP_INTR_FLAG_IRAM pozwala na obsługę przerwania, gdy flash jest zajęty
+    gpio_install_isr_service(ESP_INTR_FLAG_IRAM);
+    
+    // 3. Przypisanie naszej funkcji ISR do pinu GPIO 13
+   // gpio_isr_handler_add(PIIN_IMU_INT1, imu_gpio_isr_handler, (void*) PIIN_IMU_INT1);
+
+    // 4. Włączenie wybudzania dla Light Sleep (na wypadek przyszłego uśpienia)
+    gpio_wakeup_enable(PIIN_IMU_INT1, GPIO_INTR_HIGH_LEVEL);
+    esp_sleep_enable_gpio_wakeup();
+
+    // Wstępna konfiguracja progu wybudzania w rejestrach IMU
+    lsm6dsv16x_configure_wakeup_threshold(config_wake_ths_g);
+
+
+
+
     if(GPS_on) {
         // Logika opcjonalnego włączania GPS
+        gps_start();
+    }
+}
+
+void sensors_enter_light_sleep(void)
+{
+    ESP_LOGI(TAG, "ZASILANIE: Przygotowanie peryferiów do uśpienia...");
+
+    // 1. Włączamy monitorowanie poziomu wysokiego na pinie IMU (bo IMU ma tryb LATCHED)
+    gpio_wakeup_enable(PIIN_IMU_INT1, GPIO_INTR_HIGH_LEVEL);
+    esp_sleep_enable_gpio_wakeup();
+
+    ESP_LOGW(TAG, "ZASILANIE: Wchodzę w tryb LIGHT SLEEP. Ruch wybudzi urządzenie.");
+    
+    // Czekamy na opróżnienie bufora konsoli UART, aby logi nie uległy uszkodzeniu
+    //uart_tx_wait_idle(CONFIG_ESP_CONSOLE_UART_NUM); 
+    uart_wait_tx_idle_polling(CONFIG_ESP_CONSOLE_UART_NUM);
+
+    // 2. TUTAJ PROCESOR ZASYPIA (Zatrzymanie zegarów, pobór prądu spada)
+    esp_light_sleep_start(); 
+
+    // =================================================================
+    //         PROCESOR SIĘ WYBUDZA (Kod rusza dokładnie stąd!)
+    // =================================================================
+    
+    // 3. Natychmiast blokujemy ponowne wybudzanie, żeby stan wysoki pinu nam nie przeszkadzał
+    gpio_wakeup_disable(PIIN_IMU_INT1);
+
+    ESP_LOGW(TAG, "ZASILANIE: ESP32 wybudzony! Czyszczę zatrzask czujnika przez SPI...");
+
+    // 4. Odczyt źródeł przerwań przez SPI w bezpiecznym kontekście zadania.
+    // Ten odczyt informuje IMU, że odebraliśmy zdarzenie, i wymusza opadnięcie linii INT1 do 0V.
+    lsm6dsv16x_all_sources_t all_sources;
+    memset(&all_sources, 0, sizeof(all_sources));
+    
+    if (lsm6dsv16x_all_sources_get(&imu_ctx, &all_sources) == 0) {
+        if (all_sources.wake_up) {
+            ESP_LOGI(TAG, "ZASILANIE: Potwierdzono wybudzenie przez blok Wake-Up IMU.");
+        }
+    } else {
+        ESP_LOGE(TAG, "ZASILANIE: Błąd komunikacji SPI przy czyszczeniu rejestrów czujnika!");
     }
 }
 
 accel_data accel_get(void)
 {
     int16_t data_raw[3];
-    h3lis331dl_status_reg_t reg;
+    h3lis331dl_status_reg_t reg; // Zmiana typu struktury statusu
     h3lis331dl_status_reg_get(&accel_ctx, &reg);
 
     accel_data received_data = {0};
 
-    //pobieramy nowe, swieze dane(wszystkie osie musza byc odswiezone, nie polowa)
     if(reg.zyxda) {
-        //automatyczne czyszcze flagi odczytu
+        // ZMIANA: Pobranie surowych danych z nowego API
         h3lis331dl_acceleration_raw_get(&accel_ctx, data_raw);
 
-        //mamy juz w mg
-        received_data.x = h3lis331dl_from_fs400_to_mg(data_raw[0]) / 1000.0f;
-        received_data.y = h3lis331dl_from_fs400_to_mg(data_raw[1]) / 1000.0f;
-        received_data.z = h3lis331dl_from_fs400_to_mg(data_raw[2]) / 1000.0f;
+        // ZMIANA: Przeliczenie ze skali 200g na mg, a potem na g
+        received_data.x = h3lis331dl_from_fs200_to_mg(data_raw[0]) / 1000.0f;
+        received_data.y = h3lis331dl_from_fs200_to_mg(data_raw[1]) / 1000.0f;
+        received_data.z = h3lis331dl_from_fs200_to_mg(data_raw[2]) / 1000.0f;
     }
-   // ESP_LOGI(AccelTAG,"Acel measured: %f, %f, %f",  received_data.x ,  received_data.y,  received_data.z);
     return received_data;
 }
 
@@ -306,8 +476,8 @@ imu_data imu_get(void)
 
     ESP_LOGI(ImuTAG, "=== SENSOR MEASUREMENT ===");
     ESP_LOGI(ImuTAG, "Accel [g]:   X: %6.3f | Y: %6.3f | Z: %6.3f", 
-             received_data.accel.x, received_data.accel.y, received_data.accel.z);
-    ESP_LOGI(ImuTAG, "Gyro [dps]:  X: %6.3f | Y: %6.3f | Z: %6.3f", 
+             received_data.accel.x, received_data.accel.y, received_data.accel.z);*/
+    /*ESP_LOGI(ImuTAG, "Gyro [dps]:  X: %6.3f | Y: %6.3f | Z: %6.3f", 
              received_data.gyro.x,  received_data.gyro.y,  received_data.gyro.z);
     ESP_LOGI(ImuTAG, "Quat [SFLP]: X: %6.4f | Y: %6.4f | Z: %6.4f | W: %6.4f", 
              received_data.quat.x,  received_data.quat.y,  received_data.quat.z, received_data.quat.w);*/
@@ -317,120 +487,172 @@ imu_data imu_get(void)
 
 static void sensors_reading_task(void *pvParameters)
 {
-    ESP_LOGI(TAG, "Sensors production task started with Dynamic Sleep/Wakeup and Wi-Fi Guard.");
-    
-    while (1) {
-        //konwersja danych i gotowosc do przeslania poprzez wifi
+    ESP_LOGI(TAG, "Sensors production task started with REAL Light Sleep Wakeup.");
+
+    static int previous_level = -1;
+    loop_counter_1s = 0; // Reset na starcie
+    static int log_counter_3s = 0; // wyswietlanie danych raz na 3 sekundy
+
+    while (1)
+    {
+        int level = gpio_get_level(PIIN_IMU_INT1);
+        if (level != previous_level)
+        {
+            previous_level = level;
+            ESP_LOGW("GPIO", "INT1 changed state -> %d", level);
+        }
+
+        // Pobranie danych z SPI
         global_data_t current_frame = convert_to_global_frame();
-        
-        
-        //wypadkowe g na imu
+
         float imu_x = current_frame.accel_imu.x;
         float imu_y = current_frame.accel_imu.y;
         float imu_z = current_frame.accel_imu.z;
-        float imu_total_g = sqrtf(imu_x*imu_x + imu_y*imu_y + imu_z*imu_z);
 
-        //odcinamy stale 1g grawitacji
-        //kierunek nas nie interesuje
+        float imu_total_g = sqrtf(imu_x * imu_x + imu_y * imu_y + imu_z * imu_z);
         float imu_delta_g = fabsf(imu_total_g - 1.0f);
 
-      
-        if (is_device_sleeping) {
-            //tryb uspienia
-           
-            if (imu_delta_g > config_wake_ths_g || is_phone_connected) {
-                is_device_sleeping = false;
-                seconds_in_immobility = 0;
-                loop_counter_1s = 0;
-                ESP_LOGW(TAG, "!!! URZĄDZENIE WYBUDZONE !!! (Ruch: %.2f G, Wi-Fi: %s)", 
-                         imu_delta_g, is_phone_connected ? "TAK" : "NIE");
-                
-                // gps_start();
-            }
-            
-            // W trybie uśpienia rzadziej odpytujemy sensory i oszczędzamy CPU
-            vTaskDelay(pdMS_TO_TICKS(50));
-            continue;
-        } 
-        else {
-            //aktywne urzadzenie
-            loop_counter_1s++;
-            
-            // 100 iteracji * 10ms = 1 sekunda
-            //po po kazdej iteracji mamy sleep na 10ms
-            if (loop_counter_1s >= 100) {
-                loop_counter_1s = 0;
+        loop_counter_1s++;
 
-                //podlaczenie do telefonu - nie usypiamy
-                if (is_phone_connected) {
-                    seconds_in_immobility = 0;
-                    ESP_LOGI(TAG, "Bezruch wykryty, ale aplikacja jest połączona. Blokada uśpienia.");
-                }
-                
-                else if (imu_delta_g < config_sleep_ths_g) {
-                    seconds_in_immobility++;
-                    ESP_LOGI(TAG, "Bezruch... Sekund: %d/%d (Aktualna delta: %.3f G)", 
-                             seconds_in_immobility, config_idle_time_s, imu_delta_g);
-                    
-                    if (seconds_in_immobility >= config_idle_time_s) {
-                        is_device_sleeping = true;
-                        ESP_LOGW(TAG, "!!! SYSTEM IDZIE SPAĆ !!! Wykryto długotrwały bezruch.");
-                        // gps_stop();
+        // --- DYNAMICZNY BLOK ANALIZY BEZRUCHU (CO 1 SEKUNDĘ) ---
+        // Wyliczamy ile obiegów pętli to jedna sekunda (np. dla 20ms to 50, dla 25ms to 40, dla 50ms to 20)
+        int loops_per_second = 1000 / config_sensor_loop_ms; 
+
+        if (loop_counter_1s >= loops_per_second)
+        {
+            loop_counter_1s = 0;
+
+            if (is_phone_connected)
+            {
+                seconds_in_immobility = 0;
+            }
+            else if (imu_delta_g < config_sleep_ths_g)
+            {
+                seconds_in_immobility++;
+
+
+                if (seconds_in_immobility >= config_idle_time_s)
+                {
+                    if (config_enable_sleep)
+                    {
+
+                        
+                        ESP_LOGW(TAG, "!!! MIKROKONTROLER WCHODZI W LIGHT SLEEP (Brak ruchu przez %d s) !!!", config_idle_time_s);
+
+                        gps_stop();
+                        esp_wifi_stop();
+
+                        lsm6dsv16x_configure_wakeup_threshold(config_wake_ths_g);
+                        gpio_wakeup_enable(PIIN_IMU_INT1, GPIO_INTR_HIGH_LEVEL);
+                        esp_sleep_enable_gpio_wakeup();
+
+                        uart_wait_tx_idle_polling(CONFIG_ESP_CONSOLE_UART_NUM);
+
+                        esp_light_sleep_start();
+
+                        gpio_wakeup_disable(PIIN_IMU_INT1);
+
+                        ESP_LOGW(TAG, "!!! MIKROKONTROLER WYBUDZONY !!! Czyszczenie zatrzasku czujnika...");
+
+                        lsm6dsv16x_all_sources_t all_sources;
+                        memset(&all_sources, 0, sizeof(all_sources));
+                        lsm6dsv16x_all_sources_get(&imu_ctx, &all_sources);
+
+                        esp_wifi_start();
+                       // gps_start();
+
+                        seconds_in_immobility = 0;
+                        loop_counter_1s = 0;
                     }
-                } else {
-                    // Wykryto normalny ruch w przestrzeni — reset odliczania
-                    seconds_in_immobility = 0;
                 }
+            }
+            else
+            {
+                seconds_in_immobility = 0;
             }
         }
 
-        //packet type = 0, lot
+
+        //wypisywanie w logach raz na 3 sekundy
+        log_counter_3s++;
+        int loops_per_3_seconds = 3000 / config_sensor_loop_ms;
+
+        if (log_counter_3s >= loops_per_3_seconds)
+        {
+            log_counter_3s = 0;
+            log_global_data(&current_frame);
+        }
+
+
+        // --- DETEKCJA ZDERZENIA ---
         current_frame.packet_type = 0;
-        float h3_total_g = sqrtf(current_frame.accel_h3lis.x * current_frame.accel_h3lis.x + 
-                                 current_frame.accel_h3lis.y * current_frame.accel_h3lis.y + 
-                                 current_frame.accel_h3lis.z * current_frame.accel_h3lis.z);
 
-        if (h3_total_g > CRASH_THRESHOLD_G) {
-            ESP_LOGW(TAG, "!!! DETEKCJA ZDERZENIA: Wykryto %2.2f G !!!", h3_total_g);
+        float h3_x = current_frame.accel_h3lis.x;
+        float h3_y = current_frame.accel_h3lis.y;
+        float h3_z = current_frame.accel_h3lis.z; //nie odejmujemy grawitacji bo jest znikoma
 
-            
+        float h3_dynamic_g = sqrtf(h3_x * h3_x + h3_y * h3_y + h3_z * h3_z);
+
+        if (h3_dynamic_g > CRASH_THRESHOLD_G)
+        {
+            ESP_LOGW(TAG, "!!! DETEKCJA ZDERZENIA: Wykryto %2.2f G !!!", h3_dynamic_g);
+
             seconds_in_immobility = 0;
             loop_counter_1s = 0;
 
             int read_idx = (pre_hit_count < PRE_HIT_BUFFER_SIZE) ? 0 : pre_hit_index;
-            for (int i = 0; i < pre_hit_count; i++) {
+
+            for (int i = 0; i < pre_hit_count; i++)
+            {
                 pre_hit_buffer[read_idx].packet_type = 1;
-                if (data_queue != NULL) xQueueSend(data_queue, &pre_hit_buffer[read_idx], pdMS_TO_TICKS(10));
+                if (data_queue != NULL)
+                {
+                    xQueueSend(data_queue, &pre_hit_buffer[read_idx], pdMS_TO_TICKS(10));
+                }
                 read_idx = (read_idx + 1) % PRE_HIT_BUFFER_SIZE;
             }
 
-            //type - uderzenie
             current_frame.packet_type = 1;
-            //maks 10 ms czekanania na wolne miejsce w kolejce
-            if (data_queue != NULL) xQueueSend(data_queue, &current_frame, pdMS_TO_TICKS(10));
-
-            for (int i = 0; i < POST_HIT_SAMPLES; i++) {
-                vTaskDelay(pdMS_TO_TICKS(10));
-                global_data_t post_frame = convert_to_global_frame();
-                post_frame.packet_type = 1;
-                if (data_queue != NULL) xQueueSend(data_queue, &post_frame, pdMS_TO_TICKS(10));
+            if (data_queue != NULL)
+            {
+                xQueueSend(data_queue, &current_frame, pdMS_TO_TICKS(10));
             }
 
-            pre_hit_index = 0; pre_hit_count = 0;
-        } 
-        else {
+            for (int i = 0; i < POST_HIT_SAMPLES; i++)
+            {
+                // Dynamiczny czas zapisu po zderzeniu
+                vTaskDelay(pdMS_TO_TICKS(config_sensor_loop_ms)); 
+
+                global_data_t post_frame = convert_to_global_frame();
+                post_frame.packet_type = 1;
+
+                if (data_queue != NULL)
+                {
+                    xQueueSend(data_queue, &post_frame, pdMS_TO_TICKS(10));
+                }
+            }
+
+            pre_hit_index = 0;
+            pre_hit_count = 0;
+        }
+        else
+        {
             pre_hit_buffer[pre_hit_index] = current_frame;
             pre_hit_index = (pre_hit_index + 1) % PRE_HIT_BUFFER_SIZE;
-            if (pre_hit_count < PRE_HIT_BUFFER_SIZE) pre_hit_count++;
 
-            if (data_queue != NULL) {
-                if (xQueueSend(data_queue, &current_frame, 0) != pdTRUE) {
-                    // Kolejka pełna
-                }
+            if (pre_hit_count < PRE_HIT_BUFFER_SIZE)
+            {
+                pre_hit_count++;
+            }
+
+            if (is_phone_connected && data_queue != NULL)
+            {
+                xQueueSend(data_queue, &current_frame, 0);
             }
         }
 
-        vTaskDelay(pdMS_TO_TICKS(10));
+        // --- CENTRALNE STEROWANIE PROB_KOWANIEM ---
+        vTaskDelay(pdMS_TO_TICKS(config_sensor_loop_ms));
     }
 }
 
@@ -442,46 +664,224 @@ void sensors_task_start(void)
         4096,                   
         NULL,   //parametry                
         5,                      
-        NULL,  //handle             
+        &sensors_task_handle,  //handle             
         1                       
     );
 }
 
-void gps_start(void)
+void log_global_data(const global_data_t *data)
 {
-    if (nmea_hdl != NULL) {
-        ESP_LOGW(TAG, "GPS/NMEA parser jest już uruchomiony.");
+    if (data == NULL) {
+        ESP_LOGE(TAG, "log_global_data: Wskaźnik do danych jest NULL!");
         return;
     }
 
-    nmea_parser_config_t config = NMEA_PARSER_CONFIG_DEFAULT();
-    config.uart.uart_port = GPS_UART_NUM; 
-    config.uart.rx_pin = GPS_RX_PIN;
-
-    nmea_hdl = nmea_parser_init(&config);
-    if (nmea_hdl != NULL) {
-        nmea_parser_add_handler(nmea_hdl, gps_event_handler, NULL);
-        ESP_LOGI(TAG, "Parser NMEA (GPS) został włączony.");
+    ESP_LOGI(TAG, "================ GLOBAL DATA FRAME ================");
+    ESP_LOGI(TAG, "Typ pakietu (Packet Type): %u (%s)", 
+             data->packet_type, 
+             data->packet_type == 1 ? "ZDERZENIE / HIT" : "LOT / NORMAL");
+    
+    // Dane z akcelerometru H3LIS331DL
+    ESP_LOGI(TAG, "Accel H3LIS [g]:  X: %6.2f | Y: %6.2f | Z: %6.2f", 
+             data->accel_h3lis.x, data->accel_h3lis.y, data->accel_h3lis.z);
+    
+    // Dane z IMU LSM6DSV16X
+    ESP_LOGI(TAG, "Accel IMU   [g]:  X: %6.2f | Y: %6.2f | Z: %6.2f", 
+             data->accel_imu.x, data->accel_imu.y, data->accel_imu.z);
+    
+    // Dane z żyroskopu IMU
+    ESP_LOGI(TAG, "Gyro IMU [dps]:  X: %6.2f | Y: %6.2f | Z: %6.2f", 
+             data->gyro.x, data->gyro.y, data->gyro.z);
+    
+    // Dane GPS
+    if (data->gps_fix) {
+        ESP_LOGI(TAG, "GPS Pozycja:      Szerokość: %.6f° %c | Długość: %.6f° %c", 
+                 fabsf(data->latitude),  data->latitude >= 0 ? 'N' : 'S',
+                 fabsf(data->longitude), data->longitude >= 0 ? 'E' : 'W');
+        ESP_LOGI(TAG, "Status GPS FIX:   TAK");
     } else {
-        ESP_LOGE(TAG, "Nie udało się uruchomić parsera NMEA.");
+        ESP_LOGW(TAG, "GPS Pozycja:      BRAK AKTUALNYCH DANYCH (Ostatnia znana szer: %.6f, dł: %.6f)", 
+                 data->latitude, data->longitude);
+        ESP_LOGW(TAG, "Status GPS FIX:   NIE");
+    }
+    ESP_LOGI(TAG, "===================================================");
+}
+
+
+static void gps_event_handler(void *event_handler_arg, esp_event_base_t event_base, int32_t event_id, void *event_data)
+{
+    gps_t *gps = (gps_t *)event_data; // Rzutowanie surowych danych na strukturę GPS
+
+    switch (event_id) {
+        case GPS_UPDATE:
+            // Przypisanie do zmiennych globalnych (przydatne do reszty Twojego programu)
+            current_lat = gps->latitude;
+            current_lon = gps->longitude;
+            current_fix = (gps->fix >= 1); // True jeśli mamy jakikolwiek FIX (Standard/DGPS)
+
+            // Wyświetlenie czytelnych informacji w monitorze portu szeregowego
+            if (gps->fix >= 1) { 
+                ESP_LOGI("GPS_DIAGNOSTYKA", "=== SUKCES! ZNALEZIONO LOKALIZACJĘ ===");
+                ESP_LOGI("GPS_DIAGNOSTYKA", "Status FIX:  %d", gps->fix);
+                ESP_LOGI("GPS_DIAGNOSTYKA", "Szerokość:   %.6f %c", gps->latitude, gps->latitude > 0 ? 'N' : 'S');
+                ESP_LOGI("GPS_DIAGNOSTYKA", "Długość:     %.6f %c", gps->longitude, gps->longitude > 0 ? 'E' : 'W');
+                ESP_LOGI("GPS_DIAGNOSTYKA", "Prędkość:    %.2f km/h", gps->speed);
+                ESP_LOGI("GPS_DIAGNOSTYKA", "Satelity:    %d w użyciu", gps->sats_in_use);
+                ESP_LOGI("GPS_DIAGNOSTYKA", "Czas (UTC):  %02d:%02d:%02d", gps->tim.hour, gps->tim.minute, gps->tim.second);
+                ESP_LOGI("GPS_DIAGNOSTYKA", "--------------------------------------");
+            } else {
+                // Moduł przysłał ramkę, ale nie ma jeszcze dokładnej pozycji
+                ESP_LOGW("GPS_DIAGNOSTYKA", "Odebrano ramkę, ale BRAK FIX (Satelity w użyciu: %d, Czas: %02d:%02d:%02d)", 
+                         gps->sats_in_use, gps->tim.hour, gps->tim.minute, gps->tim.second);
+            }
+            break;
+
+       case GPS_UNKNOWN: {
+            char *raw_line = (char *)event_data;
+            if (raw_line != NULL) {
+                // Filtrujemy logi, aby monitor nie został zalany śmieciami
+                if (strstr(raw_line, "GSV") || strstr(raw_line, "GGA") || strstr(raw_line, "RMC")) {
+                    ESP_LOGW("GPS_RAW", "%s", raw_line);
+                } else {
+                    // NOWOŚĆ: Wypisuje absolutnie wszystko, co nie przeszło przez powyższy filtr
+                    ESP_LOGW("GPS_INNE_RAMKI", "Odebrano poza filtrem: %s", raw_line);
+                }
+
+                // RĘCZNY PARSER DLA RAMKI RMC ($GNRMC lub $GPRMC)
+                if (strstr(raw_line, "RMC")) {
+                    char status = 'V';
+                    float lat_raw = 0.0f, lon_raw = 0.0f;
+                    char lat_dir = 'N', lon_dir = 'E';
+                    
+                    // Format: $XXRMC,czas,status(A/V),szerokosc,N/S,dlugosc,E/W,...
+                    int parsed = sscanf(raw_line, "%*[^,],%*[^,],%c,%f,%c,%f,%c", 
+                                        &status, &lat_raw, &lat_dir, &lon_raw, &lon_dir);
+                    
+                    if (parsed >= 5 && status == 'A') {
+                        // Konwersja z formatu DDMM.MMMM na stopnie dziesiętne DD.DDDD
+                        int lat_deg = (int)(lat_raw / 100);
+                        float lat_min = lat_raw - (lat_deg * 100);
+                        current_lat = lat_deg + (lat_min / 60.0f);
+                        if (lat_dir == 'S') current_lat = -current_lat;
+
+                        int lon_deg = (int)(lon_raw / 100);
+                        float lon_min = lon_raw - (lon_deg * 100);
+                        current_lon = lon_deg + (lon_min / 60.0f);
+                        if (lon_dir == 'W') current_lon = -current_lon;
+
+                        current_fix = true;
+
+                        ESP_LOGI("GPS_RĘCZNY", "=== SUKCES! ZNALEZIONO LOKALIZACJĘ (RMC) ===");
+                        ESP_LOGI("GPS_RĘCZNY", "Szerokość: %.6f %c | Długość: %.6f %c", 
+                                 current_lat, lat_dir, current_lon, lon_dir);
+                        ESP_LOGI("GPS_RĘCZNY", "===========================================");
+                    }
+                }
+            }
+            break;
+        }
+            
+        default:
+            break;
     }
 }
 
+
+
+
+static void gps_read_task(void *pvParameters)
+{
+    uint8_t data[BUF_SIZE];
+    char line_buffer[128];
+    int line_idx = 0;
+
+    while (1) {
+        int len = uart_read_bytes(GPS_UART_NUM, data, 1, pdMS_TO_TICKS(1000));
+        
+        if (len > 0) {
+            char c = data[0];
+
+            if (c != '\r' && c != '\n') {
+                if (line_idx < sizeof(line_buffer) - 1) {
+                    line_buffer[line_idx++] = c;
+                }
+            } 
+            else if (c == '\n' && line_idx > 0) {
+                line_buffer[line_idx] = '\0';
+
+                // Szukamy ramki RMC (np. $GNRMC lub $GPRMC)
+                if (strstr(line_buffer, "RMC")) {
+                    char status = 'V';
+                    float lat_raw = 0.0f, lon_raw = 0.0f;
+                    char lat_dir = 'N', lon_dir = 'E';
+                    
+                    // Skanujemy format NMEA: $XXRMC,time,status,lat,N/S,lon,E/W
+                    int parsed = sscanf(line_buffer, "%*[^,],%*[^,],%c,%f,%c,%f,%c", 
+                                        &status, &lat_raw, &lat_dir, &lon_raw, &lon_dir);
+                    
+                    if (parsed >= 5 && status == 'A') {
+                        // 1. Konwersja formatu NMEA (DDMM.MMMM) na stopnie dziesiętne (DD.DDDDDD)
+                        int lat_deg = (int)(lat_raw / 100);
+                        float lat_min = lat_raw - (lat_deg * 100);
+                        float lat_decimal = lat_deg + (lat_min / 60.0f);
+                        if (lat_dir == 'S') lat_decimal = -lat_decimal;
+
+                        int lon_deg = (int)(lon_raw / 100);
+                        float lon_min = lon_raw - (lon_deg * 100);
+                        float lon_decimal = lon_deg + (lon_min / 60.0f);
+                        if (lon_dir == 'W') lon_decimal = -lon_decimal;
+
+                        // 2. Bezpieczna aktualizacja zmiennych globalnych silnika czujników
+                        current_lat = lat_decimal;
+                        current_lon = lon_decimal;
+                        current_fix = true;
+
+                        ESP_LOGI("GPS_PARSER", "Zaktualizowano pozycję: %.6f, %.6f", current_lat, current_lon);
+                    } else {
+                        current_fix = false; // Brak ważnej pozycji (status 'V')
+                    }
+                }
+
+                line_idx = 0; 
+            }
+        }
+    }
+}
+
+
+
+
 void gps_stop(void)
 {
-    if (nmea_hdl == NULL) {
-        ESP_LOGW(TAG, "GPS jest już wyłączony.");
-        return;
-    }
+    uart_driver_delete(GPS_UART_NUM);
+    ESP_LOGI(TAG, "Sterownik UART GPS został wyłączony.");
+}
 
-    esp_err_t err = nmea_parser_deinit(nmea_hdl);
-    if (err == ESP_OK) {
-        nmea_hdl = NULL;
-        current_fix = false; 
-        current_lat = 0.0f;
-        current_lon = 0.0f;
-        ESP_LOGI(TAG, "Parser NMEA (GPS) został pomyślnie zatrzymany.");
-    } else {
-        ESP_LOGE(TAG, "Błąd podczas zatrzymywania parsera NMEA.");
-    }
+
+
+
+void gps_start(void)
+{
+    // Konfiguracja parametrów UART
+    uart_config_t uart_config = {
+        .baud_rate = 115200,
+        .data_bits = UART_DATA_8_BITS,
+        .parity    = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .source_clk = UART_SCLK_DEFAULT,
+    };
+    
+    // Instalacja sterownika UART (piny RX/TX)
+    ESP_ERROR_CHECK(uart_driver_install(GPS_UART_NUM, BUF_SIZE * 2, 0, 0, NULL, 0));
+    ESP_ERROR_CHECK(uart_param_config(GPS_UART_NUM, &uart_config));
+    ESP_ERROR_CHECK(uart_set_pin(GPS_UART_NUM, GPS_TX_PIN, GPS_RX_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+
+    // Wysłanie komendy konfiguracji (opcjonalnie)
+    const char *change_to_gp = "$PCAS06,1*1A\r\n"; 
+    uart_write_bytes(GPS_UART_NUM, change_to_gp, strlen(change_to_gp));
+
+    // Uruchomienie własnego zadania do czytania danych
+    xTaskCreate(gps_read_task, "gps_read_task", 4096, NULL, 10, NULL);
+    ESP_LOGI(TAG, "Bezpośredni odczyt UART dla GPS został uruchomiony.");
 }

@@ -19,23 +19,26 @@ extern float CRASH_THRESHOLD_G;
 
 extern bool is_phone_connected;
 
-#define PIN_MISO 35
-#define PIN_MOSI 36
-#define PIN_SCLK 37
+#define PIN_MISO 17
+#define PIN_MOSI 18
+#define PIN_SCLK 8
 
-#define PIN_ACCEL_CS 6
+#define PIN_ACCEL_CS 14
 #define PIIN_ACCEL_INT1 21
-#define PIIN_ACCEL_INT2 35
+//#define PIIN_ACCEL_INT2 
 
-#define PIN_IMU_CS 17
+//pin cs zostaje zamieniony na int2
+#define PIN_IMU_CS 36
 #define PIIN_IMU_INT1 13
-#define PIIN_IMU_INT2 36
+//#define PIIN_IMU_INT2 36
 
 #define PRE_HIT_BUFFER_SIZE  100
 #define POST_HIT_SAMPLES     100
 
-#define GPS_RX_PIN 18  
-#define GPS_TX_PIN 19
+#define GPS_RX_PIN 5  
+#define GPS_TX_PIN 15
+
+extern int config_sensor_loop_ms;
 
 //komunikacja sieciowa
 typedef struct {
@@ -83,7 +86,7 @@ typedef struct {
     gps_time time;
 } gps_data;
 
-
+extern bool config_enable_sleep; // True = usypianie włączone, False = usypianie całkowicie zablokowane
 
 void sensors_set(bool GPS_on);
 accel_data accel_get(void);
@@ -93,5 +96,9 @@ global_data_t convert_to_global_frame(void);
 void sensors_task_start(void);
 void gps_start(void);
 void gps_stop(void);
+
+void lsm6dsv16x_configure_wakeup_threshold(float threshold_g);
+
+void log_global_data(const global_data_t *data);
 
 #endif // MEASURE_H

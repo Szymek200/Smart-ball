@@ -6,6 +6,7 @@
 #include "freertos/task.h"
 #include <string.h>
 #include <errno.h>
+#include "audio_player.h"
 
 static const char *TAG = "wifi_softap_tcp";
 
@@ -46,28 +47,33 @@ void wifi_init_softap(void)
                                                         NULL,
                                                         NULL));
 
-    wifi_config_t wifi_config = {
-        .ap = {
-            .ssid = WIFI_SSID,
-            .ssid_len = strlen(WIFI_SSID),
-            .channel = WIFI_CHANNEL,
-            .password = WIFI_PASS,
-            .max_connection = MAX_STA_CONN,
-            .authmode = WIFI_AUTH_WPA2_PSK,
-            .pmf_cfg = {
-                .required = true,
-            },
-        },
-    };
+    // 1. Zerowanie struktury, aby pozbyć się śmieci z pamięci RAM
+    wifi_config_t wifi_config;
+    memset(&wifi_config, 0, sizeof(wifi_config_t));
+
+    // 2. Bezpieczne przepisanie ciągów znaków (SSID i Hasło)
+    strlcpy((char *)wifi_config.ap.ssid, WIFI_SSID, sizeof(wifi_config.ap.ssid));
+    wifi_config.ap.ssid_len = strlen(WIFI_SSID);
+    wifi_config.ap.channel = WIFI_CHANNEL;
+    wifi_config.ap.max_connection = MAX_STA_CONN;
+    wifi_config.ap.authmode = WIFI_AUTH_WPA2_PSK;
 
     if (strlen(WIFI_PASS) == 0) {
         wifi_config.ap.authmode = WIFI_AUTH_OPEN;
+    } else {
+        strlcpy((char *)wifi_config.ap.password, WIFI_PASS, sizeof(wifi_config.ap.password));
     }
+
+    // 3. Złagodzenie wymogu PMF (bardziej kompatybilne ze smartfonami)
+    wifi_config.ap.pmf_cfg.capable = true;
+    wifi_config.ap.pmf_cfg.required = false; 
 
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
-    ESP_ERROR_CHECK(esp_wifi_start());
-
+    
+    ESP_LOGI(TAG, "Uruchamianie radia Wi-Fi...");
+    ESP_ERROR_CHECK(esp_wifi_start()); // Ryzyko restartu sprzętowego (Brownout) jest TUTAJ
+    esp_wifi_set_max_tx_power(44);
     ESP_LOGI(TAG, "Hotspot started. SSID:%s Password:%s", WIFI_SSID, WIFI_PASS);
 }
 
@@ -220,12 +226,25 @@ static void tcp_config_server_task(void * pvParameters)
         if (len > 0) {
             rx_buffer[len] = '\0';
 
+            if (strncmp(rx_buffer, "CMD:PLAY_SOUND", 14) == 0) {
+                ESP_LOGW(TAG, "-> OTRZYMANO TCP: Komenda odtworzenia dźwięku!");
+              
+                play_raw("/spiffs/dzwonek.raw");
+
+            }
+
+            else if (strncmp(rx_buffer, "CMD:STOP_SOUND", 14) == 0) {
+                ESP_LOGW(TAG, "-> OTRZYMANO TCP: Komenda STOP dźwięku!");
+                stop_raw(); 
+            }
            //czulosc wybudzenia 
             if (strncmp(rx_buffer, "CMD:WAKE_THS:", 13) == 0) {
                 float val;
                 if (sscanf(rx_buffer, "CMD:WAKE_THS:%f", &val) == 1) {
                     config_wake_ths_g = val;
                     ESP_LOGW(TAG, "-> ZMIANA TCP: Nowy próg WYBUDZENIA IMU: %.2f G", config_wake_ths_g);
+
+                    lsm6dsv16x_configure_wakeup_threshold(config_wake_ths_g);
                 }
             }
             // prog sily uderzenia

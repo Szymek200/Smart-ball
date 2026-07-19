@@ -30,8 +30,8 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
         case MQTT_EVENT_DATA:
             ESP_LOGI(TAG, "Otrzymano rozkaz z chmury. Temat: %.*s", event->topic_len, event->topic);
             if (strncmp(event->data, "PLAY", event->data_len) == 0) {
-                ESP_LOGW(TAG, "!!! ROZKAZ GSM: Uruchamiam lokalizator dźwiękowy (Buzer/Głośnik) !!!");
-                play_raw("/spiffs/dzwonek.raw"); 
+                ESP_LOGW(TAG, "!!! ROZKAZ GSM: Uruchamiam lokalizator dźwiękowy (Buzer/Głośnik) - niezaimplementowane!!!");
+               // play_raw("/spiffs/dzwonek.raw"); 
             }
             break;
         default:

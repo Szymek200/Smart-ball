@@ -19,18 +19,18 @@ extern float CRASH_THRESHOLD_G;
 
 extern bool is_phone_connected;
 
-#define PIN_MISO 17
-#define PIN_MOSI 18
-#define PIN_SCLK 8
+// --- NOWE MAPOWANIE PINÓW (BEZPIECZNE DLA OCTAL SPI) ---
+#define PIN_MISO            17
+#define PIN_MOSI            18
+#define PIN_SCLK            8
 
-#define PIN_ACCEL_CS 14
-#define PIIN_ACCEL_INT1 21
-//#define PIIN_ACCEL_INT2 
+// Akcelerometr H3LIS331DL
+#define PIN_ACCEL_CS        14
+#define PIN_ACCEL_INT1      21  // To ten pin (GPIO 21) będzie teraz budził ESP32!
 
-//pin cs zostaje zamieniony na int2
-#define PIN_IMU_CS 36
-#define PIIN_IMU_INT1 13
-//#define PIIN_IMU_INT2 36
+// IMU LSM6DSV16X
+#define PIN_IMU_CS          13  // Przeniesiony z pinu 36 na wolny i bezpieczny pin 13
+// PIN_IMU_INT1 usunięty – nie korzystamy z niego
 
 #define PRE_HIT_BUFFER_SIZE  100
 #define POST_HIT_SAMPLES     100

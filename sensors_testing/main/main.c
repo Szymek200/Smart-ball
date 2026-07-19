@@ -7,140 +7,87 @@
 #include "esp_netif.h"
 #include "esp_event.h"
 #include "nvs_flash.h" 
-#include "audio_player.h"
-#include "esp_spiffs.h"
+#include "nvs.h"
 #include "gsm.h"
-
-#include <dirent.h>     // <-- POPRAWIONE (zamiast <sys/dirent.h>)
-#include <sys/stat.h>   // Dla funkcji stat (rozmiar plików)
-
 #include "communicate.h"
 #include "measure.h"
 
 static const char *TAG = "main";
 
-QueueHandle_t data_queue = NULL; //kolejka z pomiarami
-QueueHandle_t gps_queue = NULL; // kolejka dla GSM
+QueueHandle_t data_queue = NULL; 
+QueueHandle_t gps_queue = NULL;  
 
-#include <sys/dirent.h>
-#include <sys/stat.h>
-#include "esp_log.h"
+// Zmienne konfiguracyjne zdefiniowane w measure.c
+extern float config_wake_ths_g;
+extern float config_sleep_ths_g;
+extern int config_idle_time_s;
+extern float CRASH_THRESHOLD_G;
 
-void list_spiffs_files(void) {
-    ESP_LOGW("DIAGNOSTYKA", "--- Lista plików na partycji SPIFFS ---");
-    
-    DIR *dir = opendir("/spiffs");
-    if (dir == NULL) {
-        ESP_LOGE("DIAGNOSTYKA", "Nie można otworzyć katalogu /spiffs!");
-        return;
-    }
-
-    struct dirent *entry;
-    int file_count = 0;
-    
- while ((entry = readdir(dir)) != NULL) {
-        file_count++;
-        struct stat st;
-        // Zwiększamy rozmiar do 300, aby z zapasem pomieścić max 255 bajtów z d_name
-        char full_path[300]; 
+// Funkcja wczytująca zapisane parametry z NVS podczas startu urządzenia
+void load_config_from_nvs(void) {
+    nvs_handle_t my_handle;
+    esp_err_t err = nvs_open("storage", NVS_READONLY, &my_handle);
+    if (err == ESP_OK) {
+        size_t required_size = sizeof(float);
+        nvs_get_blob(my_handle, "wake_ths", &config_wake_ths_g, &required_size);
+        nvs_get_blob(my_handle, "sleep_ths", &config_sleep_ths_g, &required_size);
         
-        // Używamy bezpiecznego snprintf zamiast sprintf
-        snprintf(full_path, sizeof(full_path), "/spiffs/%s", entry->d_name);
+        required_size = sizeof(int);
+        nvs_get_blob(my_handle, "idle_time", &config_idle_time_s, &required_size);
         
-        if (stat(full_path, &st) == 0) {
-            ESP_LOGI("DIAGNOSTYKA", "Znaleziono plik: %s (%ld bajtów)", entry->d_name, st.st_size);
-        } else {
-            ESP_LOGI("DIAGNOSTYKA", "Znaleziono plik: %s (nie można pobrać rozmiaru)", entry->d_name);
-        }
+        required_size = sizeof(float);
+        nvs_get_blob(my_handle, "crash_ths", &CRASH_THRESHOLD_G, &required_size);
+        
+        nvs_close(my_handle);
+        ESP_LOGI(TAG, "Wczytano konfigurację z NVS: Wake=%.2fG, Sleep=%.3fG, Idle=%ds, Crash=%.1fG",
+                 config_wake_ths_g, config_sleep_ths_g, config_idle_time_s, CRASH_THRESHOLD_G);
+    } else {
+        ESP_LOGW(TAG, "Brak zapisanego profilu w NVS. Używanie wartości domyślnych.");
     }
-
-    closedir(dir);
-    
-    if (file_count == 0) {
-        ESP_LOGW("DIAGNOSTYKA", "Partycja SPIFFS jest całkowicie PUSTA!");
-    }
-    ESP_LOGW("DIAGNOSTYKA", "---------------------------------------");
-}
-
-void init_spiffs(void)
-{
-    ESP_LOGI(TAG, "Inicjalizacja SPIFFS...");
-    esp_vfs_spiffs_conf_t conf = {
-        .base_path = "/spiffs",
-        .partition_label = "storage",
-        .max_files = 5,
-        .format_if_mount_failed = true
-    };
-
-    esp_err_t ret = esp_vfs_spiffs_register(&conf);
-    if (ret != ESP_OK) {
-        if (ret == ESP_FAIL) {
-            ESP_LOGE(TAG, "Błąd montowania systemu plików SPIFFS");
-        } else if (ret == ESP_ERR_NOT_FOUND) {
-            ESP_LOGE(TAG, "Nie znaleziono partycji SPIFFS");
-        } else {
-            ESP_LOGE(TAG, "Błąd inicjalizacji SPIFFS (%s)", esp_err_to_name(ret));
-        }
-        return;
-    }
-    ESP_LOGI(TAG, "SPIFFS zamontowany pomyślnie!");
 }
 
 void app_main(void)
 {
-    ESP_LOGI(TAG, "Hello");
+    ESP_LOGI(TAG, "Uruchamianie aplikacji bez SPIFFS i Audio...");
 
-    esp_log_level_set("esp_modem", ESP_LOG_DEBUG);
-esp_log_level_set("esp_modem_dte", ESP_LOG_DEBUG);
-esp_log_level_set("esp_modem_dce", ESP_LOG_DEBUG);
-
-    // Pamiec NVS
+    // Inicjalizacja pamięci NVS
     esp_err_t ret = nvs_flash_init();
-if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-    ESP_ERROR_CHECK(nvs_flash_erase());
-    ret = nvs_flash_init();
-}
-ESP_ERROR_CHECK(ret);
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
 
-    //globalne ustawienia sieci
-    //TCP stack and event loop - zadanie odbioru danych wifi
+    // Wczytanie konfiguracji z pamięci nieulotnej
+    load_config_from_nvs();
+
+    // Globalne ustawienia sieci i pętli zdarzeń
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 
-    // kolejka dla pomiarow uderzen( 100 przed zderzeniem, 100 po zderzeniu, 50 jako bufor)
+    // Kolejki danych
     data_queue = xQueueCreate(250, sizeof(global_data_t));
     if (data_queue == NULL) {
-        ESP_LOGE(TAG, "Failed to create data_queue for Wi-Fi");
+        ESP_LOGE(TAG, "Failed to create data_queue");
         return;
     }
 
     gps_queue = xQueueCreate(5, sizeof(gps_data));
     if (gps_queue == NULL) {
-        ESP_LOGE(TAG, "Failed to create gps_queue for GSM");
+        ESP_LOGE(TAG, "Failed to create gps_queue");
         return;
     }
 
-   // AUDIO
-    init_spiffs();
-    list_spiffs_files();
-    
+    // Usunięto całkowicie: init_spiffs() oraz list_spiffs_files()
 
     // START PODSYSTEMÓW
-    sensors_set(false);
-
-
+    sensors_set(false); // Automatycznie skonfiguruje IMU z uwzględnieniem wczytanego config_wake_ths_g
     wifi_init_softap();
 
     vTaskDelay(pdMS_TO_TICKS(300));
 
-    //audio_init();
-
     //tcp_server_start();
     //tcp_config_server_start();
-
-    // --- URUCHOMIENIE DIAGNOSTYKI GSM ---
-    //sim7070_full_test(); 
-   
     
     sensors_task_start();
 }

@@ -243,11 +243,12 @@ static int32_t sensor_read(void *handle, uint8_t reg, uint8_t *bufp, uint16_t le
 
 void sensors_set(bool GPS_on)
 {
-    ESP_LOGI(TAG,"Setting up sensors");
+    ESP_LOGI(TAG, "Konfiguracja czujników (H3LIS INT1 -> GPIO 21, IMU CS -> GPIO 13)");
     esp_err_t ret;
     spi_device_handle_t spi_accel_handle;
     spi_device_handle_t spi_imu_handle;
 
+    // 1. Inicjalizacja wspólnej magistrali SPI (piny 17, 18, 8)
     spi_bus_config_t buscfg = {
         .miso_io_num = PIN_MISO,
         .mosi_io_num = PIN_MOSI,
@@ -260,27 +261,27 @@ void sensors_set(bool GPS_on)
     ret = spi_bus_initialize(SPI2_HOST, &buscfg, SPI_DMA_CH_AUTO);
     ESP_ERROR_CHECK(ret); 
 
-    //konfiguracja slave
+    // 2. Dodanie urządzenia Akcelerometru H3LIS331DL do magistrali SPI
     spi_device_interface_config_t devcfg_accel = {
         .clock_speed_hz = 1 * 1000 * 1000, 
         .mode = 3, 
-        .spics_io_num = PIN_ACCEL_CS,
+        .spics_io_num = PIN_ACCEL_CS, // GPIO 14
         .queue_size = 7
     };
     ret = spi_bus_add_device(SPI2_HOST, &devcfg_accel, &spi_accel_handle);
     ESP_ERROR_CHECK(ret);
 
+    // 3. Dodanie urządzenia IMU LSM6DSV16X do magistrali SPI
     spi_device_interface_config_t devcfg_imu = {
         .clock_speed_hz = 5 * 1000 * 1000, 
         .mode = 3,                         
-        .spics_io_num = PIN_IMU_CS,        
+        .spics_io_num = PIN_IMU_CS,        // NOWOŚĆ: Przeniesione na GPIO 13
         .queue_size = 7
     };
     ret = spi_bus_add_device(SPI2_HOST, &devcfg_imu, &spi_imu_handle);
     ESP_ERROR_CHECK(ret);
 
-    //konfigurowanie mojej wlasnej struktury SPI
-
+    // 4. Powiązanie uchwytów sprzętowych z kontekstem struktur sterowników ST
     accel_hardware.spi_handle = spi_accel_handle;
     accel_hardware.cs_pin = PIN_ACCEL_CS;
     accel_ctx.handle = (void*)&accel_hardware;
@@ -293,64 +294,54 @@ void sensors_set(bool GPS_on)
     imu_ctx.write_reg = sensor_write;
     imu_ctx.read_reg = sensor_read;
 
+    // 5. Weryfikacja obecności układu H3LIS331DL (WhoAmI)
     uint8_t whoamI = 0;
     h3lis331dl_device_id_get(&accel_ctx, &whoamI);
-    if(whoamI != H3LIS331DL_ID) { // Zmiana makra na H3LIS200DL_ID (wartość to wciąż 0x32)
-        ESP_LOGE(TAG, "Accelerometer wasn't found. Received id: 0x%02X", whoamI);
+    if(whoamI != H3LIS331DL_ID) { 
+        ESP_LOGE(TAG, "Akcelerometr nie został znaleziony! Odczytane ID: 0x%02X", whoamI);
     } else {
-        ESP_LOGI(TAG,"Accelerometer was found");
+        ESP_LOGI(TAG, "Akcelerometr H3LIS331DL wykryty poprawnie.");
     }
 
+    // Konfiguracja rejestrów roboczych H3LIS331DL
     h3lis331dl_data_rate_set(&accel_ctx, H3LIS331DL_ODR_100Hz); 
     h3lis331dl_full_scale_set(&accel_ctx, H3LIS331DL_200g);
 
+    // 6. Weryfikacja obecności układu IMU LSM6DSV16X (WhoAmI)
     lsm6dsv16x_device_id_get(&imu_ctx, &whoamI);
     if(whoamI != LSM6DSV16X_ID) {
-        ESP_LOGE(TAG, "IMU wasn't found. Received id: 0x%02X", whoamI);
+        ESP_LOGE(TAG, "IMU nie zostało znalezione! Odczytane ID: 0x%02X", whoamI);
     } else {
-        ESP_LOGI(TAG,"IMU was found");
+        ESP_LOGI(TAG, "IMU LSM6DSV16X wykryte poprawnie.");
     }
 
+    // Konfiguracja rejestrów roboczych IMU i algorytmu fuzji SFLP
     lsm6dsv16x_xl_data_rate_set(&imu_ctx, LSM6DSV16X_ODR_AT_960Hz);
     lsm6dsv16x_gy_data_rate_set(&imu_ctx, LSM6DSV16X_ODR_AT_960Hz);
     lsm6dsv16x_xl_full_scale_set(&imu_ctx, LSM6DSV16X_2g);       
     lsm6dsv16x_gy_full_scale_set(&imu_ctx, LSM6DSV16X_4000dps);
-
     lsm6dsv16x_sflp_data_rate_set(&imu_ctx, LSM6DSV16X_SFLP_120Hz);
-
-    //sila grawitacji to liwelowania dryfu grawitacyjnego 
     lsm6dsv16x_sflp_game_rotation_set(&imu_ctx, PROPERTY_ENABLE);
 
-    //USYPIANIE ESP
-
+    // 7. KONFIGURACJA SPRZĘTOWEGO WYBUDZANIA PROCESORA (H3LIS INT1 -> GPIO 21)
     gpio_config_t io_conf = {
-        .intr_type = GPIO_INTR_DISABLE,            // BRAK przerwń ISR w trybie normalnym
-        .pin_bit_mask = (1ULL << PIIN_IMU_INT1),  // Pin 13
+        .intr_type = GPIO_INTR_DISABLE,            // W trybie aktywnym nie potrzebujemy funkcji ISR
+        .pin_bit_mask = (1ULL << PIN_ACCEL_INT1),  // Słuchamy pinu GPIO 21
         .mode = GPIO_MODE_INPUT,
         .pull_up_en = GPIO_PULLUP_DISABLE,
-        .pull_down_en = GPIO_PULLDOWN_ENABLE       // Ściąganie do masy, zapobiega pływaniu pinu
+        .pull_down_en = GPIO_PULLDOWN_ENABLE       // Ściąganie linii do masy, zapobiega fałszywym stanom wysokim
     };
     gpio_config(&io_conf);
     
-    // 2. Instalacja serwisu przerwań GPIO (jeśli nie był instalowany wcześniej w main.c)
-    // ESP_INTR_FLAG_IRAM pozwala na obsługę przerwania, gdy flash jest zajęty
+    // Uruchomienie globalnego menedżera przerwań GPIO (wymagane przez ESP-IDF)
     gpio_install_isr_service(ESP_INTR_FLAG_IRAM);
     
-    // 3. Przypisanie naszej funkcji ISR do pinu GPIO 13
-   // gpio_isr_handler_add(PIIN_IMU_INT1, imu_gpio_isr_handler, (void*) PIIN_IMU_INT1);
-
-    // 4. Włączenie wybudzania dla Light Sleep (na wypadek przyszłego uśpienia)
-    gpio_wakeup_enable(PIIN_IMU_INT1, GPIO_INTR_HIGH_LEVEL);
+    // Zezwolenie, aby stan wysoki na GPIO 21 mógł wybudzić ESP32 z Light Sleep
+    gpio_wakeup_enable(PIN_ACCEL_INT1, GPIO_INTR_HIGH_LEVEL);
     esp_sleep_enable_gpio_wakeup();
 
-    // Wstępna konfiguracja progu wybudzania w rejestrach IMU
-    lsm6dsv16x_configure_wakeup_threshold(config_wake_ths_g);
-
-
-
-
+    // 8. Opcjonalna inicjalizacja modułu GPS
     if(GPS_on) {
-        // Logika opcjonalnego włączania GPS
         gps_start();
     }
 }
@@ -359,14 +350,13 @@ void sensors_enter_light_sleep(void)
 {
     ESP_LOGI(TAG, "ZASILANIE: Przygotowanie peryferiów do uśpienia...");
 
-    // 1. Włączamy monitorowanie poziomu wysokiego na pinie IMU (bo IMU ma tryb LATCHED)
-    gpio_wakeup_enable(PIIN_IMU_INT1, GPIO_INTR_HIGH_LEVEL);
+    // 1. Włączamy monitorowanie poziomu wysokiego na pinie akcelerometru H3LIS331DL
+    gpio_wakeup_enable(PIN_ACCEL_INT1, GPIO_INTR_HIGH_LEVEL);
     esp_sleep_enable_gpio_wakeup();
 
-    ESP_LOGW(TAG, "ZASILANIE: Wchodzę w tryb LIGHT SLEEP. Ruch wybudzi urządzenie.");
+    ESP_LOGW(TAG, "ZASILANIE: Wchodzę w tryb LIGHT SLEEP. Silne uderzenie wybudzi urządzenie.");
     
     // Czekamy na opróżnienie bufora konsoli UART, aby logi nie uległy uszkodzeniu
-    //uart_tx_wait_idle(CONFIG_ESP_CONSOLE_UART_NUM); 
     uart_wait_tx_idle_polling(CONFIG_ESP_CONSOLE_UART_NUM);
 
     // 2. TUTAJ PROCESOR ZASYPIA (Zatrzymanie zegarów, pobór prądu spada)
@@ -377,21 +367,22 @@ void sensors_enter_light_sleep(void)
     // =================================================================
     
     // 3. Natychmiast blokujemy ponowne wybudzanie, żeby stan wysoki pinu nam nie przeszkadzał
-    gpio_wakeup_disable(PIIN_IMU_INT1);
+    gpio_wakeup_disable(PIN_ACCEL_INT1);
 
-    ESP_LOGW(TAG, "ZASILANIE: ESP32 wybudzony! Czyszczę zatrzask czujnika przez SPI...");
+    ESP_LOGW(TAG, "ZASILANIE: ESP32 wybudzony przez H3LIS! Czyszczę zatrzask przerwania przez SPI...");
 
-    // 4. Odczyt źródeł przerwań przez SPI w bezpiecznym kontekście zadania.
-    // Ten odczyt informuje IMU, że odebraliśmy zdarzenie, i wymusza opadnięcie linii INT1 do 0V.
-    lsm6dsv16x_all_sources_t all_sources;
-    memset(&all_sources, 0, sizeof(all_sources));
-    
-    if (lsm6dsv16x_all_sources_get(&imu_ctx, &all_sources) == 0) {
-        if (all_sources.wake_up) {
-            ESP_LOGI(TAG, "ZASILANIE: Potwierdzono wybudzenie przez blok Wake-Up IMU.");
+    // 4. Odczyt rejestru źródła przerwań INT1_SRC (0x31) z H3LIS331DL.
+    // Ten odczyt informuje akcelerometr, że odebraliśmy zdarzenie, co wymusza opadnięcie linii INT1 (GPIO 21) do 0V.
+    uint8_t accel_src = 0;
+    if (h3lis331dl_read_reg(&accel_ctx, 0x31, &accel_src, 1) == 0) {
+        // Bit 6 (IA) w rejestrze INT1_SRC informuje, czy przerwanie faktycznie zostało wygenerowane
+        if (accel_src & 0x40) { 
+            ESP_LOGI(TAG, "ZASILANIE: Potwierdzono wybudzenie przez blok przerwań H3LIS331DL (SRC: 0x%02X).", accel_src);
+        } else {
+            ESP_LOGW(TAG, "ZASILANIE: Wybudzenie nastąpiło, ale rejestr H3LIS nie zgłasza aktywnego źródła (SRC: 0x%02X).", accel_src);
         }
     } else {
-        ESP_LOGE(TAG, "ZASILANIE: Błąd komunikacji SPI przy czyszczeniu rejestrów czujnika!");
+        ESP_LOGE(TAG, "ZASILANIE: Błąd komunikacji SPI przy czyszczeniu rejestru przerwań akcelerometru!");
     }
 }
 
@@ -495,7 +486,7 @@ static void sensors_reading_task(void *pvParameters)
 
     while (1)
     {
-        int level = gpio_get_level(PIIN_IMU_INT1);
+        int level = gpio_get_level(PIN_ACCEL_INT1);
         if (level != previous_level)
         {
             previous_level = level;
@@ -518,57 +509,40 @@ static void sensors_reading_task(void *pvParameters)
         // Wyliczamy ile obiegów pętli to jedna sekunda (np. dla 20ms to 50, dla 25ms to 40, dla 50ms to 20)
         int loops_per_second = 1000 / config_sensor_loop_ms; 
 
-        if (loop_counter_1s >= loops_per_second)
+        if (seconds_in_immobility >= config_idle_time_s)
         {
-            loop_counter_1s = 0;
-
-            if (is_phone_connected)
+            if (config_enable_sleep)
             {
+                ESP_LOGW(TAG, "!!! MIKROKONTROLER WCHODZI W LIGHT SLEEP (Brak ruchu przez %d s) !!!", config_idle_time_s);
+
+                gps_stop();
+                esp_wifi_stop();
+
+                // Przygotowanie pinu akcelerometru do wybudzenia
+                gpio_wakeup_enable(PIN_ACCEL_INT1, GPIO_INTR_HIGH_LEVEL);
+                esp_sleep_enable_gpio_wakeup();
+
+                uart_wait_tx_idle_polling(CONFIG_ESP_CONSOLE_UART_NUM);
+
+                // MASZYNA ZASYPIA
+                esp_light_sleep_start();
+
+                // MASZYNA SIĘ WYBUDZA
+                gpio_wakeup_disable(PIN_ACCEL_INT1);
+
+                ESP_LOGW(TAG, "!!! MIKROKONTROLER WYBUDZONY PRZEZ H3LIS !!! Czyszczenie rejestrów...");
+
+                // KROK KRYTYCZNY: Odczytaj rejestr źródła przerwań H3LIS331DL przez SPI,
+                // aby skasować zatrzask (clear latched interrupt) i pozwolić linii INT1 opaść do 0V.
+                uint8_t accel_src = 0;
+                // Zakładamy, że czytasz rejestr INT1_SRC (0x31) akcelerometru
+                h3lis331dl_read_reg(&accel_ctx, 0x31, &accel_src, 1); 
+
+                esp_wifi_start();
+                // gps_start(); // odkomentuj jeśli chcesz restartować GPS po obudzeniu
+
                 seconds_in_immobility = 0;
-            }
-            else if (imu_delta_g < config_sleep_ths_g)
-            {
-                seconds_in_immobility++;
-
-
-                if (seconds_in_immobility >= config_idle_time_s)
-                {
-                    if (config_enable_sleep)
-                    {
-
-                        
-                        ESP_LOGW(TAG, "!!! MIKROKONTROLER WCHODZI W LIGHT SLEEP (Brak ruchu przez %d s) !!!", config_idle_time_s);
-
-                        gps_stop();
-                        esp_wifi_stop();
-
-                        lsm6dsv16x_configure_wakeup_threshold(config_wake_ths_g);
-                        gpio_wakeup_enable(PIIN_IMU_INT1, GPIO_INTR_HIGH_LEVEL);
-                        esp_sleep_enable_gpio_wakeup();
-
-                        uart_wait_tx_idle_polling(CONFIG_ESP_CONSOLE_UART_NUM);
-
-                        esp_light_sleep_start();
-
-                        gpio_wakeup_disable(PIIN_IMU_INT1);
-
-                        ESP_LOGW(TAG, "!!! MIKROKONTROLER WYBUDZONY !!! Czyszczenie zatrzasku czujnika...");
-
-                        lsm6dsv16x_all_sources_t all_sources;
-                        memset(&all_sources, 0, sizeof(all_sources));
-                        lsm6dsv16x_all_sources_get(&imu_ctx, &all_sources);
-
-                        esp_wifi_start();
-                       // gps_start();
-
-                        seconds_in_immobility = 0;
-                        loop_counter_1s = 0;
-                    }
-                }
-            }
-            else
-            {
-                seconds_in_immobility = 0;
+                loop_counter_1s = 0;
             }
         }
 

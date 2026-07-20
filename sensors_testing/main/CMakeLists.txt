@@ -3,32 +3,25 @@ idf_component_register(
         "main.c"
         "measure.c"
         "normalize.c"
-        "communicate.c"
+        "ble_config.c"
         "gsm.c"
-        "audio_player.c"
     INCLUDE_DIRS
         "."
     REQUIRES
+        bt              
         driver          
         esp_event       
         esp_netif       
+        nvs_flash             
         nmea0183_parser_main  
         esp_driver_ledc
     PRIV_REQUIRES
         esp_driver_spi
         esp_driver_gpio
-        esp_driver_i2s
         esp_wifi
         esp_modem
         mqtt          
-        esp_http_client      
-        spiffs            
-        nvs_flash
+        esp_http_client                  
         lis331
         lsm6
-        esp_driver_i2s
-        spiffs
 )
-
-
-#spiffs_register_flash_partition(storage "../spiffs_image" FLASH_IN_PROJECT)

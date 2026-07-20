@@ -515,8 +515,8 @@ static void sensors_reading_task(void *pvParameters)
             {
                 ESP_LOGW(TAG, "!!! MIKROKONTROLER WCHODZI W LIGHT SLEEP (Brak ruchu przez %d s) !!!", config_idle_time_s);
 
-                gps_stop();
-                esp_wifi_stop();
+               // gps_stop();
+                
 
                 // Przygotowanie pinu akcelerometru do wybudzenia
                 gpio_wakeup_enable(PIN_ACCEL_INT1, GPIO_INTR_HIGH_LEVEL);
@@ -538,7 +538,7 @@ static void sensors_reading_task(void *pvParameters)
                 // Zakładamy, że czytasz rejestr INT1_SRC (0x31) akcelerometru
                 h3lis331dl_read_reg(&accel_ctx, 0x31, &accel_src, 1); 
 
-                esp_wifi_start();
+               
                 // gps_start(); // odkomentuj jeśli chcesz restartować GPS po obudzeniu
 
                 seconds_in_immobility = 0;

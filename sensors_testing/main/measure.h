@@ -12,7 +12,7 @@ extern QueueHandle_t data_queue;
 extern QueueHandle_t gps_queue; // Potrzebne do main.c
 
 
-#include "ble_config.h"
+
 
 //globalne zmienne do communicate.c, konfiguracyjne
 extern float config_wake_ths_g;

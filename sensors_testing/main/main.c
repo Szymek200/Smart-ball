@@ -48,6 +48,8 @@ void load_config_from_nvs(void) {
 
 void app_main(void)
 {
+    
+
     ESP_LOGI(TAG, "Uruchamianie aplikacji bez SPIFFS i Audio...");
 
     // Inicjalizacja pamięci NVS
@@ -76,7 +78,7 @@ void app_main(void)
         return;
     }
 
-     ble_config_init();
+    ble_config_init();
 
     // START PODSYSTEMÓW
     sensors_set(false); // Automatycznie skonfiguruje IMU z uwzględnieniem wczytanego config_wake_ths_g

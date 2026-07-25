@@ -1,6 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA">
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/panelTelemetry" />
+
+    <LinearLayout
+        android:id="@+id/panelTelemetry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tvGpsStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lokalizacja ESP (GSM LTE):"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#37474F"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/tvCoordinates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Szerokość: ---°\nDługość: ---°\nStatus FIX: Oczekiwanie..."
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp"
+            android:textColor="#546E7A"/>
+
+        <Button
+            android:id="@+id/btnTriggerBuzzer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="WŁĄCZ GŁOŚNIK (BUZER)"
+            android:backgroundTint="#D32F2F"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <Button
+            android:id="@+id/btnBackFromLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="POWRÓT"
+            android:backgroundTint="#607D8B" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

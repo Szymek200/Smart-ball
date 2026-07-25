@@ -2,157 +2,132 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:fillViewport="true"
+    android:background="#FAFAFA">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ustawienia Piłki"
-            android:textSize="24sp"
+            android:text="KONFIGURACJA URZĄDZENIA"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:layout_marginBottom="24dp"/>
+            android:textColor="#37474F"
+            android:layout_marginBottom="24dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Czułość Wybudzania (Hardware)"
+            android:text="Czułość wybudzenia (Rejestr sprzętowy 1-127)"
             android:textStyle="bold"
-            android:textColor="#FF5722"/>
+            android:textColor="#263238" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+            <EditText
+                android:id="@+id/etWakeupThreshold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="np. 20"
+                android:inputType="number" />
+            <Button
+                android:id="@+id/btnSetWakeup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USTAW" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Wartość INT1_THS (1-127).\n1 = Bardzo czuły (~0.7G), 5 = Mało czuły"
-            android:textSize="12sp"
-            android:paddingBottom="8dp"/>
-
-        <EditText
-            android:id="@+id/etWakeupThreshold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="np. 1"
-            android:text="1"/>
-
-        <Button
-            android:id="@+id/btnSetWakeup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Wyślij (CMD:THS)"
-            android:backgroundTint="#FF5722"
-            android:layout_marginBottom="24dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Próg Siły Uderzenia (Software)"
+            android:text="Próg siły uderzenia [G]"
             android:textStyle="bold"
-            android:textColor="#2196F3"/>
+            android:textColor="#263238" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+            <EditText
+                android:id="@+id/etHitThreshold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="np. 4.5"
+                android:inputType="numberDecimal" />
+            <Button
+                android:id="@+id/btnSetHit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USTAW" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Minimalna siła w G, aby zarejestrować uderzenie.\nDomyślnie: 1.2 G"
-            android:textSize="12sp"
-            android:paddingBottom="8dp"/>
-
-        <EditText
-            android:id="@+id/etHitThreshold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:hint="np. 1.5"
-            android:text="1.5"/>
-
-        <Button
-            android:id="@+id/btnSetHit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Wyślij (CMD:HIT)"
-            android:backgroundTint="#2196F3"
-            android:layout_marginBottom="24dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Próg Końca Uderzenia (G)"
+            android:text="Czas bezruchu do uśpienia [sekundy]"
             android:textStyle="bold"
-            android:textColor="#4CAF50"/>
+            android:textColor="#263238" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+            <EditText
+                android:id="@+id/etIdleTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Min. 5 sek"
+                android:inputType="number" />
+            <Button
+                android:id="@+id/btnSetIdle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USTAW" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Kiedy siła spadnie poniżej tej wartości, uderzenie się kończy.\nDomyślnie: 1.1 G"
-            android:textSize="12sp"/>
-
-        <EditText
-            android:id="@+id/etEndThreshold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:hint="np. 1.1"
-            android:text="1.1"/>
-
-        <Button
-            android:id="@+id/btnSetEnd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Wyślij (CMD:END)"
-            android:backgroundTint="#4CAF50"
-            android:layout_marginBottom="24dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Czas do uśpienia (Sekundy)"
+            android:text="Czułość uśpienia (Próg detekcji bezruchu)"
             android:textStyle="bold"
-            android:textColor="#9C27B0"/>
-
-        <Switch
-            android:id="@+id/swSleepEnable"
+            android:textColor="#263238" />
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Automatyczne usypianie włączone"
-            android:checked="true"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ile sekund bezruchu, zanim piłka się wyłączy.\nDomyślnie: 30"
-            android:textSize="12sp"/>
-
-        <EditText
-            android:id="@+id/etIdleTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="np. 60"
-            android:text="30"/>
-
-        <Button
-            android:id="@+id/btnSetIdle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Wyślij (CMD:IDLE)"
-            android:backgroundTint="#9C27B0"
-            android:layout_marginBottom="32dp"/>
+            android:orientation="horizontal"
+            android:layout_marginBottom="32dp">
+            <EditText
+                android:id="@+id/etSleepThreshold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="np. 0.05"
+                android:inputType="numberDecimal" />
+            <Button
+                android:id="@+id/btnSetSleepThs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USTAW" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnBackFromSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Wróć"
+            android:text="POWRÓT DO PANELU"
             android:backgroundTint="#607D8B"
-            android:layout_marginBottom="16dp"/>
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
 </ScrollView>

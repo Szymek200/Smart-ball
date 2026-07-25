@@ -132,19 +132,87 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="WYKRES UDERZENIA (G)"
-                android:textStyle="bold"
-                android:gravity="center" />
+                android:orientation="vertical"
+                android:padding="14dp"
+                android:layout_marginBottom="16dp"
+                android:background="#E8EAF6">
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/collisionChart"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="KOKPIT STATYSTYK SESJI SMART BALL"
+                    android:textStyle="bold"
+                    android:textSize="13sp"
+                    android:textColor="#1A237E"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/tvSessionShots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Suma uderzeń: 0"
+                    android:textSize="15sp"
+                    android:textColor="#263238"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/tvSessionEnergy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Energia sesji: 0.0 J"
+                    android:textSize="15sp"
+                    android:textColor="#263238"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/tvSessionConsistency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Powtarzalność: 0%"
+                    android:textSize="15sp"
+                    android:textColor="#263238" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PODGLĄD TELEMETRII NA ŻYWO (SYNCHRONIZOWANY)"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <!-- KONTENER NA DWA ZSYNCHRONIZOWANE WYKRESY -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="320dp"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp"
                 android:background="#FFFFFF"
-                android:layout_marginBottom="16dp" />
+                android:elevation="2dp"
+                android:padding="4dp">
+
+                <!-- Górny Wykres: Przyspieszenia IMU oraz High-G H3 -->
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/accelLiveChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E0E0E0" />
+
+                <!-- Dolny Wykres: Rotacja z Żyroskopu -->
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/gyroLiveChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/lastHitTextView"
@@ -157,18 +225,15 @@
                 android:background="#F0F0F0"
                 android:layout_marginBottom="16dp"/>
 
-            <TextView
+            <Button
+                android:id="@+id/btnOpenLastShot"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TRAJEKTORIA LOTU (DPS)"
+                android:layout_height="60dp"
+                android:text="ANALIZUJ OSTATNIE ZDARZENIE"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:gravity="center" />
-
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/flightChart"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:background="#FFFFFF"
+                android:backgroundTint="#1A237E"
+                android:textColor="#FFFFFF"
                 android:layout_marginBottom="16dp" />
 
             <Button
@@ -183,6 +248,26 @@
                 android:layout_height="wrap_content"
                 android:text="USTAWIENIA SENSORA"
                 android:backgroundTint="#607D8B"
+                android:layout_marginTop="8dp" />
+
+            <Button
+                android:id="@+id/btnShowLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LOKALIZACJA SATELITARNA I GSM"
+                android:backgroundTint="#4CAF50"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="8dp" />
+
+            <Button
+                android:id="@+id/btnOpenSessions"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="MENEDŻER TRENINGÓW / SESJI"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:backgroundTint="#3F51B5"
+                android:textColor="#FFFFFF"
                 android:layout_marginTop="8dp" />
 
             <TextView

@@ -24,6 +24,7 @@ extern int config_idle_time_s;
 extern float CRASH_THRESHOLD_G;
 
 bool is_phone_connected = false;
+static volatile bool is_notify_enabled = false;
 
 
 void ble_store_config_init(void);
@@ -35,21 +36,62 @@ static const ble_uuid128_t gatt_svr_svc_uuid =
 static const ble_uuid128_t gatt_svr_chr_uuid =
     BLE_UUID128_INIT(0x87, 0x09, 0x21, 0x43, 0x65, 0x87, 0x21, 0x43, 0x89, 0x67, 0x21, 0x43, 0x21, 0x43, 0x65, 0x87);
 
+    // Przechowujemy identyfikator aktywnego połączenia i uchwyt nowej charakterystyki
+static uint16_t active_conn_handle = BLE_HS_CONN_HANDLE_NONE;
+static uint16_t gatt_data_char_val_handle;
+
+    // UUID nowej charakterystyki danych pomiarowych
+static const ble_uuid128_t gatt_data_chr_uuid =
+    BLE_UUID128_INIT(0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78);
+
 static void ble_app_advertise(void);
 static int ble_app_gap_event(struct ble_gap_event *event, void *arg);
 static int gatt_svr_chr_access(uint16_t conn_handle, uint16_t attr_handle, struct ble_gatt_access_ctxt *ctxt, void *arg);
 
+static void ble_data_tx_task(void *pvParameters)
+{
+    global_data_t sensor_data;
+
+    while (1) {
+        // Blokowanie aż pojawią się dane
+        if (xQueueReceive(data_queue, &sensor_data, portMAX_DELAY)) {
+            
+            // Sprawdzamy połączenie i aktywną subskrypcję powiadomień
+           // if (is_phone_connected && is_notify_enabled && active_conn_handle != BLE_HS_CONN_HANDLE_NONE) {
+           if (is_phone_connected && active_conn_handle != BLE_HS_CONN_HANDLE_NONE){
+                
+                struct os_mbuf *om = ble_hs_mbuf_from_flat(&sensor_data, sizeof(global_data_t));
+                if (om != NULL) {
+                    int rc = ble_gatts_notify_custom(active_conn_handle, gatt_data_char_val_handle, om);
+                    if (rc != 0) {
+                        // Zapobieganie wyciekom pamięci os_mbuf przy błędzie wysyłania!
+                        os_mbuf_free_chain(om);
+                    }
+                } else {
+                    ESP_LOGE(TAG, "Brak pamięci mbuf dla powiadomienia BLE");
+                }
+            }
+        }
+        // Usunięto zbędne vTaskDelay – xQueueReceive wystarczająco zarządza czasem.
+    }
+}
 
 static const struct ble_gatt_chr_def gatt_svr_chrs[] = {
     {
+        // 1. Dychotomiczna charakterystyka konfiguracyjna (odczyt/zapis)
         .uuid = &gatt_svr_chr_uuid.u,
         .access_cb = gatt_svr_chr_access,
         .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
         .val_handle = &gatt_char_val_handle,
     },
     {
-        0, /* Terminator */
-    }
+        // 2. NOWOŚĆ: Charakterystyka do wysyłania stramu danych pomiarowych i GPS
+        .uuid = &gatt_data_chr_uuid.u,
+        .access_cb = gatt_svr_chr_access,
+        .flags = BLE_GATT_CHR_F_NOTIFY,
+        .val_handle = &gatt_data_char_val_handle,
+    },
+    { 0 } /* Terminator */
 };
 
 /* Tablica usług GATT */
@@ -140,23 +182,36 @@ static int gatt_svr_chr_access(uint16_t conn_handle, uint16_t attr_handle, struc
 static int ble_app_gap_event(struct ble_gap_event *event, void *arg) {
     switch (event->type) {
         case BLE_GAP_EVENT_CONNECT:
-            ESP_LOGI(TAG, "Połączono z telefonem! status=%d", event->connect.status);
             if (event->connect.status == 0) {
                 is_phone_connected = true;
+                active_conn_handle = event->connect.conn_handle;
             } else {
                 ble_app_advertise();
             }
             break;
 
         case BLE_GAP_EVENT_DISCONNECT:
-            ESP_LOGI(TAG, "Rozłączono z telefonem. Wznawiam rozgłaszanie...");
             is_phone_connected = false;
+            is_notify_enabled = false; // Resetujemy stan subskrypcji
+            active_conn_handle = BLE_HS_CONN_HANDLE_NONE;
             ble_app_advertise();
             break;
 
-        case BLE_GAP_EVENT_ADV_COMPLETE:
-            ESP_LOGI(TAG, "Zakończono rozgłaszanie, wznawiam...");
-            ble_app_advertise();
+        case BLE_GAP_EVENT_SUBSCRIBE:
+            // JEDEN POŁĄCZONY CASE Z LOGAMI I OBSŁUGĄ WŁĄCZANIA NOTIFY:
+            ESP_LOGI(TAG, "Zdarzenie SUBSCRIBE: attr_handle=%d, gatt_data_handle=%d, cur_notify=%d",
+                     event->subscribe.attr_handle, 
+                     gatt_data_char_val_handle, 
+                     event->subscribe.cur_notify);
+
+            if (event->subscribe.attr_handle == gatt_data_char_val_handle) {
+                is_notify_enabled = event->subscribe.cur_notify;
+                if (is_notify_enabled) {
+                    ESP_LOGI(TAG, ">>> SUBSRYPCJA NOTIFY WŁĄCZONA DLA TELEFONU! <<<");
+                } else {
+                    ESP_LOGI(TAG, ">>> SUBSRYPCJA NOTIFY WYŁĄCZONA! <<<");
+                }
+            }
             break;
 
         default:
@@ -164,6 +219,7 @@ static int ble_app_gap_event(struct ble_gap_event *event, void *arg) {
     }
     return 0;
 }
+
 
 static void ble_app_advertise(void) {
     struct ble_gap_adv_params adv_params;
@@ -232,6 +288,22 @@ void ble_config_init(void) {
     ble_hs_cfg.reset_cb = ble_app_on_reset;
     ble_hs_cfg.sync_cb = ble_app_on_sync;
 
+    // === DODAJ TE LINIE: KONFIGURACJA TRYBU PAROWANIA "JUST WORKS" ===
+    //parowanie
+    /*
+    ble_hs_cfg.sm_io_cap = BLE_HS_IO_NO_INPUT_OUTPUT; // Brak ekranu i klawiatury
+    ble_hs_cfg.sm_bonding = 1;                        // Pozwól na zapamiętanie telefonu
+    ble_hs_cfg.sm_mitm = 0;                           // Wyłącz ochronę Man-In-The-Middle (brak PIN-u)
+    ble_hs_cfg.sm_our_key_dist = BLE_SM_PAIR_KEY_DIST_ENC;
+    ble_hs_cfg.sm_their_key_dist = BLE_SM_PAIR_KEY_DIST_ENC;
+*/
+
+ble_hs_cfg.sm_io_cap = BLE_HS_IO_NO_INPUT_OUTPUT;
+    ble_hs_cfg.sm_bonding = 0;  // <-- ZMIEŃ Z 1 NA 0! (Wyłącza zapisywanie kluczy)
+    ble_hs_cfg.sm_mitm = 0;
+    ble_hs_cfg.sm_sc = 0;
+    ble_hs_cfg.sm_our_key_dist = 0;
+    ble_hs_cfg.sm_their_key_dist = 0;
  
     ble_svc_gap_init();
     ble_svc_gatt_init();
@@ -261,4 +333,7 @@ void ble_config_init(void) {
 
     
     nimble_port_freertos_init(ble_host_task);
+
+    xTaskCreate(ble_data_tx_task, "ble_data_tx_task", 4096, NULL, 5, NULL);
 }
+

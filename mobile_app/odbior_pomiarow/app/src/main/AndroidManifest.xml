@@ -11,6 +11,17 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <!-- Uprawnienia Bluetooth (Android 12+) -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <!-- Dla starszych wersji Androida -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
 
 
     <application
@@ -24,6 +35,19 @@
         android:theme="@style/Theme.Odbior_pomiarow">
         <activity android:name=".HistoryActivity" android:label="Historia" />
         <activity android:name=".SettingsActivity" android:label="Ustawienia" />
+        <activity android:name=".LocationActivity" android:label="Lokalizacja"/>
+        <activity android:name=".ShotDetailsActivity" android:label="Uderzenie" />
+        <activity android:name=".SessionActivity" android:exported="false" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <activity
             android:name=".MainActivity"

@@ -1,10 +1,13 @@
 package com.example.odbior_pomiarow
 
-import android.content.Context
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
-import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Switch
@@ -12,22 +15,20 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.content.Intent
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.listener.ChartTouchListener
+import com.github.mikephil.charting.listener.OnChartGestureListener
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileWriter
-import java.io.InputStream
-import java.net.ServerSocket
-import java.net.Socket
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.sqrt
@@ -35,63 +36,46 @@ import kotlin.math.sqrt
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        // Lista statyczna dostępna dla HistoryActivity
         val fullHitHistory = mutableListOf<HistoryEntry>()
     }
 
-    // Stałe konfiguracyjne
-    private val TCP_PORT = 3333               // Port zgodny z ESP32
-    private val LOG_TAG = "TCP_LOGGER"
+    private val BLE_PERMISSION_REQUEST_CODE = 101
+    private val LOG_TAG = "MAIN_ACTIVITY"
     private val LOG_FILE_PREFIX = "pomiary"
     private val UI_UPDATE_INTERVAL_MS = 50L
-    private val HEARTBEAT_TIMEOUT_MS = 5000L
 
-    // Rozmiar struktury global_data_t z ESP32 (45 bajtów)
-    private val STRUCT_SIZE = 45
+    // --- DWA WIDOKI WYKRESÓW ---
+    private lateinit var accelChart: LineChart
+    private lateinit var gyroChart: LineChart
+    private var chartSampleCount = 0f
+    private val MAX_VISIBLE_SAMPLES = 200
 
-    // --- ELEMENTY UI (WIDOKI) ---
-    private lateinit var collisionChart: LineChart
-    private lateinit var flightChart: LineChart
+    // Flag zabezpieczający przed nieskończoną pętlą synchronizacji gestów
+    private var isSyncingCharts = false
+
+    // --- ELEMENTY UI ---
     private lateinit var lastHitTextView: TextView
     private lateinit var statusTextView: TextView
     private lateinit var connectionStatusTextView: TextView
+    private lateinit var btnOpenLastShot: Button
 
-    // Pola tekstowe dla Akcelerometru Uderzeniowego H3LIS
+    private lateinit var tvSessionShots: TextView
+    private lateinit var tvSessionEnergy: TextView
+    private lateinit var tvSessionConsistency: TextView
+
     private lateinit var h3AccelX: TextView; private lateinit var h3AccelY: TextView; private lateinit var h3AccelZ: TextView
-
-    // Pola tekstowe dla Akcelerometru IMU
     private lateinit var imuAccelX: TextView; private lateinit var imuAccelY: TextView; private lateinit var imuAccelZ: TextView
-
-    // Pola tekstowe dla Żyroskopu IMU
-
-    // Pola tekstowe dla GPS
-    private lateinit var gpsLat: TextView; private lateinit var gpsLon: TextView; private lateinit var gpsFix: TextView
-
-    private lateinit var accelX: TextView; private lateinit var accelY: TextView; private lateinit var accelZ: TextView
     private lateinit var gyroX: TextView; private lateinit var gyroY: TextView; private lateinit var gyroZ: TextView
+    private lateinit var gpsLat: TextView; private lateinit var gpsLon: TextView; private lateinit var gpsFix: TextView
 
     private lateinit var hitHistoryContainer: LinearLayout
     private lateinit var logSwitch: Switch
 
-    // --- BUFORY I STANY (ZDEKLAROWANE TYLKO RAZ) ---
-    private val eventSamples = mutableListOf<SampleData>()          // Bufor na próbki uderzenia
-    private val currentIntervalSamples = mutableListOf<SampleData>() // Bufor na próbki lotu (wsteczna historia)
-
-    private var receiveState = ReceiveState.NORMAL
-    private val TOTAL_EVENT_SAMPLES = 200              // 100 przed i 100 po zderzeniu
-
-    private var lastUiUpdateTime = 0L
-    private var lastPacketTime = 0L
-
-    // Współbieżność Coroutines
     private val scope = CoroutineScope(Dispatchers.IO)
-    private var tcpServerJob: Job? = null
-    private var clientSocket: Socket? = null
-
-    // Logowanie do pliku CSV
     private var logWriter: FileWriter? = null
     private var isLoggingEnabled = false
     private var logFile: File? = null
+    private var lastUiUpdateTime = 0L
 
     private val logFileName: String
         get() = "${LOG_FILE_PREFIX}_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}.csv"
@@ -107,346 +91,226 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+
+        BleManager.onGpsDataReceivedListener = { lat, lon, fix ->
+            runOnUiThread {
+                gpsLat.text = String.format("Lat: %.5f", lat)
+                gpsLon.text = String.format("Lon: %.5f", lon)
+                gpsFix.text = if (fix) "FIX: TAK" else "FIX: NIE"
+            }
+        }
+
+
+
         initializeViews()
-        setupChart()
-        setupFlightChart()
 
-        startTcpServer()
-        startConnectionStatusChecker()
-    }
-
-    // --- URUCHOMIENIE SERWERA TCP ---
-    private fun startTcpServer() { // Pozostawiamy starą nazwę metody, żeby nie psuć wywołań w onCreate
-        tcpServerJob = scope.launch {
-            val espIpAddress = "192.168.4.1" // Stały, domyślny IP dla SoftAP w ESP-IDF
-
-            while (isActive) {
-                try {
-                    Log.i(LOG_TAG, "Próba połączenia z ESP32 pod adresem $espIpAddress:$TCP_PORT...")
-                    runOnUiThread {
-                        statusTextView.text = "Status: Łączenie z urządzeniem..."
-                    }
-
-                    // Tworzymy gniazdo klienta — ta linia próbuje połączyć się z ESP32
-                    clientSocket = Socket(espIpAddress, TCP_PORT)
-
-                    Log.i(LOG_TAG, "Połączono pomyślnie z ESP32!")
-                    updateHeartbeat()
-
-                    // Obsługa strumienia danych (blokuje wątek dopóki połączenie trwa)
-                    handleClientStream(clientSocket!!)
-
-                } catch (e: Exception) {
-                    Log.w(LOG_TAG, "Nie udało się połączyć z ESP32: ${e.message}. Ponowna próba za 3 sekundy...")
-                    runOnUiThread {
-                        statusTextView.text = "Status: Oczekiwanie na urządzenie..."
-                    }
-                    delay(3000L) // Odczekaj 3 sekundy przed kolejną próbą nawiązania sesji
-                }
-            }
-        }
-    }
-
-    private suspend fun handleClientStream(socket: Socket) {
-        withContext(Dispatchers.IO) {
-            val inputStream = socket.getInputStream()
-            val buffer = ByteArray(STRUCT_SIZE)
-
-            try {
-                // Czytamy ze strumienia dopóki połączenie nie zostanie przerwane
-                while (isActive && !socket.isClosed && socket.isConnected) {
-                    readFully(inputStream, buffer)
-                    updateHeartbeat()
-
-                    val byteBuffer = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN)
-                    parseTcpStruct(byteBuffer)
-                }
-            } catch (e: Exception) {
-                Log.w(LOG_TAG, "Błąd transmisji lub rozłączenie: ${e.message}")
-            } finally {
-                try { socket.close() } catch (e: Exception) {}
-                runOnUiThread {
-                    connectionStatusTextView.text = "Status: Rozłączono"
+        BleManager.init(this)
+        BleManager.onConnectionStateChanged = { isConnected ->
+            runOnUiThread {
+                if (isConnected) {
+                    connectionStatusTextView.text = "Status: Połączono BLE"
+                    connectionStatusTextView.setBackgroundColor(Color.parseColor("#B3FFB3"))
+                } else {
+                    connectionStatusTextView.text = "Status: Rozłączono BLE"
                     connectionStatusTextView.setBackgroundColor(Color.parseColor("#FFB3B3"))
                 }
             }
         }
+
+        checkAndRequestBlePermissions()
     }
 
-    private fun readFully(inputStream: InputStream, buffer: ByteArray) {
-        var offset = 0
-        var bytesToRead = buffer.size
-        while (bytesToRead > 0) {
-            val bytesRead = inputStream.read(buffer, offset, bytesToRead)
-            if (bytesRead == -1) throw Exception("Koniec strumienia TCP")
-            offset += bytesRead
-            bytesToRead -= bytesRead
+    private fun setupDualCharts() {
+        // --- 1. KONFIGURACJA GÓRNEGO WYKRESU (PRZYSPIESZENIE) ---
+        accelChart.apply {
+            description.text = "Przyspieszenie [G]"
+            setTouchEnabled(true)
+            isDragEnabled = true
+            isScaleXEnabled = true
+            isScaleYEnabled = false
+            setPinchZoom(false)
+            setBackgroundColor(Color.WHITE)
+        }
+
+        val setImuAccel = LineDataSet(mutableListOf(), "IMU (do 16G)").apply {
+            color = Color.RED
+            setDrawCircles(false)
+            lineWidth = 2f
+            setDrawValues(false)
+            axisDependency = YAxis.AxisDependency.LEFT
+        }
+
+        val setH3Accel = LineDataSet(mutableListOf(), "H3 High-G (do 400G)").apply {
+            color = Color.BLACK
+            setDrawCircles(false)
+            lineWidth = 2f
+            setDrawValues(false)
+            axisDependency = YAxis.AxisDependency.RIGHT
+        }
+
+        accelChart.data = LineData(setImuAccel, setH3Accel)
+
+        // Lewa Oś Y dla głównego IMU (Zakres 0 - 16 G)
+        accelChart.axisLeft.apply {
+            textColor = Color.RED
+            setDrawGridLines(true)
+            axisMinimum = 0f
+            axisMaximum = 16f
+        }
+
+        // Prawa Oś Y dla czujnika zderzeń H3 (Dynamiczna skala 0 - 400 G)
+        accelChart.axisRight.apply {
+            textColor = Color.BLACK
+            setDrawGridLines(false)
+            axisMinimum = 0f
+            axisMaximum = 400f
+        }
+
+        // --- 2. KONFIGURACJA DOLNEGO WYKRESU (ŻYROSKOP) ---
+        gyroChart.apply {
+            description.text = "Rotacja (Układ Ziemi) [dps]"
+            setTouchEnabled(true)
+            isDragEnabled = true
+            isScaleXEnabled = true
+            isScaleYEnabled = false
+            setPinchZoom(false)
+            setBackgroundColor(Color.WHITE)
+        }
+
+        // Oś X Globalna: Rotacja Północ-Południe / Poprzeczna (np. Top-spin/Back-spin)
+        val setGyroX = LineDataSet(mutableListOf(), "Oś X Globalna").apply {
+            color = Color.parseColor("#2196F3") // Niebieski
+            setDrawCircles(false)
+            lineWidth = 2f
+            setDrawValues(false)
+        }
+
+        // Oś Y Globalna: Rotacja Wschód-Zachód / Pozioma (np. Side-spin)
+        val setGyroY = LineDataSet(mutableListOf(), "Oś Y Globalna").apply {
+            color = Color.parseColor("#4CAF50") // Zielony
+            setDrawCircles(false)
+            lineWidth = 2f
+            setDrawValues(false)
+        }
+
+        // Oś Z Globalna: Rotacja Pionowa (Śrubowa / Żyroskopowa)
+        val setGyroZ = LineDataSet(mutableListOf(), "Oś Z Globalna").apply {
+            color = Color.parseColor("#FF9800") // Pomarańczowy
+            setDrawCircles(false)
+            lineWidth = 2f
+            setDrawValues(false)
+        }
+
+        gyroChart.data = LineData(setGyroX, setGyroY, setGyroZ)
+
+        gyroChart.axisLeft.apply {
+            textColor = Color.BLACK
+            setDrawGridLines(true)
+            resetAxisMinimum() // Dopuszczamy wartości dodatnie i ujemne (kierunek obrotu)
+        }
+        gyroChart.axisRight.isEnabled = false
+
+        // Synchronizacja gestów
+        accelChart.onChartGestureListener = createSyncGestureListener(accelChart, gyroChart)
+        gyroChart.onChartGestureListener = createSyncGestureListener(gyroChart, accelChart)
+
+    }
+
+    private fun createSyncGestureListener(srcChart: LineChart, dstChart: LineChart): OnChartGestureListener {
+        return object : OnChartGestureListener {
+            override fun onChartScale(me: MotionEvent?, scaleX: Float, scaleY: Float) {
+                syncCharts(srcChart, dstChart)
+            }
+
+            override fun onChartTranslate(me: MotionEvent?, dX: Float, dY: Float) {
+                syncCharts(srcChart, dstChart)
+            }
+
+            override fun onChartGestureStart(me: MotionEvent?, lastPerformedGesture: ChartTouchListener.ChartGesture?) {}
+            override fun onChartGestureEnd(me: MotionEvent?, lastPerformedGesture: ChartTouchListener.ChartGesture?) {}
+            override fun onChartLongPressed(me: MotionEvent?) {}
+            override fun onChartDoubleTapped(me: MotionEvent?) {}
+            override fun onChartSingleTapped(me: MotionEvent?) {}
+            override fun onChartFling(me1: MotionEvent?, me2: MotionEvent?, velocityX: Float, velocityY: Float) {}
         }
     }
 
-    // --- PARSER STRUMIENIA TCP ---
-    private fun parseTcpStruct(buffer: ByteBuffer) {
-        buffer.position(0)
+    private fun syncCharts(src: LineChart, dst: LineChart) {
+        if (isSyncingCharts) return
+        isSyncingCharts = true
 
-        // 1. Accel H3LIS (Pobieramy czyste wartości G przysłane z ESP32)
-        val h3_ax = buffer.getFloat()
-        val h3_ay = buffer.getFloat()
-        val h3_az = buffer.getFloat()
+        val srcMatrix = src.viewPortHandler.matrixTouch
+        val dstMatrix = dst.viewPortHandler.matrixTouch
 
-        // 2. Accel IMU
-        val imu_ax = buffer.getFloat()
-        val imu_ay = buffer.getFloat()
-        val imu_az = buffer.getFloat()
+        // Kopiujemy pozycję i skaling osi X
+        val vals = FloatArray(9)
+        srcMatrix.getValues(vals)
 
-        // 3. Gyro IMU
-        val imu_gx = buffer.getFloat()
-        val imu_gy = buffer.getFloat()
-        val imu_gz = buffer.getFloat()
+        val dstVals = FloatArray(9)
+        dstMatrix.getValues(dstVals)
+        dstVals[0] = vals[0] // Scale X
+        dstVals[2] = vals[2] // Translate X
 
-        // 4. GPS
-        val lat = buffer.getFloat()
-        val lon = buffer.getFloat()
-        val gpsFix = buffer.get() != 0.toByte()
+        dstMatrix.setValues(dstVals)
+        dst.viewPortHandler.refresh(dstMatrix, dst, true)
 
-        val ts = System.currentTimeMillis()
+        isSyncingCharts = false
+    }
 
-        // Do rysowania wykresu lotu i wyświetlania na ekranie konwertujemy IMU na jednostki [mg] (mnożymy * 1000)
-        val currentSample = SampleData(
-            imu_ax * 1000f, imu_ay * 1000f, imu_az * 1000f,
-            imu_gx, imu_gy, imu_gz, ts
-        )
+    private fun addSampleToChart(h3x: Float, h3y: Float, h3z: Float, ax: Float, ay: Float, az: Float, gx: Float, gy: Float, gz: Float) {
 
-        // Zapis do pliku CSV (zapisujemy czyste, czytelne wartości)
-        if (isLoggingEnabled) {
-            writeSampleToCsv(h3_ax, h3_ay, h3_az, imu_ax * 1000f, imu_ay * 1000f, imu_az * 1000f, imu_gx, imu_gy, imu_gz, lat, lon, gpsFix)
-        }
-
-        // ====================================================================
-        // POPRAWIONA DETEKCJA ZDERZENIA BAZUJĄCA NA AKCELEROMETRZE 400G
-        // ====================================================================
-        // Wypadkowa siła G (wektor 3D) wyliczona bezpośrednio z wartości G
-        val totalG = sqrt((h3_ax * h3_ax + h3_ay * h3_ay + h3_az * h3_az).toDouble()).toFloat()
-
-        if (receiveState == ReceiveState.NORMAL) {
-            // Na ekranie telefonu pokazujemy wartości w mg
-            displaySensorData(
-                h3_ax, h3_ay, h3_az,
-                imu_ax * 1000f, imu_ay * 1000f, imu_az * 1000f,
-                imu_gx, imu_gy, imu_gz,
-                lat, lon, gpsFix
+        scope.launch(Dispatchers.IO) {
+            SessionManager.logSampleToCurrentSession(
+                h3x, h3y, h3z,
+                ax, ay, az,
+                gx, gy, gz,
+                0f, 0f, false // Jesli przekazujesz tu pozycje GPS, podmien te wartości
             )
-            analyzeFlight(currentSample)
-
-            // Jeśli wypadkowe przeciążenie na czujniku uderzeniowym przekroczy próg 4.5G -> aktywuj zderzenie
-            // Gdy urządzenie leży, totalG wynosi około 1.0f (grawitacja ziemska).
-            if (totalG > 4.5f) {
-                triggerEventTransition()
-            }
-        } else if (receiveState == ReceiveState.EVENT_RECEIVING) {
-            eventSamples.add(currentSample.copy(isLive = false))
-
-            if (eventSamples.size >= TOTAL_EVENT_SAMPLES) {
-                finalizeEventProcessing()
-            }
-        }
-    }
-
-    private fun triggerEventTransition() {
-        receiveState = ReceiveState.EVENT_RECEIVING
-        eventSamples.clear()
-
-        // Przepisz ostatnie 100 pomiarów z lotu jako czas "PRZED" uderzeniem
-        val preHistoryCount = minOf(currentIntervalSamples.size, 100)
-        if (preHistoryCount > 0) {
-            val preSamples = currentIntervalSamples.takeLast(preHistoryCount)
-            eventSamples.addAll(preSamples.map { it.copy(isLive = false) })
-        }
-        currentIntervalSamples.clear()
-
-        runOnUiThread {
-            statusTextView.text = "!!! WYKRYTO ZDERZENIE: POBIERANIE PACZKI !!!"
-            statusTextView.setTextColor(Color.RED)
-        }
-    }
-
-    private fun finalizeEventProcessing() {
-        val samplesToDraw = ArrayList(eventSamples)
-        receiveState = ReceiveState.NORMAL
-        currentIntervalSamples.clear()
-
-        if (samplesToDraw.isEmpty()) return
-
-        val duration = samplesToDraw.size * 10L // 200 pomiarów * 10ms delay na ESP = 2 sekundy
-        val peakForce = samplesToDraw.maxOf {
-            sqrt((it.ax * it.ax + it.ay * it.ay + it.az * it.az).toDouble()).toFloat()
         }
 
         runOnUiThread {
-            addHitToHistory(Date(), duration, peakForce, samplesToDraw)
-            drawCollisionChart(samplesToDraw)
-            statusTextView.text = "Zderzenie przetworzone pomyślnie (200 próbek)"
-            statusTextView.setTextColor(Color.BLACK)
-        }
-        eventSamples.clear()
-    }
+            val accelData = accelChart.data ?: return@runOnUiThread
+            val gyroData = gyroChart.data ?: return@runOnUiThread
 
-    private fun analyzeFlight(sample: SampleData) {
-        currentIntervalSamples.add(sample)
-        if (currentIntervalSamples.size > 300) {
-            currentIntervalSamples.removeAt(0)
-        }
-        if (currentIntervalSamples.size % 100 == 0) {
-            processFlightData()
-        }
-    }
+            val setImu = accelData.getDataSetByIndex(0)
+            val setH3 = accelData.getDataSetByIndex(1)
+            val setGyro = gyroData.getDataSetByIndex(0)
 
-    private fun processFlightData() {
-        if (currentIntervalSamples.size < 10) return
-        val flightSegment = ArrayList(currentIntervalSamples)
+            // Wyliczenie wypadkowych w odpowiednich jednostkach
+            val imuMagG = sqrt((ax * ax + ay * ay + az * az).toDouble()).toFloat() / 1000f // mg -> G
+            val h3MagG = sqrt((h3x * h3x + h3y * h3y + h3z * h3z).toDouble()).toFloat()     // G
+            val gyroMagDps = sqrt((gx * gx + gy * gy + gz * gz).toDouble()).toFloat()      // dps
 
-        val avgRotation = flightSegment.map {
-            sqrt((it.gx * it.gx + it.gy * it.gy + it.gz * it.gz).toDouble()).toFloat()
-        }.average().toFloat()
+            // Dodawanie do osobnych wykresów
+            accelData.addEntry(Entry(chartSampleCount, imuMagG), 0)
+            accelData.addEntry(Entry(chartSampleCount, h3MagG), 1)
+            gyroData.addEntry(Entry(chartSampleCount, gyroMagDps), 0)
 
-        runOnUiThread {
-            drawFlightChart(flightSegment)
-            lastHitTextView.text = String.format("Lot na żywo... Śr. obrót: %.1f dps", avgRotation)
-            lastHitTextView.setBackgroundColor(Color.CYAN)
-        }
-    }
+            chartSampleCount++
 
-    // --- WIZUALIZACJA I WYKRESY ---
-    private fun drawCollisionChart(samples: List<SampleData>) {
-        val accelEntries = mutableListOf<Entry>()
-        val gyroEntries = mutableListOf<Entry>()
-        if (samples.isEmpty()) return
+            // Usuwanie starych próbek
+            if (setImu.entryCount > MAX_VISIBLE_SAMPLES) setImu.removeEntry(0)
+            if (setH3.entryCount > MAX_VISIBLE_SAMPLES) setH3.removeEntry(0)
+            if (setGyro.entryCount > MAX_VISIBLE_SAMPLES) setGyro.removeEntry(0)
 
-        samples.forEachIndexed { index, s ->
-            val x = index * 0.010f // Każda próbka to 10ms
+            accelData.notifyDataChanged()
+            gyroData.notifyDataChanged()
+            accelChart.notifyDataSetChanged()
+            gyroChart.notifyDataSetChanged()
 
-            // s.ax jest już w miligrawitacjach [mg], więc dzielimy przez 1000f, aby na wykresie mieć czyste jednostki G
-            val aMag = sqrt((s.ax * s.ax + s.ay * s.ay + s.az * s.az).toDouble()).toFloat() / 1000f
-            accelEntries.add(Entry(x, aMag))
+            // Ograniczenie widoku osi X na obu wykresach
+            val minX = (chartSampleCount - MAX_VISIBLE_SAMPLES).coerceAtLeast(0f)
+            accelChart.xAxis.axisMinimum = minX
+            accelChart.xAxis.axisMaximum = chartSampleCount
 
-            val gMag = sqrt((s.gx * s.gx + s.gy * s.gy + s.gz * s.gz).toDouble()).toFloat()
-            gyroEntries.add(Entry(x, gMag))
-        }
+            gyroChart.xAxis.axisMinimum = minX
+            gyroChart.xAxis.axisMaximum = chartSampleCount
 
-        val setA = LineDataSet(accelEntries, "Siła [G]").apply {
-            color = Color.RED; axisDependency = com.github.mikephil.charting.components.YAxis.AxisDependency.LEFT
-            setDrawCircles(false); lineWidth = 2.5f; setDrawValues(false)
-        }
-        val setG = LineDataSet(gyroEntries, "Rotacja [dps]").apply {
-            color = Color.BLUE; axisDependency = com.github.mikephil.charting.components.YAxis.AxisDependency.RIGHT
-            setDrawCircles(false); lineWidth = 2.5f; setDrawValues(false)
-        }
-
-        collisionChart.data = LineData(setA, setG)
-        collisionChart.invalidate()
-    }
-
-    private fun drawFlightChart(samples: List<SampleData>) {
-        if (samples.isEmpty()) return
-        val gyroEntries = ArrayList<Entry>()
-
-        samples.forEachIndexed { index, s ->
-            val timeSec = index * 0.010f
-            val gMag = sqrt((s.gx * s.gx + s.gy * s.gy + s.gz * s.gz).toDouble()).toFloat()
-            gyroEntries.add(Entry(timeSec, gMag))
-        }
-
-        val setG = LineDataSet(gyroEntries, "Rotacja [dps]").apply {
-            color = Color.BLUE; lineWidth = 2f; setDrawCircles(false); setDrawValues(false)
-            mode = LineDataSet.Mode.CUBIC_BEZIER; setDrawFilled(true); fillAlpha = 50; fillColor = Color.BLUE
-        }
-
-        flightChart.data = LineData(setG)
-        flightChart.invalidate()
-    }
-
-    private fun displaySensorData(
-        h3x: Float, h3y: Float, h3z: Float,
-        ax: Float, ay: Float, az: Float,
-        gx: Float, gy: Float, gz: Float,
-        lat: Float, lon: Float, fix: Boolean
-    ) {
-        val now = System.currentTimeMillis()
-        if (now - lastUiUpdateTime < UI_UPDATE_INTERVAL_MS) return // Ograniczenie narzutu na UI
-        lastUiUpdateTime = now
-
-        runOnUiThread {
-            // 1. Aktualizacja H3LIS331DL (wartości przekazywane są w G)
-            h3AccelX.text = String.format("X: %.2f G", h3x)
-            h3AccelY.text = String.format("Y: %.2f G", h3y)
-            h3AccelZ.text = String.format("Z: %.2f G", h3z)
-
-            // 2. Aktualizacja Akcelerometru IMU (konwertujemy na mg dla precyzji profilu)
-            imuAccelX.text = String.format("X: %.1f mg", ax)
-            imuAccelY.text = String.format("Y: %.1f mg", ay)
-            imuAccelZ.text = String.format("Z: %.1f mg", az)
-
-            // 3. Aktualizacja Żyroskopu IMU (w dps)
-            gyroX.text = String.format("X: %.1f dps", gx)
-            gyroY.text = String.format("Y: %.1f dps", gy)
-            gyroZ.text = String.format("Z: %.1f dps", gz)
-
-            // 4. Aktualizacja sekcji GPS
-            gpsLat.text = String.format("Szer: %.5f°", lat)
-            gpsLon.text = String.format("Dług: %.5f°", lon)
-            if (fix) {
-                gpsFix.text = "FIX: TAK"
-                gpsFix.setTextColor(Color.parseColor("#006400")) // Ciemnozielony
-            } else {
-                gpsFix.text = "FIX: BRAK"
-                gpsFix.setTextColor(Color.RED)
-            }
-
-            statusTextView.text = "Status: Odbieram dane..."
-            statusTextView.setTextColor(Color.BLACK)
+            accelChart.invalidate()
+            gyroChart.invalidate()
         }
     }
 
-    private fun addHitToHistory(hitDate: Date, durationMs: Long, peakForce: Float, currentSamples: List<SampleData>) {
-        val newHit = HistoryEntry(EntryType.HIT, hitDate, durationMs, currentSamples, peakValue = peakForce)
-        fullHitHistory.add(0, newHit)
-
-        runOnUiThread {
-            val forceInG = peakForce / 1000f
-            lastHitTextView.text = String.format("Ostatnie: %.2f G (%d ms)", forceInG, durationMs)
-            lastHitTextView.setBackgroundColor(Color.parseColor("#FFD700"))
-
-            val quickSummary = TextView(this).apply {
-                text = String.format("💥 %.2f G | %d ms", forceInG, durationMs)
-                textSize = 14f
-            }
-            hitHistoryContainer.addView(quickSummary, 0)
-        }
-    }
-
-    // --- MONITOR POŁĄCZENIA (HEARTBEAT) ---
-    private fun updateHeartbeat() {
-        lastPacketTime = System.currentTimeMillis()
-        runOnUiThread {
-            connectionStatusTextView.text = "Status: Połączono"
-            connectionStatusTextView.setTextColor(Color.BLACK)
-            connectionStatusTextView.setBackgroundColor(Color.parseColor("#B3FFB3"))
-        }
-    }
-
-    private fun startConnectionStatusChecker() {
-        scope.launch(Dispatchers.Main) {
-            while (isActive) {
-                delay(1000L)
-                if (System.currentTimeMillis() - lastPacketTime > HEARTBEAT_TIMEOUT_MS) {
-                    connectionStatusTextView.text = "Status: Rozłączono"
-                    connectionStatusTextView.setTextColor(Color.RED)
-                    connectionStatusTextView.setBackgroundColor(Color.parseColor("#FFB3B3"))
-                }
-            }
-        }
-    }
-
-    // --- INICJALIZACJA UI I ZAPISU CSV ---
     private fun initializeViews() {
         findViewById<Button>(R.id.btnSettings).setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
@@ -454,34 +318,56 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnShowHistory).setOnClickListener {
             startActivity(Intent(this, HistoryActivity::class.java))
         }
+        findViewById<Button>(R.id.btnShowLocation).setOnClickListener {
+            startActivity(Intent(this, LocationActivity::class.java))
+        }
+        findViewById<Button>(R.id.btnOpenSessions)?.setOnClickListener {
+            startActivity(Intent(this, SessionActivity::class.java))
+        }
+
+        // Inicjalizacja dwóch osobnych wykresów
+        accelChart = findViewById(R.id.accelLiveChart)
+        gyroChart = findViewById(R.id.gyroLiveChart)
+        setupDualCharts()
 
         lastHitTextView = findViewById(R.id.lastHitTextView)
-        collisionChart = findViewById(R.id.collisionChart)
-        flightChart = findViewById(R.id.flightChart)
         statusTextView = findViewById(R.id.statusTextView)
         connectionStatusTextView = findViewById(R.id.connectionStatusTextView)
 
-        // 1. Akcelerometr Uderzeniowy H3LIS
+        btnOpenLastShot = findViewById(R.id.btnOpenLastShot)
+        btnOpenLastShot.setOnClickListener {
+            if (fullHitHistory.isNotEmpty()) {
+                val lastEntry = fullHitHistory[0]
+                ShotDetailsActivity.selectedSamples = lastEntry.samples
+                ShotDetailsActivity.peakValue = lastEntry.peakValue
+                ShotDetailsActivity.entryType = lastEntry.type
+
+                val intent = Intent(this, ShotDetailsActivity::class.java)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Brak zarejestrowanych zdarzeń w obecnej sesji!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        tvSessionShots = findViewById(R.id.tvSessionShots)
+        tvSessionEnergy = findViewById(R.id.tvSessionEnergy)
+        tvSessionConsistency = findViewById(R.id.tvSessionConsistency)
+
         h3AccelX = findViewById(R.id.h3AccelX)
         h3AccelY = findViewById(R.id.h3AccelY)
         h3AccelZ = findViewById(R.id.h3AccelZ)
 
-        // 2. Akcelerometr IMU
         imuAccelX = findViewById(R.id.imuAccelX)
         imuAccelY = findViewById(R.id.imuAccelY)
         imuAccelZ = findViewById(R.id.imuAccelZ)
 
-        // 3. Żyroskop IMU
         gyroX = findViewById(R.id.gyroX)
         gyroY = findViewById(R.id.gyroY)
         gyroZ = findViewById(R.id.gyroZ)
 
-        // 4. GPS
         gpsLat = findViewById(R.id.gpsLat)
         gpsLon = findViewById(R.id.gpsLon)
         gpsFix = findViewById(R.id.gpsFix)
-
-
 
         hitHistoryContainer = findViewById(R.id.hitHistoryContainer)
         logSwitch = findViewById(R.id.logSwitch)
@@ -497,12 +383,45 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkAndRequestBlePermissions() {
+        val permissionsToRequest = mutableListOf<String>()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(Manifest.permission.BLUETOOTH_SCAN)
+            }
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(Manifest.permission.BLUETOOTH_CONNECT)
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permissionsToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionsToRequest.toTypedArray(), BLE_PERMISSION_REQUEST_CODE)
+        } else {
+            BleManager.startScanAndConnect(this)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == BLE_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                BleManager.startScanAndConnect(this)
+            } else {
+                Toast.makeText(this, "Aplikacja wymaga uprawnień Bluetooth!", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
     private fun initLogFile() {
         val appDirectory = getExternalFilesDir(null) ?: return
         logFile = File(appDirectory, logFileName)
         try {
             logWriter = FileWriter(logFile, true)
-            // Zapisz nagłówek jeśli plik jest pusty
             logWriter?.write("Timestamp,H3_AX,H3_AY,H3_AZ,IMU_AX,IMU_AY,IMU_AZ,IMU_GX,IMU_GY,IMU_GZ,Lat,Lon,Fix\n")
             isLoggingEnabled = true
             Toast.makeText(this, "Zapis do: ${logFile?.name}", Toast.LENGTH_SHORT).show()
@@ -512,58 +431,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun writeSampleToCsv(h3x: Float, h3y: Float, h3z: Float, ax: Float, ay: Float, az: Float, gx: Float, gy: Float, gz: Float, lat: Float, lon: Float, fix: Boolean) {
-        scope.launch(Dispatchers.IO) {
-            try {
-                logWriter?.write("${System.currentTimeMillis()},$h3x,$h3y,$h3z,$ax,$ay,$az,$gx,$gy,$gz,$lat,$lon,${if(fix) 1 else 0}\n")
-                logWriter?.flush()
-            } catch (e: Exception) {
-                Log.e(LOG_TAG, "Błąd zapisu wiersza CSV: ${e.message}")
-            }
-        }
-    }
-
-    private fun setupChart() {
-        collisionChart.apply {
-            description.isEnabled = false; setTouchEnabled(true); isDragEnabled = true
-            setScaleEnabled(true); setPinchZoom(true); setBackgroundColor(Color.WHITE)
-            xAxis.apply {
-                position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
-                setDrawGridLines(true)
-                valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String = String.format(Locale.getDefault(), "%.2fs", value)
-                }
-            }
-            axisLeft.apply { textColor = Color.RED; axisMinimum = 0f; setDrawGridLines(true) }
-            axisRight.apply { isEnabled = true; textColor = Color.BLUE; axisMinimum = 0f; setDrawGridLines(false) }
-            legend.isEnabled = true
-        }
-    }
-
-    private fun setupFlightChart() {
-        flightChart.apply {
-            description.text = "Analiza rotacji w locie"; description.textColor = Color.BLACK
-            setTouchEnabled(true); setPinchZoom(true); setBackgroundColor(Color.parseColor("#F0F8FF"))
-            xAxis.apply {
-                position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
-                setDrawGridLines(true)
-                valueFormatter = object : ValueFormatter() {
-                    override fun getFormattedValue(value: Float): String = String.format(Locale.getDefault(), "%.1fs", value)
-                }
-            }
-            axisLeft.apply { textColor = Color.BLUE; axisMinimum = 0f }
-            axisRight.isEnabled = false; legend.isEnabled = true
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         try {
-            clientSocket?.close() // Zmiana z serverSocket na clientSocket
             logWriter?.close()
+            BleManager.disconnect()
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Błąd zamykania zasobów: ${e.message}")
         }
-        tcpServerJob?.cancel()
     }
 }

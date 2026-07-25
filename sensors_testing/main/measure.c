@@ -589,7 +589,9 @@ static void sensors_reading_task(void *pvParameters)
                 pre_hit_count++;
             }
 
-            if (is_phone_connected && data_queue != NULL)
+
+            //pozbylem sie is phone connected
+            if ( data_queue != NULL)
             {
                 xQueueSend(data_queue, &current_frame, 0);
             }

@@ -14,12 +14,7 @@
         android:paddingBottom="16dp"
         android:gravity="center"/>
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/historyChart"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginBottom="8dp"
-        android:background="#FFFFFF" />
+
 
     <ScrollView
         android:layout_width="match_parent"

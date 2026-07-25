@@ -69,7 +69,12 @@ static int seconds_in_immobility = 0;
 static int loop_counter_1s = 0;
 
 
+bool is_gps_connected = false; 
 
+// Funkcja zwracająca status połączenia dla innych modułów:
+bool get_gps_hardware_status(void) {
+    return is_gps_connected;
+}
 
 
 //zwraca najswiezsze dane z GPS
@@ -79,40 +84,6 @@ void get_last_gps_data(float *lat, float *lon, bool *fix) {
     *fix = current_fix;
 }
 
-/*
-//aktualizacja dannych z gps
-static void gps_event_handler(void *event_handler_arg, esp_event_base_t event_base, int32_t event_id, void *event_data)
-{
-    //ESP_LOGW(TAG, "GPS/NMEA parser jest już uruchomiony.");
-
-    gps_t *gps = (gps_t *)event_data;
-    switch (event_id) {
-        case GPS_UPDATE:
-            current_lat = gps->latitude;
-            current_lon = gps->longitude;
-            current_fix = gps->fix;
-
-            if (gps->fix >= 1) { // 1 = Fix Standardowy, 2 = Differential, itp.
-                ESP_LOGI(TAG, "--- NOWA POZYCJA GPS ---");
-                ESP_LOGI(TAG, "Status FIX:  %d", gps->fix);
-                ESP_LOGI(TAG, "Szerokość:   %.6f %c", gps->latitude, gps->latitude > 0 ? 'N' : 'S');
-                ESP_LOGI(TAG, "Długość:     %.6f %c", gps->longitude, gps->longitude > 0 ? 'E' : 'W');
-                ESP_LOGI(TAG, "Wysokość:    %.1f m", gps->altitude);
-                ESP_LOGI(TAG, "Prędkość:    %.2f km/h", gps->speed);
-                ESP_LOGI(TAG, "Satelity:    %d", gps->sats_in_use);
-                ESP_LOGI(TAG, "Czas (UTC):  %02d:%02d:%02d", gps->tim.hour, gps->tim.minute, gps->tim.second);
-                ESP_LOGI(TAG, "------------------------");
-            } else {
-                ESP_LOGW(TAG, "Brak poprawnego FIX (Satelity w użyciu: %d)", gps->sats_in_use);
-            }
-        
-            break;
-        case GPS_UNKNOWN:
-            break;
-        default:
-            break;
-    }
-}*/
 
 void lsm6dsv16x_configure_wakeup_threshold(float threshold_g)
 {
@@ -506,7 +477,7 @@ static void sensors_reading_task(void *pvParameters)
         loop_counter_1s++;
 
         // --- DYNAMICZNY BLOK ANALIZY BEZRUCHU (CO 1 SEKUNDĘ) ---
-        // Wyliczamy ile obiegów pętli to jedna sekunda (np. dla 20ms to 50, dla 25ms to 40, dla 50ms to 20)
+    
         int loops_per_second = 1000 / config_sensor_loop_ms; 
 
         if (seconds_in_immobility >= config_idle_time_s)
@@ -532,10 +503,9 @@ static void sensors_reading_task(void *pvParameters)
 
                 ESP_LOGW(TAG, "!!! MIKROKONTROLER WYBUDZONY PRZEZ H3LIS !!! Czyszczenie rejestrów...");
 
-                // KROK KRYTYCZNY: Odczytaj rejestr źródła przerwań H3LIS331DL przez SPI,
-                // aby skasować zatrzask (clear latched interrupt) i pozwolić linii INT1 opaść do 0V.
+          
                 uint8_t accel_src = 0;
-                // Zakładamy, że czytasz rejestr INT1_SRC (0x31) akcelerometru
+               
                 h3lis331dl_read_reg(&accel_ctx, 0x31, &accel_src, 1); 
 
                
@@ -558,12 +528,12 @@ static void sensors_reading_task(void *pvParameters)
         }
 
 
-        // --- DETEKCJA ZDERZENIA ---
+        
         current_frame.packet_type = 0;
 
         float h3_x = current_frame.accel_h3lis.x;
         float h3_y = current_frame.accel_h3lis.y;
-        float h3_z = current_frame.accel_h3lis.z; //nie odejmujemy grawitacji bo jest znikoma
+        float h3_z = current_frame.accel_h3lis.z; 
 
         float h3_dynamic_g = sqrtf(h3_x * h3_x + h3_y * h3_y + h3_z * h3_z);
 
@@ -625,7 +595,7 @@ static void sensors_reading_task(void *pvParameters)
             }
         }
 
-        // --- CENTRALNE STEROWANIE PROB_KOWANIEM ---
+       
         vTaskDelay(pdMS_TO_TICKS(config_sensor_loop_ms));
     }
 }
@@ -667,176 +637,123 @@ void log_global_data(const global_data_t *data)
     ESP_LOGI(TAG, "Gyro IMU [dps]:  X: %6.2f | Y: %6.2f | Z: %6.2f", 
              data->gyro.x, data->gyro.y, data->gyro.z);
     
-    // Dane GPS
-    if (data->gps_fix) {
-        ESP_LOGI(TAG, "GPS Pozycja:      Szerokość: %.6f° %c | Długość: %.6f° %c", 
-                 fabsf(data->latitude),  data->latitude >= 0 ? 'N' : 'S',
-                 fabsf(data->longitude), data->longitude >= 0 ? 'E' : 'W');
-        ESP_LOGI(TAG, "Status GPS FIX:   TAK");
+    // --- SEKCJA DIAGNOSTYKI GPS ---
+    bool hardware_ok = get_gps_hardware_status();
+
+    if (hardware_ok) {
+        ESP_LOGI(TAG, "Komunikacja GPS (UART): POŁĄCZONO (Odebrano ramki NMEA)");
+
+        if (data->gps_fix) {
+            ESP_LOGI(TAG, "Status FIX GPS:        TAK (Pozycja aktualna)");
+            ESP_LOGI(TAG, "GPS Pozycja:           Szerokość: %.6f° %c | Długość: %.6f° %c", 
+                     fabsf(data->latitude),  data->latitude >= 0 ? 'N' : 'S',
+                     fabsf(data->longitude), data->longitude >= 0 ? 'E' : 'W');
+        } else {
+            ESP_LOGW(TAG, "Status FIX GPS:        BRAK FIXA (Szukam satelitów...)");
+            if (data->latitude != 0.0f || data->longitude != 0.0f) {
+                ESP_LOGW(TAG, "Ostatnia znana poz.:   Szer: %.6f, Dł: %.6f", 
+                         data->latitude, data->longitude);
+            }
+        }
     } else {
-        ESP_LOGW(TAG, "GPS Pozycja:      BRAK AKTUALNYCH DANYCH (Ostatnia znana szer: %.6f, dł: %.6f)", 
-                 data->latitude, data->longitude);
-        ESP_LOGW(TAG, "Status GPS FIX:   NIE");
+        ESP_LOGE(TAG, "Komunikacja GPS (UART): BRAK SYGNAŁU! (Sprawdź zasilanie, TX/RX lub baudrate)");
+        ESP_LOGE(TAG, "Status FIX GPS:        NIEAKTYWNY");
     }
+
     ESP_LOGI(TAG, "===================================================");
 }
 
 
-static void gps_event_handler(void *event_handler_arg, esp_event_base_t event_base, int32_t event_id, void *event_data)
-{
-    gps_t *gps = (gps_t *)event_data; // Rzutowanie surowych danych na strukturę GPS
-
-    switch (event_id) {
-        case GPS_UPDATE:
-            // Przypisanie do zmiennych globalnych (przydatne do reszty Twojego programu)
-            current_lat = gps->latitude;
-            current_lon = gps->longitude;
-            current_fix = (gps->fix >= 1); // True jeśli mamy jakikolwiek FIX (Standard/DGPS)
-
-            // Wyświetlenie czytelnych informacji w monitorze portu szeregowego
-            if (gps->fix >= 1) { 
-                ESP_LOGI("GPS_DIAGNOSTYKA", "=== SUKCES! ZNALEZIONO LOKALIZACJĘ ===");
-                ESP_LOGI("GPS_DIAGNOSTYKA", "Status FIX:  %d", gps->fix);
-                ESP_LOGI("GPS_DIAGNOSTYKA", "Szerokość:   %.6f %c", gps->latitude, gps->latitude > 0 ? 'N' : 'S');
-                ESP_LOGI("GPS_DIAGNOSTYKA", "Długość:     %.6f %c", gps->longitude, gps->longitude > 0 ? 'E' : 'W');
-                ESP_LOGI("GPS_DIAGNOSTYKA", "Prędkość:    %.2f km/h", gps->speed);
-                ESP_LOGI("GPS_DIAGNOSTYKA", "Satelity:    %d w użyciu", gps->sats_in_use);
-                ESP_LOGI("GPS_DIAGNOSTYKA", "Czas (UTC):  %02d:%02d:%02d", gps->tim.hour, gps->tim.minute, gps->tim.second);
-                ESP_LOGI("GPS_DIAGNOSTYKA", "--------------------------------------");
-            } else {
-                // Moduł przysłał ramkę, ale nie ma jeszcze dokładnej pozycji
-                ESP_LOGW("GPS_DIAGNOSTYKA", "Odebrano ramkę, ale BRAK FIX (Satelity w użyciu: %d, Czas: %02d:%02d:%02d)", 
-                         gps->sats_in_use, gps->tim.hour, gps->tim.minute, gps->tim.second);
-            }
-            break;
-
-       case GPS_UNKNOWN: {
-            char *raw_line = (char *)event_data;
-            if (raw_line != NULL) {
-                // Filtrujemy logi, aby monitor nie został zalany śmieciami
-                if (strstr(raw_line, "GSV") || strstr(raw_line, "GGA") || strstr(raw_line, "RMC")) {
-                    ESP_LOGW("GPS_RAW", "%s", raw_line);
-                } else {
-                    // NOWOŚĆ: Wypisuje absolutnie wszystko, co nie przeszło przez powyższy filtr
-                    ESP_LOGW("GPS_INNE_RAMKI", "Odebrano poza filtrem: %s", raw_line);
-                }
-
-                // RĘCZNY PARSER DLA RAMKI RMC ($GNRMC lub $GPRMC)
-                if (strstr(raw_line, "RMC")) {
-                    char status = 'V';
-                    float lat_raw = 0.0f, lon_raw = 0.0f;
-                    char lat_dir = 'N', lon_dir = 'E';
-                    
-                    // Format: $XXRMC,czas,status(A/V),szerokosc,N/S,dlugosc,E/W,...
-                    int parsed = sscanf(raw_line, "%*[^,],%*[^,],%c,%f,%c,%f,%c", 
-                                        &status, &lat_raw, &lat_dir, &lon_raw, &lon_dir);
-                    
-                    if (parsed >= 5 && status == 'A') {
-                        // Konwersja z formatu DDMM.MMMM na stopnie dziesiętne DD.DDDD
-                        int lat_deg = (int)(lat_raw / 100);
-                        float lat_min = lat_raw - (lat_deg * 100);
-                        current_lat = lat_deg + (lat_min / 60.0f);
-                        if (lat_dir == 'S') current_lat = -current_lat;
-
-                        int lon_deg = (int)(lon_raw / 100);
-                        float lon_min = lon_raw - (lon_deg * 100);
-                        current_lon = lon_deg + (lon_min / 60.0f);
-                        if (lon_dir == 'W') current_lon = -current_lon;
-
-                        current_fix = true;
-
-                        ESP_LOGI("GPS_RĘCZNY", "=== SUKCES! ZNALEZIONO LOKALIZACJĘ (RMC) ===");
-                        ESP_LOGI("GPS_RĘCZNY", "Szerokość: %.6f %c | Długość: %.6f %c", 
-                                 current_lat, lat_dir, current_lon, lon_dir);
-                        ESP_LOGI("GPS_RĘCZNY", "===========================================");
-                    }
-                }
-            }
-            break;
-        }
-            
-        default:
-            break;
-    }
-}
 
 
 
+///gps all
+
+// === OBSŁUGA ODCZYTU I PARSOWANIA GPS ===
 
 static void gps_read_task(void *pvParameters)
 {
-    uint8_t data[BUF_SIZE];
-    char line_buffer[128];
+    uint8_t rx_buf[1];
+    char line_buf[256];
     int line_idx = 0;
+    int no_data_counter = 0;
+
+    ESP_LOGI(TAG, "GPS Parser uruchomiony...");
 
     while (1) {
-        int len = uart_read_bytes(GPS_UART_NUM, data, 1, pdMS_TO_TICKS(1000));
-        
+        // Czytamy po 1 bajcie z portu UART z czasem oczekiwania 100 ms
+        int len = uart_read_bytes(GPS_UART_NUM, rx_buf, 1, pdMS_TO_TICKS(100));
+
         if (len > 0) {
-            char c = data[0];
+            no_data_counter = 0; 
+
+            char c = (char)rx_buf[0];
 
             if (c != '\r' && c != '\n') {
-                if (line_idx < sizeof(line_buffer) - 1) {
-                    line_buffer[line_idx++] = c;
+                if (line_idx < sizeof(line_buf) - 1) {
+                    line_buf[line_idx++] = c;
                 }
             } 
-            else if (c == '\n' && line_idx > 0) {
-                line_buffer[line_idx] = '\0';
+            else if (line_idx > 0) {
+                line_buf[line_idx] = '\0'; 
 
-                // Szukamy ramki RMC (np. $GNRMC lub $GPRMC)
-                if (strstr(line_buffer, "RMC")) {
+                
+                if (line_buf[0] == '$' && (strstr(line_buf, "GP") || strstr(line_buf, "GN") || strstr(line_buf, "GA") || strstr(line_buf, "GL") || strstr(line_buf, "BD"))) {
+                    is_gps_connected = true;
+                }
+
+                
+                if (strstr(line_buf, "RMC")) {
                     char status = 'V';
                     float lat_raw = 0.0f, lon_raw = 0.0f;
                     char lat_dir = 'N', lon_dir = 'E';
-                    
-                    // Skanujemy format NMEA: $XXRMC,time,status,lat,N/S,lon,E/W
-                    int parsed = sscanf(line_buffer, "%*[^,],%*[^,],%c,%f,%c,%f,%c", 
+
+                    // Format NMEA: $XXRMC,time,status,lat,N/S,lon,E/W,...
+                    int parsed = sscanf(line_buf, "%*[^,],%*[^,],%c,%f,%c,%f,%c", 
                                         &status, &lat_raw, &lat_dir, &lon_raw, &lon_dir);
-                    
+
                     if (parsed >= 5 && status == 'A') {
-                        // 1. Konwersja formatu NMEA (DDMM.MMMM) na stopnie dziesiętne (DD.DDDDDD)
-                        int lat_deg = (int)(lat_raw / 100);
-                        float lat_min = lat_raw - (lat_deg * 100);
+                        // Konwersja DDMM.MMMM na DD.DDDDDD (Szerokość)
+                        int lat_deg = (int)(lat_raw / 100.0f);
+                        float lat_min = lat_raw - (lat_deg * 100.0f);
                         float lat_decimal = lat_deg + (lat_min / 60.0f);
                         if (lat_dir == 'S') lat_decimal = -lat_decimal;
 
-                        int lon_deg = (int)(lon_raw / 100);
-                        float lon_min = lon_raw - (lon_deg * 100);
+                        // Konwersja DDMM.MMMM na DD.DDDDDD (Długość)
+                        int lon_deg = (int)(lon_raw / 100.0f);
+                        float lon_min = lon_raw - (lon_deg * 100.0f);
                         float lon_decimal = lon_deg + (lon_min / 60.0f);
                         if (lon_dir == 'W') lon_decimal = -lon_decimal;
 
-                        // 2. Bezpieczna aktualizacja zmiennych globalnych silnika czujników
+                        // Aktualizacja stanów dla reszty systemu
                         current_lat = lat_decimal;
                         current_lon = lon_decimal;
                         current_fix = true;
-
-                        ESP_LOGI("GPS_PARSER", "Zaktualizowano pozycję: %.6f, %.6f", current_lat, current_lon);
                     } else {
-                        current_fix = false; // Brak ważnej pozycji (status 'V')
+                        // Otrzymujemy ramki, ale moduł nie ustalił jeszcze pozycji (Status 'V')
+                        current_fix = false;
                     }
                 }
 
                 line_idx = 0; 
             }
+        } else {
+           
+            no_data_counter++;
+
+           
+            if (no_data_counter >= 30) {
+                is_gps_connected = false;
+                current_fix = false;
+                no_data_counter = 30;
+            }
         }
     }
 }
 
-
-
-
-void gps_stop(void)
-{
-    uart_driver_delete(GPS_UART_NUM);
-    ESP_LOGI(TAG, "Sterownik UART GPS został wyłączony.");
-}
-
-
-
-
 void gps_start(void)
 {
-    // Konfiguracja parametrów UART
+    // Konfiguracja UART dla GPS
     uart_config_t uart_config = {
         .baud_rate = 115200,
         .data_bits = UART_DATA_8_BITS,
@@ -846,16 +763,70 @@ void gps_start(void)
         .source_clk = UART_SCLK_DEFAULT,
     };
     
-    // Instalacja sterownika UART (piny RX/TX)
     ESP_ERROR_CHECK(uart_driver_install(GPS_UART_NUM, BUF_SIZE * 2, 0, 0, NULL, 0));
     ESP_ERROR_CHECK(uart_param_config(GPS_UART_NUM, &uart_config));
     ESP_ERROR_CHECK(uart_set_pin(GPS_UART_NUM, GPS_TX_PIN, GPS_RX_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
 
-    // Wysłanie komendy konfiguracji (opcjonalnie)
-    const char *change_to_gp = "$PCAS06,1*1A\r\n"; 
-    uart_write_bytes(GPS_UART_NUM, change_to_gp, strlen(change_to_gp));
-
-    // Uruchomienie własnego zadania do czytania danych
+    // Uruchomienie parsera danych
     xTaskCreate(gps_read_task, "gps_read_task", 4096, NULL, 10, NULL);
-    ESP_LOGI(TAG, "Bezpośredni odczyt UART dla GPS został uruchomiony.");
+    ESP_LOGI(TAG, "Parser danych GPS został pomyślnie uruchomiony.");
 }
+
+/*
+//czyta wszystko z uart od gps
+static void gps_dump_all_task(void *pvParameters)
+{
+    uint8_t rx_buf[128];
+    char line_buf[256];
+    int line_idx = 0;
+
+    ESP_LOGI("GPS_DUMP", "Uruchomiono podgląd surowych danych GPS...");
+
+    while (1) {
+        // Czytamy dane po 1 bajcie z portu UART
+        int len = uart_read_bytes(GPS_UART_NUM, rx_buf, 1, pdMS_TO_TICKS(100));
+
+        if (len > 0) {
+            char c = (char)rx_buf[0];
+
+            // Składamy linię do napotkania znaku nowej linii '\n' lub '\r'
+            if (c != '\r' && c != '\n') {
+                if (line_idx < sizeof(line_buf) - 1) {
+                    line_buf[line_idx++] = c;
+                }
+            } 
+            else if (line_idx > 0) {
+                line_buf[line_idx] = '\0'; // Zwieńczenie ciągu znaków
+                
+                // Wypisujemy całą odebraną linię NMEA na ekran logów
+                ESP_LOGI("GPS_RAW", "%s", line_buf);
+                
+                line_idx = 0; // Reset bufora linii dla kolejnej ramki
+            }
+        }
+    }
+}
+
+//gps start do gps_dump
+void gps_start(void)
+{
+    // 1. Konfiguracja UART
+    uart_config_t uart_config = {
+        .baud_rate = 115200, // Zmień na 115200 jeśli Twój moduł działa na wyższym baudrate
+        .data_bits = UART_DATA_8_BITS,
+        .parity    = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .source_clk = UART_SCLK_DEFAULT,
+    };
+    
+    // 2. Instalacja sterownika i przypisanie pinów
+    ESP_ERROR_CHECK(uart_driver_install(GPS_UART_NUM, BUF_SIZE * 2, 0, 0, NULL, 0));
+    ESP_ERROR_CHECK(uart_param_config(GPS_UART_NUM, &uart_config));
+    ESP_ERROR_CHECK(uart_set_pin(GPS_UART_NUM, GPS_TX_PIN, GPS_RX_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+
+    // 3. Utworzenie zadania wypisującego logi
+    xTaskCreate(gps_dump_all_task, "gps_dump_all_task", 4096, NULL, 10, NULL);
+    ESP_LOGI("GPS_DUMP", "Zadanie podglądu GPS zostało uruchomione.");
+}
+    */

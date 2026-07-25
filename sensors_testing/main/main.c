@@ -81,7 +81,7 @@ void app_main(void)
     ble_config_init();
 
     // START PODSYSTEMÓW
-    sensors_set(false); // Automatycznie skonfiguruje IMU z uwzględnieniem wczytanego config_wake_ths_g
+    sensors_set(true); // Automatycznie skonfiguruje IMU z uwzględnieniem wczytanego config_wake_ths_g
   
 
     vTaskDelay(pdMS_TO_TICKS(300));

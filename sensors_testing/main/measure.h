@@ -20,6 +20,8 @@ extern float config_sleep_ths_g;
 extern int config_idle_time_s;
 extern float CRASH_THRESHOLD_G; 
 
+extern bool is_gps_connected; // Flaga fizycznej komunikacji UART
+
 extern bool is_phone_connected;
 
 // --- NOWE MAPOWANIE PINÓW (BEZPIECZNE DLA OCTAL SPI) ---
@@ -38,8 +40,10 @@ extern bool is_phone_connected;
 #define PRE_HIT_BUFFER_SIZE  100
 #define POST_HIT_SAMPLES     100
 
-#define GPS_RX_PIN 5  
-#define GPS_TX_PIN 15
+
+
+#define GPS_RX_PIN 5  // pin tx z gps
+#define GPS_TX_PIN 15 //pin rx z gps
 
 extern int config_sensor_loop_ms;
 

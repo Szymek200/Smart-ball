@@ -33,6 +33,8 @@ object BleManager {
 
     var onGpsDataReceivedListener: ((lat: Float, lon: Float, fix: Boolean) -> Unit)? = null
 
+    var onDataSampleReceivedListener: ((h3x: Float, h3y: Float, h3z: Float, ax: Float, ay: Float, az: Float, gx: Float, gy: Float, gz: Float) -> Unit)? = null
+
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothGatt: BluetoothGatt? = null
 
@@ -231,6 +233,8 @@ object BleManager {
 
             // Rejestracja w SessionManager
             SessionManager.logSampleToCurrentSession(h3x, h3y, h3z, ax, ay, az, gx, gy, gz, lat, lon, fix)
+
+            onDataSampleReceivedListener?.invoke(h3x, h3y, h3z, ax, ay, az, gx, gy, gz)
 
             if (onGpsDataReceivedListener != null) {
                 onGpsDataReceivedListener?.invoke(lat, lon, fix)

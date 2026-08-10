@@ -29,20 +29,34 @@ static volatile bool is_notify_enabled = false;
 
 void ble_store_config_init(void);
 
-
+/*
 static const ble_uuid128_t gatt_svr_svc_uuid =
     BLE_UUID128_INIT(0x78, 0x56, 0x34, 0x12, 0x34, 0x12, 0x78, 0x56, 0x34, 0x12, 0x78, 0x56, 0x34, 0x12, 0x34, 0x12);
 
 static const ble_uuid128_t gatt_svr_chr_uuid =
     BLE_UUID128_INIT(0x87, 0x09, 0x21, 0x43, 0x65, 0x87, 0x21, 0x43, 0x89, 0x67, 0x21, 0x43, 0x21, 0x43, 0x65, 0x87);
+*/
+
+// Usługa GATT: "12341234-5678-1234-5678-123412345678"
+static const ble_uuid128_t gatt_svr_svc_uuid =
+    BLE_UUID128_INIT(0x78, 0x56, 0x34, 0x12, 0x34, 0x12, 0x78, 0x56, 0x34, 0x12, 0x78, 0x56, 0x34, 0x12, 0x34, 0x12);
+
+// Charakterystyka konfiguracyjna: "87654321-4321-6789-4321-876543210987"
+static const ble_uuid128_t gatt_svr_chr_uuid =
+    BLE_UUID128_INIT(0x87, 0x09, 0x21, 0x43, 0x65, 0x87, 0x21, 0x43, 0x89, 0x67, 0x21, 0x43, 0x21, 0x43, 0x65, 0x87);
+
+// Charakterystyka danych: "78563412-7856-3412-7856-341278563412"
+static const ble_uuid128_t gatt_data_chr_uuid =
+    BLE_UUID128_INIT(0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78);
 
     // Przechowujemy identyfikator aktywnego połączenia i uchwyt nowej charakterystyki
 static uint16_t active_conn_handle = BLE_HS_CONN_HANDLE_NONE;
 static uint16_t gatt_data_char_val_handle;
 
     // UUID nowej charakterystyki danych pomiarowych
+    /*
 static const ble_uuid128_t gatt_data_chr_uuid =
-    BLE_UUID128_INIT(0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78);
+    BLE_UUID128_INIT(0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78);*/
 
 static void ble_app_advertise(void);
 static int ble_app_gap_event(struct ble_gap_event *event, void *arg);
@@ -78,14 +92,14 @@ static void ble_data_tx_task(void *pvParameters)
 
 static const struct ble_gatt_chr_def gatt_svr_chrs[] = {
     {
-        // 1. Dychotomiczna charakterystyka konfiguracyjna (odczyt/zapis)
+        // 1. Charakterystyka konfiguracyjna (ZAPIS / ODCZYT)
         .uuid = &gatt_svr_chr_uuid.u,
         .access_cb = gatt_svr_chr_access,
-        .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
+        .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE | BLE_GATT_CHR_F_WRITE_NO_RSP,
         .val_handle = &gatt_char_val_handle,
     },
     {
-        // 2. NOWOŚĆ: Charakterystyka do wysyłania stramu danych pomiarowych i GPS
+        // 2. Charakterystyka NOTIFY
         .uuid = &gatt_data_chr_uuid.u,
         .access_cb = gatt_svr_chr_access,
         .flags = BLE_GATT_CHR_F_NOTIFY,
@@ -120,64 +134,248 @@ void save_config_to_nvs(void) {
     }
 }
 
-static int gatt_svr_chr_access(uint16_t conn_handle, uint16_t attr_handle, struct ble_gatt_access_ctxt *ctxt, void *arg) {
-    char tx_buffer[128];
+
+static int gatt_svr_chr_access(uint16_t conn_handle,
+                               uint16_t attr_handle,
+                               struct ble_gatt_access_ctxt *ctxt,
+                               void *arg)
+{
+    ESP_LOGW(TAG,
+             "========== GATT ACCESS ==========");
     
-    if (ctxt->op == BLE_ATT_ACCESS_OP_READ) {
-        snprintf(tx_buffer, sizeof(tx_buffer), "CFG:%.2f:%.3f:%d:%.1f\n", 
-                 config_wake_ths_g, config_sleep_ths_g, config_idle_time_s, CRASH_THRESHOLD_G);
-        int rc = os_mbuf_append(ctxt->om, tx_buffer, strlen(tx_buffer));
+    ESP_LOGW(TAG,
+             "op=%d",
+             ctxt->op);
+
+    ESP_LOGW(TAG,
+             "attr_handle=%d",
+             attr_handle);
+
+    ESP_LOGW(TAG,
+             "config_handle=%d",
+             gatt_char_val_handle);
+
+    ESP_LOGW(TAG,
+             "data_handle=%d",
+             gatt_data_char_val_handle);
+
+  
+    if (ctxt->op == BLE_GATT_ACCESS_OP_READ_CHR) {
+
+        ESP_LOGW(TAG, "[BLE] READ CONFIG");
+
+        char tx_buffer[128];
+
+        snprintf(tx_buffer,
+                 sizeof(tx_buffer),
+                 "CFG:%.2f:%.3f:%d:%.1f\n",
+                 config_wake_ths_g,
+                 config_sleep_ths_g,
+                 config_idle_time_s,
+                 CRASH_THRESHOLD_G);
+
+        ESP_LOGW(TAG,
+                 "[BLE] Wysyłam konfigurację: %s",
+                 tx_buffer);
+
+        int rc = os_mbuf_append(ctxt->om,
+                                tx_buffer,
+                                strlen(tx_buffer));
+
         return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
     }
 
-    if (ctxt->op == BLE_ATT_ACCESS_OP_WRITE) {
+
+    if (ctxt->op == BLE_GATT_ACCESS_OP_WRITE_CHR) {
+
+        ESP_LOGW(TAG, "[BLE] WRITE CONFIG");
+
+    
+        if (attr_handle != gatt_char_val_handle) {
+
+            ESP_LOGE(TAG,
+                     "[BLE] WRITE na nieprawidłowym handle! "
+                     "attr=%d config=%d",
+                     attr_handle,
+                     gatt_char_val_handle);
+
+            return BLE_ATT_ERR_WRITE_NOT_PERMITTED;
+        }
+
         char rx_buffer[128];
+
         uint16_t len = OS_MBUF_PKTLEN(ctxt->om);
-        if (len >= sizeof(rx_buffer)) len = sizeof(rx_buffer) - 1;
-        
-        ble_hs_mbuf_to_flat(ctxt->om, rx_buffer, len, NULL);
+
+        ESP_LOGW(TAG,
+                 "[BLE] Odebrano %d bajtów",
+                 len);
+
+        if (len >= sizeof(rx_buffer)) {
+            len = sizeof(rx_buffer) - 1;
+        }
+
+        int rc = ble_hs_mbuf_to_flat(ctxt->om,
+                                     rx_buffer,
+                                     len,
+                                     NULL);
+
+        if (rc != 0) {
+
+            ESP_LOGE(TAG,
+                     "[BLE] ble_hs_mbuf_to_flat() error=%d",
+                     rc);
+
+            return BLE_ATT_ERR_UNLIKELY;
+        }
+
         rx_buffer[len] = '\0';
+
+      
+        for (int i = 0; i < len; i++) {
+
+            if (rx_buffer[i] == '\r' ||
+                rx_buffer[i] == '\n') {
+
+                rx_buffer[i] = '\0';
+                break;
+            }
+        }
+
+        ESP_LOGW(TAG,
+                 "[BLE] ODEBRANY TEKST: '%s'",
+                 rx_buffer);
 
         bool should_save = false;
 
+    
         if (strncmp(rx_buffer, "CMD:WAKE_THS:", 13) == 0) {
+
             float val;
-            if (sscanf(rx_buffer, "CMD:WAKE_THS:%f", &val) == 1) {
+
+            if (sscanf(rx_buffer,
+                       "CMD:WAKE_THS:%f",
+                       &val) == 1) {
+
+                ESP_LOGW(TAG,
+                         "[BLE] STARA config_wake_ths_g = %.3f",
+                         config_wake_ths_g);
+
                 config_wake_ths_g = val;
-                lsm6dsv16x_configure_wakeup_threshold(config_wake_ths_g);
+
+                ESP_LOGW(TAG,
+                         "[BLE] NOWA config_wake_ths_g = %.3f",
+                         config_wake_ths_g);
+
                 should_save = true;
             }
+            else {
+
+                ESP_LOGE(TAG,
+                         "[BLE] Błąd sscanf CMD:WAKE_THS");
+            }
         }
+
+      
         else if (strncmp(rx_buffer, "CMD:HIT_THS:", 12) == 0) {
+
             float val;
-            if (sscanf(rx_buffer, "CMD:HIT_THS:%f", &val) == 1) {
+
+            if (sscanf(rx_buffer,
+                       "CMD:HIT_THS:%f",
+                       &val) == 1) {
+
+                ESP_LOGW(TAG,
+                         "[BLE] STARA CRASH_THRESHOLD_G = %.3f",
+                         CRASH_THRESHOLD_G);
+
                 CRASH_THRESHOLD_G = val;
-                should_save = true;
-            }
-        }
-        else if (strncmp(rx_buffer, "CMD:IDLE_TIME:", 14) == 0) {
-            int val;
-            if (sscanf(rx_buffer, "CMD:IDLE_TIME:%d", &val) == 1) {
-                config_idle_time_s = val;
-                should_save = true;
-            }
-        }
-        else if (strncmp(rx_buffer, "CMD:SLEEP_THS:", 14) == 0) {
-            float val;
-            if (sscanf(rx_buffer, "CMD:SLEEP_THS:%f", &val) == 1) {
-                config_sleep_ths_g = val;
+
+                ESP_LOGW(TAG,
+                         "[BLE] NOWA CRASH_THRESHOLD_G = %.3f",
+                         CRASH_THRESHOLD_G);
+
                 should_save = true;
             }
         }
 
-        if (should_save) {
-            save_config_to_nvs();
+      
+        else if (strncmp(rx_buffer, "CMD:IDLE_TIME:", 14) == 0) {
+
+            int val;
+
+            if (sscanf(rx_buffer,
+                       "CMD:IDLE_TIME:%d",
+                       &val) == 1) {
+
+                ESP_LOGW(TAG,
+                         "[BLE] STARA config_idle_time_s = %d",
+                         config_idle_time_s);
+
+                config_idle_time_s = val;
+
+                ESP_LOGW(TAG,
+                         "[BLE] NOWA config_idle_time_s = %d",
+                         config_idle_time_s);
+
+                should_save = true;
+            }
         }
+
+      
+        else if (strncmp(rx_buffer, "CMD:SLEEP_THS:", 14) == 0) {
+
+            float val;
+
+            if (sscanf(rx_buffer,
+                       "CMD:SLEEP_THS:%f",
+                       &val) == 1) {
+
+                ESP_LOGW(TAG,
+                         "[BLE] STARA config_sleep_ths_g = %.3f",
+                         config_sleep_ths_g);
+
+                config_sleep_ths_g = val;
+
+                ESP_LOGW(TAG,
+                         "[BLE] NOWA config_sleep_ths_g = %.3f",
+                         config_sleep_ths_g);
+
+                should_save = true;
+            }
+        }
+
+      
+        else {
+
+            ESP_LOGE(TAG,
+                     "[BLE] NIEZNANA KOMENDA: '%s'",
+                     rx_buffer);
+        }
+
+     
+        if (should_save) {
+
+            ESP_LOGW(TAG,
+                     "[BLE] Zapis konfiguracji do NVS...");
+
+            save_config_to_nvs();
+
+            ESP_LOGW(TAG,
+                     "[BLE] NVS zapisane.");
+        }
+
         return 0;
     }
-    
+
+
+    ESP_LOGW(TAG,
+             "[BLE] Nieobsługiwana operacja GATT: %d",
+             ctxt->op);
+
     return BLE_ATT_ERR_REQ_NOT_SUPPORTED;
 }
+
+
 
 static int ble_app_gap_event(struct ble_gap_event *event, void *arg) {
     switch (event->type) {

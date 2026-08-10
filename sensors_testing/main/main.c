@@ -50,6 +50,7 @@ void app_main(void)
 {
     
 
+   // esp_log_level_set("NimBLE", ESP_LOG_WARN);
     ESP_LOGI(TAG, "Uruchamianie aplikacji bez SPIFFS i Audio...");
 
     // Inicjalizacja pamięci NVS

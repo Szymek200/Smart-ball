@@ -186,10 +186,12 @@ object BleManager {
     /**
      * Przetwarza dane pomiarowe spływające z ESP32 (Struktura global_data_t)
      */
+    /**
+     * Przetwarza dane pomiarowe spływające z ESP32 (Struktura global_data_t)
+     */
     private fun handleIncomingData(bytes: ByteArray) {
 
         Log.d("SMART_BALL", "BLE: Odebrano ramkę o rozmiarze ${bytes.size} bajtów")
-
 
         if (bytes.size < 40) {
             val text = String(bytes)
@@ -202,31 +204,38 @@ object BleManager {
 
         try {
             val packetType = buffer.get()
+
+            // --- ODCZYT CZUJNIKÓW IMU / ACCEL / GYRO ---
             val h3x = buffer.float
             val h3y = buffer.float
             val h3z = buffer.float
+
             val ax = buffer.float
             val ay = buffer.float
             val az = buffer.float
+
             val gx = buffer.float
             val gy = buffer.float
             val gz = buffer.float
+
+            // --- ODCZYT GPS ---
             val lat = buffer.float
             val lon = buffer.float
             val fix = buffer.get() != 0.toByte()
 
+            // --- NOWE LOGI W LOGCAT DLA ACCEL I GYRO ---
+            Log.d("SMART_BALL", "BLE ACCEL H3 (High-G) -> X: $h3x, Y: $h3y, Z: $h3z [G]")
+            Log.d("SMART_BALL", "BLE ACCEL IMU --------> X: $ax, Y: $ay, Z: $az [mg]")
+            Log.d("SMART_BALL", "BLE GYRO -------------> X: $gx, Y: $gy, Z: $gz [dps]")
+            Log.d("SMART_BALL", "BLE GPS Wyparsowany -> lat=$lat, lon=$lon, fix=$fix")
 
-            Log.d("SMART_BALL", "BLE GPS Wyparsowany: lat=$lat, lon=$lon, fix=$fix")
-
-
+            // Rejestracja w SessionManager
             SessionManager.logSampleToCurrentSession(h3x, h3y, h3z, ax, ay, az, gx, gy, gz, lat, lon, fix)
 
-
             if (onGpsDataReceivedListener != null) {
-                Log.d("SMART_BALL", "BLE: Wysyłam dane do onGpsDataReceivedListener...")
                 onGpsDataReceivedListener?.invoke(lat, lon, fix)
             } else {
-                Log.w("SMART_BALL", "BLE OSTRZEŻENIE: onGpsDataReceivedListener jest NULL! Żadne Activity nie słucha danych GPS!")
+                Log.w("SMART_BALL", "BLE OSTRZEŻENIE: onGpsDataReceivedListener jest NULL!")
             }
 
         } catch (e: Exception) {

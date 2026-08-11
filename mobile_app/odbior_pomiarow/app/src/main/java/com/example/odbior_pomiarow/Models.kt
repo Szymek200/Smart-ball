@@ -28,6 +28,7 @@ data class HistoryEntry(
 
 //pojedyncza probka pomiarowa
 data class SampleData(
+    val h3x: Float = 0f, val h3y: Float = 0f, val h3z: Float = 0f,
     val ax: Float, val ay: Float, val az: Float,
     val gx: Float, val gy: Float, val gz: Float,
     val timestamp: Long,

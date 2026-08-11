@@ -39,11 +39,9 @@ class MainActivity : AppCompatActivity() {
         val fullHitHistory = mutableListOf<HistoryEntry>()
     }
 
-
     private val BLE_PERMISSION_REQUEST_CODE = 101
     private val LOG_TAG = "MAIN_ACTIVITY"
     private val LOG_FILE_PREFIX = "pomiary"
-    private val UI_UPDATE_INTERVAL_MS = 50L
 
     // --- DWA WIDOKI WYKRESÓW ---
     private lateinit var accelChart: LineChart
@@ -51,7 +49,9 @@ class MainActivity : AppCompatActivity() {
     private var chartSampleCount = 0f
     private val MAX_VISIBLE_SAMPLES = 200
 
+    // Bufor próbek dla aktualnie rejestrowanego zdarzenia
     private val currentHitSamples = mutableListOf<SampleData>()
+
     // Flag zabezpieczający przed nieskończoną pętlą synchronizacji gestów
     private var isSyncingCharts = false
 
@@ -77,7 +77,6 @@ class MainActivity : AppCompatActivity() {
     private var logWriter: FileWriter? = null
     private var isLoggingEnabled = false
     private var logFile: File? = null
-    private var lastUiUpdateTime = 0L
 
     private val logFileName: String
         get() = "${LOG_FILE_PREFIX}_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}.csv"
@@ -101,7 +100,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // ZMODYFIKOWANY LISTENER - odbiera packetType jako pierwszy parametr
         BleManager.onDataSampleReceivedListener = { packetType, h3x, h3y, h3z, ax, ay, az, gx, gy, gz ->
             runOnUiThread {
                 // 1. Dodanie nowej próbki na żywo do wykresów
@@ -124,34 +122,32 @@ class MainActivity : AppCompatActivity() {
 
                 // 5. OBSŁUGA DETEKCJI ZDARZENIA (packetType == 1)
                 if (packetType == 1.toByte()) {
-                    // Używamy zdefiniowanej już klasy SampleData
                     val sample = SampleData(
+                        h3x = h3x, h3y = h3y, h3z = h3z,
                         ax = ax, ay = ay, az = az,
                         gx = gx, gy = gy, gz = gz,
                         timestamp = System.currentTimeMillis()
                     )
                     currentHitSamples.add(sample)
                 } else if (currentHitSamples.isNotEmpty()) {
-                    // Koniec serii uderzenia (ESP32 skończyło wysyłać próbki z packet_type = 1)
+                    // Wyliczenie wartości szczytowej w jednostkach G z akcelerometru H3 High-G
                     val peakG = currentHitSamples.maxOf { s ->
-                        sqrt((s.ax * s.ax + s.ay * s.ay + s.az * s.az).toDouble()).toFloat()
+                        sqrt((s.h3x * s.h3x + s.h3y * s.h3y + s.h3z * s.h3z).toDouble()).toFloat()
                     }
 
-                    // Tworzenie wpisu z użyciem istniejących klas HistoryEntry oraz EntryType
                     val newEntry = HistoryEntry(
                         type = EntryType.HIT,
                         date = Date(),
-                        durationMs = currentHitSamples.size * 10L, // 10ms na próbkę
+                        durationMs = currentHitSamples.size * 10L,
                         samples = ArrayList(currentHitSamples),
                         peakValue = peakG
                     )
 
-                    // Dodanie zdarzenia do historii
                     fullHitHistory.add(0, newEntry)
 
-                    // Aktualizacja UI
-                    lastHitTextView.text = String.format("Ostatnie uderzenie: %.2f G", peakG / 1000f)
-                    Toast.makeText(this@MainActivity, "Wykryto nowe uderzenie!", Toast.LENGTH_SHORT).show()
+                    // Natychmiastowa aktualizacja etykiety UI
+                    lastHitTextView.text = String.format("Ostatnie uderzenie: %.2f G", peakG)
+                    Toast.makeText(this@MainActivity, "Wykryto nowe uderzenie: ${String.format("%.2f", peakG)} G!", Toast.LENGTH_SHORT).show()
 
                     currentHitSamples.clear()
                 }
@@ -177,9 +173,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupDualCharts() {
-        // ====================================================================
-        // 1. KONFIGURACJA GÓRNEGO WYKRESU (PRZYSPIESZENIE: IMU vs H3)
-        // ====================================================================
         accelChart.apply {
             description.text = "Przyspieszenie (Lewa: IMU [mg], Prawa: H3 High-G [G])"
             setTouchEnabled(true)
@@ -190,27 +183,24 @@ class MainActivity : AppCompatActivity() {
             setBackgroundColor(Color.WHITE)
         }
 
-        // Seria dla IMU (Low-G) -> Lewa Oś Y
         val setImuAccel = LineDataSet(mutableListOf(), "IMU Accel [mg]").apply {
             color = Color.RED
             setDrawCircles(false)
             lineWidth = 2f
             setDrawValues(false)
-            axisDependency = YAxis.AxisDependency.LEFT // Przypisanie do lewej osi Y
+            axisDependency = YAxis.AxisDependency.LEFT
         }
 
-        // Seria dla H3 (High-G) -> Prawa Oś Y
         val setH3Accel = LineDataSet(mutableListOf(), "H3 High-G [G]").apply {
             color = Color.BLACK
             setDrawCircles(false)
             lineWidth = 2f
             setDrawValues(false)
-            axisDependency = YAxis.AxisDependency.RIGHT // Przypisanie do prawej osi Y
+            axisDependency = YAxis.AxisDependency.RIGHT
         }
 
         accelChart.data = LineData(setImuAccel, setH3Accel)
 
-        // Lewa Oś Y – przeznaczona dla IMU
         accelChart.axisLeft.apply {
             textColor = Color.RED
             setDrawGridLines(true)
@@ -218,7 +208,6 @@ class MainActivity : AppCompatActivity() {
             resetAxisMaximum()
         }
 
-        // Prawa Oś Y – przeznaczona dla H3 High-G
         accelChart.axisRight.apply {
             isEnabled = true
             textColor = Color.BLACK
@@ -227,9 +216,6 @@ class MainActivity : AppCompatActivity() {
             resetAxisMaximum()
         }
 
-        // ====================================================================
-        // 2. KONFIGURACJA DOLNEGO WYKRESU (ŻYROSKOP: X, Y, Z)
-        // ====================================================================
         gyroChart.apply {
             description.text = "Rotacja [dps]"
             setTouchEnabled(true)
@@ -240,7 +226,6 @@ class MainActivity : AppCompatActivity() {
             setBackgroundColor(Color.WHITE)
         }
 
-        // Oś X — NIEBIESKA
         val setGyroX = LineDataSet(mutableListOf(), "Żyroskop X").apply {
             color = Color.BLUE
             setDrawCircles(false)
@@ -249,18 +234,16 @@ class MainActivity : AppCompatActivity() {
             axisDependency = YAxis.AxisDependency.LEFT
         }
 
-        // Oś Y — ZIELONA
         val setGyroY = LineDataSet(mutableListOf(), "Żyroskop Y").apply {
-            color = Color.parseColor("#4CAF50") // Zielony
+            color = Color.parseColor("#4CAF50")
             setDrawCircles(false)
             lineWidth = 2.5f
             setDrawValues(false)
             axisDependency = YAxis.AxisDependency.LEFT
         }
 
-        // Oś Z — POMARAŃCZOWA
         val setGyroZ = LineDataSet(mutableListOf(), "Żyroskop Z").apply {
-            color = Color.parseColor("#FF9800") // Pomarańczowy
+            color = Color.parseColor("#FF9800")
             setDrawCircles(false)
             lineWidth = 2.5f
             setDrawValues(false)
@@ -269,18 +252,16 @@ class MainActivity : AppCompatActivity() {
 
         gyroChart.data = LineData(setGyroX, setGyroY, setGyroZ)
 
-        // Oś Y żyroskopu – dynamiczny zakres z marginesami, aby widzieć nawet drobne ułamki dps
         gyroChart.axisLeft.apply {
             textColor = Color.BLACK
             setDrawGridLines(true)
             resetAxisMinimum()
             resetAxisMaximum()
-            spaceTop = 20f    // 20% marginesu u góry
-            spaceBottom = 20f // 20% marginesu u dołu
+            spaceTop = 20f
+            spaceBottom = 20f
         }
         gyroChart.axisRight.isEnabled = false
 
-        // Synchronizacja gestów przy powiększaniu/przesuwaniu obu wykresów
         accelChart.onChartGestureListener = createSyncGestureListener(accelChart, gyroChart)
         gyroChart.onChartGestureListener = createSyncGestureListener(gyroChart, accelChart)
     }
@@ -311,14 +292,13 @@ class MainActivity : AppCompatActivity() {
         val srcMatrix = src.viewPortHandler.matrixTouch
         val dstMatrix = dst.viewPortHandler.matrixTouch
 
-        // Kopiujemy pozycję i skaling osi X
         val vals = FloatArray(9)
         srcMatrix.getValues(vals)
 
         val dstVals = FloatArray(9)
         dstMatrix.getValues(dstVals)
-        dstVals[0] = vals[0] // Scale X
-        dstVals[2] = vals[2] // Translate X
+        dstVals[0] = vals[0]
+        dstVals[2] = vals[2]
 
         dstMatrix.setValues(dstVals)
         dst.viewPortHandler.refresh(dstMatrix, dst, true)
@@ -327,7 +307,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addSampleToChart(h3x: Float, h3y: Float, h3z: Float, ax: Float, ay: Float, az: Float, gx: Float, gy: Float, gz: Float) {
-
         scope.launch(Dispatchers.IO) {
             SessionManager.logSampleToCurrentSession(
                 h3x, h3y, h3z,
@@ -348,24 +327,18 @@ class MainActivity : AppCompatActivity() {
             val setGyroY = gyroData.getDataSetByIndex(1)
             val setGyroZ = gyroData.getDataSetByIndex(2)
 
-            // Wyliczenie wypadkowych dla Akcelerometrów
-            // IMU w mg (np. sqrt(ax^2 + ay^2 + az^2))
             val imuMagMg = sqrt((ax * ax + ay * ay + az * az).toDouble()).toFloat()
-            // H3 w G
             val h3MagG = sqrt((h3x * h3x + h3y * h3y + h3z * h3z).toDouble()).toFloat()
 
-            // 1. Dodawanie próbek do Wykresu Akcelerometrów (IMU na lewą oś [mg], H3 na prawą [G])
             accelData.addEntry(Entry(chartSampleCount, imuMagMg), 0)
             accelData.addEntry(Entry(chartSampleCount, h3MagG), 1)
 
-            // 2. Dodawanie osobnych próbek wartości składowych dla Żyroskopu
-            gyroData.addEntry(Entry(chartSampleCount, gx), 0) // Niebieski (X)
-            gyroData.addEntry(Entry(chartSampleCount, gy), 1) // Zielony (Y)
-            gyroData.addEntry(Entry(chartSampleCount, gz), 2) // Pomarańczowy (Z)
+            gyroData.addEntry(Entry(chartSampleCount, gx), 0)
+            gyroData.addEntry(Entry(chartSampleCount, gy), 1)
+            gyroData.addEntry(Entry(chartSampleCount, gz), 2)
 
             chartSampleCount++
 
-            // Buforowanie widocznych próbek (przewijanie wykresu)
             if (setImu.entryCount > MAX_VISIBLE_SAMPLES) setImu.removeEntry(0)
             if (setH3.entryCount > MAX_VISIBLE_SAMPLES) setH3.removeEntry(0)
 
@@ -378,7 +351,6 @@ class MainActivity : AppCompatActivity() {
             accelChart.notifyDataSetChanged()
             gyroChart.notifyDataSetChanged()
 
-            // Przesuwanie widoku wzdłuż osi X
             val minX = (chartSampleCount - MAX_VISIBLE_SAMPLES).coerceAtLeast(0f)
             accelChart.xAxis.axisMinimum = minX
             accelChart.xAxis.axisMaximum = chartSampleCount
@@ -405,7 +377,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, SessionActivity::class.java))
         }
 
-        // Inicjalizacja dwóch osobnych wykresów
         accelChart = findViewById(R.id.accelLiveChart)
         gyroChart = findViewById(R.id.gyroLiveChart)
         setupDualCharts()

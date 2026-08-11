@@ -17,23 +17,40 @@ object BleManager {
     private const val TAG = "BLE_MANAGER"
 
 
+    // Usługa GATT – DOKŁADNIE TAKA JAK W LOGCAT!
     val SERVICE_UUID: UUID = UUID.fromString("12341234-5678-1234-5678-123412345678")
 
-
+    // Charakterystyka konfiguracyjna do wysyłania komend WRITE
     val CONFIG_CHAR_UUID: UUID = UUID.fromString("87654321-4321-6789-4321-876543210987")
 
-
+    // Charakterystyka danych NOTIFY
     val DATA_CHAR_UUID: UUID = UUID.fromString("78563412-7856-3412-7856-341278563412")
 
-
+    // Deskryptor powiadomień
     val CCCD_UUID: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
+
+
+    //val DATA_CHAR_UUID: UUID = UUID.fromString("78563412-7856-3412-7856-341278563412")
+
+
+
+
+    //val CCCD_UUID: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
 
     private var configCharacteristic: BluetoothGattCharacteristic? = null
     private var dataCharacteristic: BluetoothGattCharacteristic? = null
 
     var onGpsDataReceivedListener: ((lat: Float, lon: Float, fix: Boolean) -> Unit)? = null
 
-    var onDataSampleReceivedListener: ((h3x: Float, h3y: Float, h3z: Float, ax: Float, ay: Float, az: Float, gx: Float, gy: Float, gz: Float) -> Unit)? = null
+   // var onDataSampleReceivedListener: ((h3x: Float, h3y: Float, h3z: Float, ax: Float, ay: Float, az: Float, gx: Float, gy: Float, gz: Float) -> Unit)? = null
+
+
+    var onDataSampleReceivedListener: ((
+        packetType: Byte,
+        h3x: Float, h3y: Float, h3z: Float,
+        ax: Float, ay: Float, az: Float,
+        gx: Float, gy: Float, gz: Float
+    ) -> Unit)? = null
 
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothGatt: BluetoothGatt? = null
@@ -124,14 +141,21 @@ object BleManager {
         }
 
         override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
-            Log.i(TAG, "onServicesDiscovered wywołane ze statusem: $status")
+            Log.i(TAG, "onServicesDiscovered status: $status")
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 val service = gatt?.getService(SERVICE_UUID)
                 if (service != null) {
                     configCharacteristic = service.getCharacteristic(CONFIG_CHAR_UUID)
                     dataCharacteristic = service.getCharacteristic(DATA_CHAR_UUID)
 
-                    Log.i(TAG, "Odkryto charakterystyki! Rejestracja NOTIFY...")
+                    Log.i(TAG, "Config char: $configCharacteristic")
+                    Log.i(TAG, "Data char: $dataCharacteristic")
+
+
+
+                    if (configCharacteristic == null) {
+                        Log.e(TAG, "BŁĄD: Nie znaleziono CONFIG_CHAR_UUID w usłudze!")
+                    }
 
                     dataCharacteristic?.let { char ->
                         val notifyResult = gatt.setCharacteristicNotification(char, true)
@@ -181,6 +205,18 @@ object BleManager {
                 val response = String(value)
                 Log.d(TAG, "Odebrano tekst konfiguracyjny (READ): $response")
                 onDataReceivedListener?.invoke(response)
+            }
+        }
+
+        override fun onCharacteristicWrite(
+            gatt: BluetoothGatt?,
+            characteristic: BluetoothGattCharacteristic?,
+            status: Int
+        ) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                Log.i(TAG, "SUKCES: Komenda została pomyślnie zapisana do ESP32!")
+            } else {
+                Log.e(TAG, "BŁĄD ZAPISU BLE: status=$status")
             }
         }
     }
@@ -234,7 +270,8 @@ object BleManager {
             // Rejestracja w SessionManager
             SessionManager.logSampleToCurrentSession(h3x, h3y, h3z, ax, ay, az, gx, gy, gz, lat, lon, fix)
 
-            onDataSampleReceivedListener?.invoke(h3x, h3y, h3z, ax, ay, az, gx, gy, gz)
+
+            onDataSampleReceivedListener?.invoke(packetType, h3x, h3y, h3z, ax, ay, az, gx, gy, gz)
 
             if (onGpsDataReceivedListener != null) {
                 onGpsDataReceivedListener?.invoke(lat, lon, fix)
@@ -264,17 +301,23 @@ object BleManager {
         val char = configCharacteristic ?: return false
 
         val bytes = command.toByteArray(Charsets.UTF_8)
+        Log.i(TAG, "Wysyłam komendę BLE: '$command' do charakterystyki ${char.uuid}")
 
         return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            gatt.writeCharacteristic(char, bytes, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT) == BluetoothGatt.GATT_SUCCESS
+            // ZMIANA: Zamiast WRITE_TYPE_DEFAULT używamy WRITE_TYPE_NO_RESPONSE
+            val status = gatt.writeCharacteristic(char, bytes, BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE)
+            Log.d(TAG, "Wynik gatt.writeCharacteristic: $status")
+            status == BluetoothGatt.GATT_SUCCESS
         } else {
             @Suppress("DEPRECATION")
             char.value = bytes
             @Suppress("DEPRECATION")
+            // ZMIANA: Zamiast WRITE_TYPE_DEFAULT
+            char.writeType = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
+            @Suppress("DEPRECATION")
             gatt.writeCharacteristic(char)
         }
     }
-
     fun disconnect() {
         bluetoothGatt?.disconnect()
         bluetoothGatt?.close()

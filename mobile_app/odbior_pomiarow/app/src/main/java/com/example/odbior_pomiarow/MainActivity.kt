@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         val fullHitHistory = mutableListOf<HistoryEntry>()
     }
 
+
     private val BLE_PERMISSION_REQUEST_CODE = 101
     private val LOG_TAG = "MAIN_ACTIVITY"
     private val LOG_FILE_PREFIX = "pomiary"
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity() {
     private var chartSampleCount = 0f
     private val MAX_VISIBLE_SAMPLES = 200
 
+    private val currentHitSamples = mutableListOf<SampleData>()
     // Flag zabezpieczający przed nieskończoną pętlą synchronizacji gestów
     private var isSyncingCharts = false
 
@@ -91,7 +93,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-
         BleManager.onGpsDataReceivedListener = { lat, lon, fix ->
             runOnUiThread {
                 gpsLat.text = String.format("Lat: %.5f", lat)
@@ -100,7 +101,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        BleManager.onDataSampleReceivedListener = { h3x, h3y, h3z, ax, ay, az, gx, gy, gz ->
+        // ZMODYFIKOWANY LISTENER - odbiera packetType jako pierwszy parametr
+        BleManager.onDataSampleReceivedListener = { packetType, h3x, h3y, h3z, ax, ay, az, gx, gy, gz ->
             runOnUiThread {
                 // 1. Dodanie nowej próbki na żywo do wykresów
                 addSampleToChart(h3x, h3y, h3z, ax, ay, az, gx, gy, gz)
@@ -119,10 +121,42 @@ class MainActivity : AppCompatActivity() {
                 gyroX.text = String.format("X: %.1f dps", gx)
                 gyroY.text = String.format("Y: %.1f dps", gy)
                 gyroZ.text = String.format("Z: %.1f dps", gz)
+
+                // 5. OBSŁUGA DETEKCJI ZDARZENIA (packetType == 1)
+                if (packetType == 1.toByte()) {
+                    // Używamy zdefiniowanej już klasy SampleData
+                    val sample = SampleData(
+                        ax = ax, ay = ay, az = az,
+                        gx = gx, gy = gy, gz = gz,
+                        timestamp = System.currentTimeMillis()
+                    )
+                    currentHitSamples.add(sample)
+                } else if (currentHitSamples.isNotEmpty()) {
+                    // Koniec serii uderzenia (ESP32 skończyło wysyłać próbki z packet_type = 1)
+                    val peakG = currentHitSamples.maxOf { s ->
+                        sqrt((s.ax * s.ax + s.ay * s.ay + s.az * s.az).toDouble()).toFloat()
+                    }
+
+                    // Tworzenie wpisu z użyciem istniejących klas HistoryEntry oraz EntryType
+                    val newEntry = HistoryEntry(
+                        type = EntryType.HIT,
+                        date = Date(),
+                        durationMs = currentHitSamples.size * 10L, // 10ms na próbkę
+                        samples = ArrayList(currentHitSamples),
+                        peakValue = peakG
+                    )
+
+                    // Dodanie zdarzenia do historii
+                    fullHitHistory.add(0, newEntry)
+
+                    // Aktualizacja UI
+                    lastHitTextView.text = String.format("Ostatnie uderzenie: %.2f G", peakG / 1000f)
+                    Toast.makeText(this@MainActivity, "Wykryto nowe uderzenie!", Toast.LENGTH_SHORT).show()
+
+                    currentHitSamples.clear()
+                }
             }
         }
-
-
 
         initializeViews()
 

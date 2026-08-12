@@ -1,19 +1,20 @@
 #include "communicate.h"
 #include "normalize.h"
+
+#include <string.h>
+#include <errno.h>
+
 #include "lwip/err.h"
 #include "lwip/sockets.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "nvs_flash.h"
 #include "nvs.h"
-#include <string.h>
-#include <errno.h>
 
 static const char *TAG = "wifi_softap_tcp";
 
 bool is_phone_connected = false;
 
-// Zmienne z measure.h
 extern float config_wake_ths_g;
 extern float config_sleep_ths_g;
 extern int config_idle_time_s;
@@ -28,10 +29,10 @@ static void wifi_event_handler(void * arg, esp_event_base_t event_base, int32_t 
     }
 }
 
-// Pomocnicza funkcja do zapisu konfiguracji do NVS
 void save_config_to_nvs(void) {
     nvs_handle_t my_handle;
     esp_err_t err = nvs_open("nvs", NVS_READWRITE, &my_handle);
+
     if (err == ESP_OK) {
         nvs_set_blob(my_handle, "wake_ths", &config_wake_ths_g, sizeof(float));
         nvs_set_blob(my_handle, "sleep_ths", &config_sleep_ths_g, sizeof(float));
@@ -78,17 +79,16 @@ void wifi_init_softap(void)
     esp_wifi_set_max_tx_power(44);
 }
 
-// Dedykowane zadanie dla TCP Servera przesyłającego strumień danych (bez zmian funkcjonalnych)
+
 static void tcp_server_task(void * pvParameters)
 {
-    // ... (Kod funkcji tcp_server_task pozostaje taki sam jak w Twoim źródle, pominięty dla czytelności)
+    //to do
 }
 
 void tcp_server_start(void) {
     xTaskCreate(tcp_server_task, "tcp_server", 4096, NULL, 5, NULL);
 }
 
-// Zmodyfikowane zadanie serwera konfiguracji z obsługą NVS i usuniętym Audio
 static void tcp_config_server_task(void * pvParameters)
 {
     char rx_buffer[128];
@@ -138,8 +138,6 @@ static void tcp_config_server_task(void * pvParameters)
             rx_buffer[len] = '\0';
             bool should_save = false;
 
-            // Usunięto obsługę komend CMD:PLAY_SOUND i CMD:STOP_SOUND
-
             if (strncmp(rx_buffer, "CMD:WAKE_THS:", 13) == 0) {
                 float val;
                 if (sscanf(rx_buffer, "CMD:WAKE_THS:%f", &val) == 1) {
@@ -171,7 +169,7 @@ static void tcp_config_server_task(void * pvParameters)
             }
                
             if (should_save) {
-                save_config_to_nvs(); // Trwały zapis nowych wartości
+                save_config_to_nvs();
             }
 
             send(sock, "STATUS:OK\n", 10, 0);

@@ -1,8 +1,8 @@
 #include "normalize.h"
 #include "measure.h"
 
-// funkcja z measure.c
-void get_last_gps_data(float *lat, float *lon, bool *fix);
+// function from measure.c
+//void get_last_gps_data(float *lat, float *lon, bool *fix);
 
 static vector3d_t rotate_vector_by_quaternion(vector3d_t v, imu_data imu)
 {
@@ -34,19 +34,18 @@ global_data_t convert_to_global_frame(void)
 
     global_data_t global = {0};
 
-    //dane do GPS
+    //default data to GPS
     float temp_lat = 0.0f;
     float temp_lon = 0.0f;
     bool temp_fix = false;
 
     get_last_gps_data(&temp_lat, &temp_lon, &temp_fix);
 
-    // przepisanie do struktury globalnej
+    // to global structure
     global.latitude = temp_lat;
     global.longitude = temp_lon;
     global.gps_fix = temp_fix;
 
-   
     vector3d_t local_h3lis = { .x = raw_h3lis.x,        .y = raw_h3lis.y,        .z = raw_h3lis.z };
     vector3d_t local_imu_xl = { .x = raw_imu.accel.x,    .y = raw_imu.accel.y,    .z = raw_imu.accel.z };
     vector3d_t local_imu_gy = { .x = raw_imu.gyro.x,     .y = raw_imu.gyro.y,     .z = raw_imu.gyro.z };

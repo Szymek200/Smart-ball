@@ -1,35 +1,28 @@
 #include "measure.h"
+#include "normalize.h" 
+
+#include <math.h> 
+#include <string.h> 
+
 #include "h3lis331dl_reg.h"
 #include "lsm6dsv16x_reg.h"
-
 #include "driver/spi_master.h"
 #include "driver/gpio.h"
 #include "esp_log.h"
 #include "esp_event.h"     
-#include "nmea_parser.h"  
-#include <string.h> 
+#include "nmea_parser.h"
 #include "esp_sleep.h"
 #include "esp_wifi.h"
 #include "freertos/queue.h"
 #include "driver/uart.h"
 
-#include "normalize.h" 
-#include <math.h> 
-
 #define BUF_SIZE (1024)
 
 static const char *TAG = "Sensors_Engine";
 
-static void gps_event_handler(void *event_handler_arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
-
-
 #define GPS_UART_NUM UART_NUM_1 
 
-//DEFINICJE STAŁYCH DLA BUFORA I DETEKCJI ZDERZENIA
-#define PRE_HIT_BUFFER_SIZE  100
-#define POST_HIT_SAMPLES     100
-
-bool config_enable_sleep = false; // Domyślnie uśpienie jest włączone. Zmień na false, aby wyłączyć.
+bool config_enable_sleep = false;
 
 static stmdev_ctx_t accel_ctx;
 static stmdev_ctx_t imu_ctx;
@@ -62,33 +55,28 @@ int config_idle_time_s = 60;      // Wymagany czas bezruchu w sekundach
 
 int config_sensor_loop_ms = 30;
 
-// Zmienne stanu zasilania i liczników
+bool is_gps_connected = false;
 
+// Zmienne stanu zasilania i liczników
 static int seconds_in_immobility = 0;
 //dzielnik czestotliwosci
 static int loop_counter_1s = 0;
 
+static void gps_event_handler(void *event_handler_arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
 
-bool is_gps_connected = false; 
-
-// Funkcja zwracająca status połączenia dla innych modułów:
 bool get_gps_hardware_status(void) {
     return is_gps_connected;
 }
 
-
-//zwraca najswiezsze dane z GPS
+//latest data from gps
 void get_last_gps_data(float *lat, float *lon, bool *fix) {
     *lat = current_lat;
     *lon = current_lon;
     *fix = current_fix;
 }
 
-
 void lsm6dsv16x_configure_wakeup_threshold(float threshold_g)
 {
-    // Zakładamy, że imu_ctx jest wskaźnikiem typu stmdev_ctx_t* lub bezpośrednio obiektem contextu.
-    // Jeśli imu_ctx to globalna struktura, przekazujemy jej adres: &imu_ctx
     const stmdev_ctx_t *ctx = &imu_ctx; 
 
     // KROK 1: Powrót do głównego banku rejestrów (User Bank 0)
@@ -140,8 +128,6 @@ void lsm6dsv16x_configure_wakeup_threshold(float threshold_g)
 
     ESP_LOGI(TAG, "LSM6DSV16X: Skonfigurowano LATCHED Wake-Up za pomocą API. Próg = %.2f G", threshold_g);
 
-    // Sekcja diagnostyczna (Dump rejestrów) zostaje bez zmian, 
-    // ponieważ bezpośredni odczyt pętli jest najwygodniejszy do surowego zrzutu pamięci.
     ESP_LOGI(TAG, "=== LSM REGISTER DUMP ===");
     uint8_t val;
     for(uint8_t reg = 0x45; reg <= 0x5E; reg++)
@@ -156,10 +142,8 @@ void lsm6dsv16x_configure_wakeup_threshold(float threshold_g)
 
 static int32_t sensor_write(void *handle, uint8_t header, const uint8_t *bufp, uint16_t len)
 {
-    //pin cs oraz jaki port SPI wykorzystujemy
     sensor_spi_handle_t *sensor = (sensor_spi_handle_t *)handle;
 
-    //konfiguracja do odczytu wielobitowego
     if (sensor->cs_pin == PIN_ACCEL_CS && len > 1) {
         header |= 0x40; 
     }
@@ -167,7 +151,7 @@ static int32_t sensor_write(void *handle, uint8_t header, const uint8_t *bufp, u
     uint8_t tx_data[1 + 16]; 
     tx_data[0] = header;
 
-    //desc, src, bajty
+    //desc, src, bytes
     memcpy(&tx_data[1], bufp, len);
 
     spi_transaction_t trans ={
@@ -183,7 +167,6 @@ static int32_t sensor_read(void *handle, uint8_t reg, uint8_t *bufp, uint16_t le
 {
 
     //reg - adres rejestru(w czujniku), z ktorego czytamy dane
-
     sensor_spi_handle_t *sensor = (sensor_spi_handle_t *)handle;
     //najstarszy bit w bajcie adresowym - odczyt danych
 
@@ -214,12 +197,12 @@ static int32_t sensor_read(void *handle, uint8_t reg, uint8_t *bufp, uint16_t le
 
 void sensors_set(bool GPS_on)
 {
-    ESP_LOGI(TAG, "Konfiguracja czujników (H3LIS INT1 -> GPIO 21, IMU CS -> GPIO 13)");
+    ESP_LOGI(TAG, "Konfiguracja czujników");
     esp_err_t ret;
     spi_device_handle_t spi_accel_handle;
     spi_device_handle_t spi_imu_handle;
 
-    // 1. Inicjalizacja wspólnej magistrali SPI (piny 17, 18, 8)
+    //spi bus
     spi_bus_config_t buscfg = {
         .miso_io_num = PIN_MISO,
         .mosi_io_num = PIN_MOSI,
@@ -232,27 +215,27 @@ void sensors_set(bool GPS_on)
     ret = spi_bus_initialize(SPI2_HOST, &buscfg, SPI_DMA_CH_AUTO);
     ESP_ERROR_CHECK(ret); 
 
-    // 2. Dodanie urządzenia Akcelerometru H3LIS331DL do magistrali SPI
+    //adding H3Lis to bus
     spi_device_interface_config_t devcfg_accel = {
         .clock_speed_hz = 1 * 1000 * 1000, 
         .mode = 3, 
-        .spics_io_num = PIN_ACCEL_CS, // GPIO 14
+        .spics_io_num = PIN_ACCEL_CS, 
         .queue_size = 7
     };
     ret = spi_bus_add_device(SPI2_HOST, &devcfg_accel, &spi_accel_handle);
     ESP_ERROR_CHECK(ret);
 
-    // 3. Dodanie urządzenia IMU LSM6DSV16X do magistrali SPI
+    //adding IMU to bus
     spi_device_interface_config_t devcfg_imu = {
         .clock_speed_hz = 5 * 1000 * 1000, 
         .mode = 3,                         
-        .spics_io_num = PIN_IMU_CS,        // NOWOŚĆ: Przeniesione na GPIO 13
+        .spics_io_num = PIN_IMU_CS,        
         .queue_size = 7
     };
     ret = spi_bus_add_device(SPI2_HOST, &devcfg_imu, &spi_imu_handle);
     ESP_ERROR_CHECK(ret);
 
-    // 4. Powiązanie uchwytów sprzętowych z kontekstem struktur sterowników ST
+    
     accel_hardware.spi_handle = spi_accel_handle;
     accel_hardware.cs_pin = PIN_ACCEL_CS;
     accel_ctx.handle = (void*)&accel_hardware;
@@ -264,8 +247,7 @@ void sensors_set(bool GPS_on)
     imu_ctx.handle = (void*)&imu_hardware;
     imu_ctx.write_reg = sensor_write;
     imu_ctx.read_reg = sensor_read;
-
-    // 5. Weryfikacja obecności układu H3LIS331DL (WhoAmI)
+    
     uint8_t whoamI = 0;
     h3lis331dl_device_id_get(&accel_ctx, &whoamI);
     if(whoamI != H3LIS331DL_ID) { 
@@ -274,11 +256,10 @@ void sensors_set(bool GPS_on)
         ESP_LOGI(TAG, "Akcelerometr H3LIS331DL wykryty poprawnie.");
     }
 
-    // Konfiguracja rejestrów roboczych H3LIS331DL
+    // settings of ACCEL
     h3lis331dl_data_rate_set(&accel_ctx, H3LIS331DL_ODR_100Hz); 
     h3lis331dl_full_scale_set(&accel_ctx, H3LIS331DL_200g);
 
-    // 6. Weryfikacja obecności układu IMU LSM6DSV16X (WhoAmI)
     lsm6dsv16x_device_id_get(&imu_ctx, &whoamI);
     if(whoamI != LSM6DSV16X_ID) {
         ESP_LOGE(TAG, "IMU nie zostało znalezione! Odczytane ID: 0x%02X", whoamI);
@@ -286,7 +267,7 @@ void sensors_set(bool GPS_on)
         ESP_LOGI(TAG, "IMU LSM6DSV16X wykryte poprawnie.");
     }
 
-    // Konfiguracja rejestrów roboczych IMU i algorytmu fuzji SFLP
+    // imu settings
     lsm6dsv16x_xl_data_rate_set(&imu_ctx, LSM6DSV16X_ODR_AT_960Hz);
     lsm6dsv16x_gy_data_rate_set(&imu_ctx, LSM6DSV16X_ODR_AT_960Hz);
     lsm6dsv16x_xl_full_scale_set(&imu_ctx, LSM6DSV16X_2g);       
@@ -294,24 +275,20 @@ void sensors_set(bool GPS_on)
     lsm6dsv16x_sflp_data_rate_set(&imu_ctx, LSM6DSV16X_SFLP_120Hz);
     lsm6dsv16x_sflp_game_rotation_set(&imu_ctx, PROPERTY_ENABLE);
 
-    // 7. KONFIGURACJA SPRZĘTOWEGO WYBUDZANIA PROCESORA (H3LIS INT1 -> GPIO 21)
+    //Accel wakeup interrupt
     gpio_config_t io_conf = {
-        .intr_type = GPIO_INTR_DISABLE,            // W trybie aktywnym nie potrzebujemy funkcji ISR
-        .pin_bit_mask = (1ULL << PIN_ACCEL_INT1),  // Słuchamy pinu GPIO 21
+        .intr_type = GPIO_INTR_DISABLE,            
+        .pin_bit_mask = (1ULL << PIN_ACCEL_INT1),  
         .mode = GPIO_MODE_INPUT,
         .pull_up_en = GPIO_PULLUP_DISABLE,
-        .pull_down_en = GPIO_PULLDOWN_ENABLE       // Ściąganie linii do masy, zapobiega fałszywym stanom wysokim
+        .pull_down_en = GPIO_PULLDOWN_ENABLE       
     };
     gpio_config(&io_conf);
     
-    // Uruchomienie globalnego menedżera przerwań GPIO (wymagane przez ESP-IDF)
-    gpio_install_isr_service(ESP_INTR_FLAG_IRAM);
-    
-    // Zezwolenie, aby stan wysoki na GPIO 21 mógł wybudzić ESP32 z Light Sleep
+    gpio_install_isr_service(ESP_INTR_FLAG_IRAM);    
     gpio_wakeup_enable(PIN_ACCEL_INT1, GPIO_INTR_HIGH_LEVEL);
     esp_sleep_enable_gpio_wakeup();
 
-    // 8. Opcjonalna inicjalizacja modułu GPS
     if(GPS_on) {
         gps_start();
     }
@@ -360,13 +337,13 @@ void sensors_enter_light_sleep(void)
 accel_data accel_get(void)
 {
     int16_t data_raw[3];
-    h3lis331dl_status_reg_t reg; // Zmiana typu struktury statusu
+    h3lis331dl_status_reg_t reg;
     h3lis331dl_status_reg_get(&accel_ctx, &reg);
 
     accel_data received_data = {0};
 
     if(reg.zyxda) {
-        // ZMIANA: Pobranie surowych danych z nowego API
+        
         h3lis331dl_acceleration_raw_get(&accel_ctx, data_raw);
 
         // ZMIANA: Przeliczenie ze skali 200g na mg, a potem na g
@@ -453,7 +430,11 @@ static void sensors_reading_task(void *pvParameters)
 
     static int previous_level = -1;
     loop_counter_1s = 0; // Reset na starcie
+
+    //how many loops - one loop 30 ms
     static int log_counter_3s = 0; // wyswietlanie danych raz na 3 sekundy
+
+    int loops_per_second = 1000 / config_sensor_loop_ms; 
 
     while (1)
     {
@@ -476,9 +457,23 @@ static void sensors_reading_task(void *pvParameters)
 
         loop_counter_1s++;
 
-        // --- DYNAMICZNY BLOK ANALIZY BEZRUCHU (CO 1 SEKUNDĘ) ---
-    
-        int loops_per_second = 1000 / config_sensor_loop_ms; 
+        // moveless detection
+        
+        if (loop_counter_1s >= loops_per_second)
+        {
+            loop_counter_1s = 0; // Resetujemy licznik pod-pętli
+
+            if (imu_delta_g < config_sleep_ths_g)
+            {
+                seconds_in_immobility++; 
+                ESP_LOGI(TAG, "Czas w bezruchu: %d / %d s", seconds_in_immobility, config_idle_time_s);
+            }
+            else
+            {
+                // Jeśli wykryto ruch, zerujemy licznik bezruchu
+                seconds_in_immobility = 0; 
+            }
+        }
 
         if (seconds_in_immobility >= config_idle_time_s)
         {
@@ -487,12 +482,9 @@ static void sensors_reading_task(void *pvParameters)
                 ESP_LOGW(TAG, "!!! MIKROKONTROLER WCHODZI W LIGHT SLEEP (Brak ruchu przez %d s) !!!", config_idle_time_s);
 
                // gps_stop();
-                
-
-                // Przygotowanie pinu akcelerometru do wybudzenia
+            
                 gpio_wakeup_enable(PIN_ACCEL_INT1, GPIO_INTR_HIGH_LEVEL);
                 esp_sleep_enable_gpio_wakeup();
-
                 uart_wait_tx_idle_polling(CONFIG_ESP_CONSOLE_UART_NUM);
 
                 // MASZYNA ZASYPIA
@@ -503,13 +495,10 @@ static void sensors_reading_task(void *pvParameters)
 
                 ESP_LOGW(TAG, "!!! MIKROKONTROLER WYBUDZONY PRZEZ H3LIS !!! Czyszczenie rejestrów...");
 
-          
                 uint8_t accel_src = 0;
-               
                 h3lis331dl_read_reg(&accel_ctx, 0x31, &accel_src, 1); 
 
-               
-                // gps_start(); // odkomentuj jeśli chcesz restartować GPS po obudzeniu
+                // gps_start(); 
 
                 seconds_in_immobility = 0;
                 loop_counter_1s = 0;
@@ -527,8 +516,6 @@ static void sensors_reading_task(void *pvParameters)
             log_global_data(&current_frame);
         }
 
-
-        
         current_frame.packet_type = 0;
 
         float h3_x = current_frame.accel_h3lis.x;
@@ -589,14 +576,11 @@ static void sensors_reading_task(void *pvParameters)
                 pre_hit_count++;
             }
 
-
-            //pozbylem sie is phone connected
             if ( data_queue != NULL)
             {
                 xQueueSend(data_queue, &current_frame, 0);
             }
         }
-
        
         vTaskDelay(pdMS_TO_TICKS(config_sensor_loop_ms));
     }
@@ -608,9 +592,9 @@ void sensors_task_start(void)
         sensors_reading_task,   
         "sensors_task",         
         4096,                   
-        NULL,   //parametry                
+        NULL,   //parameters                
         5,                      
-        &sensors_task_handle,  //handle             
+        &sensors_task_handle,            
         1                       
     );
 }
@@ -627,19 +611,15 @@ void log_global_data(const global_data_t *data)
              data->packet_type, 
              data->packet_type == 1 ? "ZDERZENIE / HIT" : "LOT / NORMAL");
     
-    // Dane z akcelerometru H3LIS331DL
     ESP_LOGI(TAG, "Accel H3LIS [g]:  X: %6.2f | Y: %6.2f | Z: %6.2f", 
              data->accel_h3lis.x, data->accel_h3lis.y, data->accel_h3lis.z);
     
-    // Dane z IMU LSM6DSV16X
     ESP_LOGI(TAG, "Accel IMU   [g]:  X: %6.2f | Y: %6.2f | Z: %6.2f", 
              data->accel_imu.x, data->accel_imu.y, data->accel_imu.z);
     
-    // Dane z żyroskopu IMU
     ESP_LOGI(TAG, "Gyro IMU [dps]:  X: %6.2f | Y: %6.2f | Z: %6.2f", 
              data->gyro.x, data->gyro.y, data->gyro.z);
     
-    // --- SEKCJA DIAGNOSTYKI GPS ---
     bool hardware_ok = get_gps_hardware_status();
 
     if (hardware_ok) {
@@ -658,16 +638,12 @@ void log_global_data(const global_data_t *data)
             }
         }
     } else {
-        ESP_LOGE(TAG, "Komunikacja GPS (UART): BRAK SYGNAŁU! (Sprawdź zasilanie, TX/RX lub baudrate)");
+        ESP_LOGE(TAG, "Komunikacja GPS (UART): BRAK SYGNAŁU! ");
         ESP_LOGE(TAG, "Status FIX GPS:        NIEAKTYWNY");
     }
 
     ESP_LOGI(TAG, "===================================================");
 }
-
-
-
-
 
 ///gps all
 
@@ -683,7 +659,7 @@ static void gps_read_task(void *pvParameters)
     ESP_LOGI(TAG, "GPS Parser uruchomiony...");
 
     while (1) {
-        // Czytamy po 1 bajcie z portu UART z czasem oczekiwania 100 ms
+        // read one byte at a time wiht 100 ms break
         int len = uart_read_bytes(GPS_UART_NUM, rx_buf, 1, pdMS_TO_TICKS(100));
 
         if (len > 0) {
@@ -699,12 +675,10 @@ static void gps_read_task(void *pvParameters)
             else if (line_idx > 0) {
                 line_buf[line_idx] = '\0'; 
 
-                
                 if (line_buf[0] == '$' && (strstr(line_buf, "GP") || strstr(line_buf, "GN") || strstr(line_buf, "GA") || strstr(line_buf, "GL") || strstr(line_buf, "BD"))) {
                     is_gps_connected = true;
                 }
 
-                
                 if (strstr(line_buf, "RMC")) {
                     char status = 'V';
                     float lat_raw = 0.0f, lon_raw = 0.0f;
@@ -727,12 +701,10 @@ static void gps_read_task(void *pvParameters)
                         float lon_decimal = lon_deg + (lon_min / 60.0f);
                         if (lon_dir == 'W') lon_decimal = -lon_decimal;
 
-                        // Aktualizacja stanów dla reszty systemu
                         current_lat = lat_decimal;
                         current_lon = lon_decimal;
                         current_fix = true;
                     } else {
-                        // Otrzymujemy ramki, ale moduł nie ustalił jeszcze pozycji (Status 'V')
                         current_fix = false;
                     }
                 }
@@ -755,7 +727,6 @@ static void gps_read_task(void *pvParameters)
 
 void gps_start(void)
 {
-    // Konfiguracja UART dla GPS
     uart_config_t uart_config = {
         .baud_rate = 115200,
         .data_bits = UART_DATA_8_BITS,
@@ -769,7 +740,6 @@ void gps_start(void)
     ESP_ERROR_CHECK(uart_param_config(GPS_UART_NUM, &uart_config));
     ESP_ERROR_CHECK(uart_set_pin(GPS_UART_NUM, GPS_TX_PIN, GPS_RX_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
 
-    // Uruchomienie parsera danych
     xTaskCreate(gps_read_task, "gps_read_task", 4096, NULL, 10, NULL);
     ESP_LOGI(TAG, "Parser danych GPS został pomyślnie uruchomiony.");
 }

@@ -10,7 +10,7 @@
 static const char *TAG = "AUDIO_PLAYER";
 
 static TaskHandle_t audio_task_handle = NULL;
-static volatile bool keep_playing = false; // Flaga sterująca pętlą z Wi-Fi
+static volatile bool keep_playing = false;
 static char current_filepath[64];
 
 void audio_init(void) {
@@ -36,7 +36,6 @@ void audio_init(void) {
     ESP_LOGI(TAG, "Audio PWM (LEDC) zainicjalizowane na GPIO %d", AUDIO_PIN);
 }
 
-// Zadanie FreeRTOS, które kręci się w tle i zapętla plik za pomocą LEDC
 static void audio_loop_task(void *pvParameters) {
     uint8_t probka;
 
@@ -47,7 +46,6 @@ static void audio_loop_task(void *pvParameters) {
             break;
         }
 
-        // Czytamy plik bajt po bajcie dopóki jest plik ORAZ nikt nie wysłał komendy STOP przez Wi-Fi
         while (keep_playing && (fread(&probka, 1, 1, f) > 0)) {
             ledc_set_duty(LEDC_MODE, LEDC_CHANNEL, probka);
             ledc_update_duty(LEDC_MODE, LEDC_CHANNEL);
@@ -66,16 +64,15 @@ static void audio_loop_task(void *pvParameters) {
     }
 
     ESP_LOGI(TAG, "Zadanie audio przerwane przez Wi-Fi. Wyciszam głośnik.");
-    // Pełne wyciszenie po stopie
     ledc_set_duty(LEDC_MODE, LEDC_CHANNEL, 0);
     ledc_update_duty(LEDC_MODE, LEDC_CHANNEL);
 
     audio_task_handle = NULL;
-    vTaskDelete(NULL); // Samousunięcie wątku
+    vTaskDelete(NULL); 
 }
 
 void play_raw(const char* filepath) {
-    // Jeśli dźwięk już gra, najpierw go uciszamy i zatrzymujemy stary wątek
+    
     if (keep_playing) {
         stop_raw();
     }
@@ -83,7 +80,6 @@ void play_raw(const char* filepath) {
     strncpy(current_filepath, filepath, sizeof(current_filepath) - 1);
     keep_playing = true;
 
-    // Tworzymy zadanie z priorytetem 4 (stabilne odtwarzanie bez rwania)
     xTaskCreate(audio_loop_task, "audio_loop", 4096, NULL, 4, &audio_task_handle);
     ESP_LOGI(TAG, "Uruchomiono zapętlone odtwarzanie LEDC: %s", filepath);
 }
@@ -92,9 +88,8 @@ void stop_raw(void) {
     if (!keep_playing) return;
 
     ESP_LOGW(TAG, "Zatrzymywanie odtwarzania dźwięku LEDC...");
-    keep_playing = false; // Zmiana flagi natychmiast przerywa pętlę while w audio_loop_task
-
-    // Czekamy chwilę w bezpiecznej pętli, aż zadanie się zamknie
+    keep_playing = false;
+    
     int timeout = 0;
     while (audio_task_handle != NULL && timeout < 100) {
         vTaskDelay(pdMS_TO_TICKS(10));

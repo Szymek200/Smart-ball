@@ -9,10 +9,9 @@
 #define LEDC_TIMER          LEDC_TIMER_0
 #define LEDC_DUTY_RES       LEDC_TIMER_8_BIT
 
-// Nowe nazwy funkcji pasujące do Twojego projektu głównego
 void audio_init(void);
-void play_raw(const char* filepath); // Zostawiamy nazwę play_wav, żeby nie zmieniać kodu w communicate.c
-void stop_raw(void); // <-- NOWOŚĆ: Funkcja zatrzymująca odtwarzanie
+void play_raw(const char* filepath); 
+void stop_raw(void); 
 
 #endif // AUDIO_PLAYER_H
 

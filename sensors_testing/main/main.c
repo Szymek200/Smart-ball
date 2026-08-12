@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include <string.h>
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+
 #include "driver/spi_master.h"
 #include "esp_log.h"
 #include "esp_netif.h"
 #include "esp_event.h"
 #include "nvs_flash.h" 
 #include "nvs.h"
+
 #include "gsm.h"
 #include "ble_config.h"
 #include "measure.h"
@@ -50,7 +53,7 @@ void app_main(void)
 {
     
 
-   // esp_log_level_set("NimBLE", ESP_LOG_WARN);
+   // esp_log_level_set("NimBLE", ESP_LOG_WARN); //wylaczenie powiadomien Bluetooth
     ESP_LOGI(TAG, "Uruchamianie aplikacji bez SPIFFS i Audio...");
 
     // Inicjalizacja pamięci NVS
@@ -63,8 +66,6 @@ void app_main(void)
 
     // Wczytanie konfiguracji z pamięci nieulotnej
     load_config_from_nvs();
-
- 
 
     // Kolejki danych
     data_queue = xQueueCreate(250, sizeof(global_data_t));
@@ -81,13 +82,9 @@ void app_main(void)
 
     ble_config_init();
 
-    // START PODSYSTEMÓW
-    sensors_set(true); // Automatycznie skonfiguruje IMU z uwzględnieniem wczytanego config_wake_ths_g
-  
+    sensors_set(true); 
 
     vTaskDelay(pdMS_TO_TICKS(300));
 
-   
-    
     sensors_task_start();
 }

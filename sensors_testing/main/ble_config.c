@@ -2,9 +2,6 @@
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "nvs.h"
-#include "measure.h"
-
-
 #include "nimble/nimble_port.h"
 #include "nimble/nimble_port_freertos.h"
 #include "host/ble_hs.h"
@@ -12,12 +9,14 @@
 #include "services/gap/ble_svc_gap.h"
 #include "services/gatt/ble_svc_gatt.h"
 
+#include "measure.h"
+
 static const char *TAG = "BLE_CONFIG";
 
 static uint16_t gatt_char_val_handle;
 static uint8_t ble_addr_type;
 
-// Zmienne zewnętrzne z measure.c
+// from measure
 extern float config_wake_ths_g;
 extern float config_sleep_ths_g;
 extern int config_idle_time_s;
@@ -26,16 +25,7 @@ extern float CRASH_THRESHOLD_G;
 bool is_phone_connected = false;
 static volatile bool is_notify_enabled = false;
 
-
 void ble_store_config_init(void);
-
-/*
-static const ble_uuid128_t gatt_svr_svc_uuid =
-    BLE_UUID128_INIT(0x78, 0x56, 0x34, 0x12, 0x34, 0x12, 0x78, 0x56, 0x34, 0x12, 0x78, 0x56, 0x34, 0x12, 0x34, 0x12);
-
-static const ble_uuid128_t gatt_svr_chr_uuid =
-    BLE_UUID128_INIT(0x87, 0x09, 0x21, 0x43, 0x65, 0x87, 0x21, 0x43, 0x89, 0x67, 0x21, 0x43, 0x21, 0x43, 0x65, 0x87);
-*/
 
 // Usługa GATT: "12341234-5678-1234-5678-123412345678"
 static const ble_uuid128_t gatt_svr_svc_uuid =
@@ -49,14 +39,9 @@ static const ble_uuid128_t gatt_svr_chr_uuid =
 static const ble_uuid128_t gatt_data_chr_uuid =
     BLE_UUID128_INIT(0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78);
 
-    // Przechowujemy identyfikator aktywnego połączenia i uchwyt nowej charakterystyki
+// Przechowujemy identyfikator aktywnego połączenia i uchwyt nowej charakterystyki
 static uint16_t active_conn_handle = BLE_HS_CONN_HANDLE_NONE;
 static uint16_t gatt_data_char_val_handle;
-
-    // UUID nowej charakterystyki danych pomiarowych
-    /*
-static const ble_uuid128_t gatt_data_chr_uuid =
-    BLE_UUID128_INIT(0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78);*/
 
 static void ble_app_advertise(void);
 static int ble_app_gap_event(struct ble_gap_event *event, void *arg);
@@ -67,11 +52,9 @@ static void ble_data_tx_task(void *pvParameters)
     global_data_t sensor_data;
 
     while (1) {
-        // Blokowanie aż pojawią się dane
+        
         if (xQueueReceive(data_queue, &sensor_data, portMAX_DELAY)) {
             
-            // Sprawdzamy połączenie i aktywną subskrypcję powiadomień
-           // if (is_phone_connected && is_notify_enabled && active_conn_handle != BLE_HS_CONN_HANDLE_NONE) {
            if (is_phone_connected && active_conn_handle != BLE_HS_CONN_HANDLE_NONE){
                 
                 struct os_mbuf *om = ble_hs_mbuf_from_flat(&sensor_data, sizeof(global_data_t));
@@ -86,7 +69,6 @@ static void ble_data_tx_task(void *pvParameters)
                 }
             }
         }
-        // Usunięto zbędne vTaskDelay – xQueueReceive wystarczająco zarządza czasem.
     }
 }
 
@@ -105,7 +87,7 @@ static const struct ble_gatt_chr_def gatt_svr_chrs[] = {
         .flags = BLE_GATT_CHR_F_NOTIFY,
         .val_handle = &gatt_data_char_val_handle,
     },
-    { 0 } /* Terminator */
+    { 0 } 
 };
 
 /* Tablica usług GATT */
@@ -160,7 +142,8 @@ static int gatt_svr_chr_access(uint16_t conn_handle,
              gatt_data_char_val_handle);
 
   
-    if (ctxt->op == BLE_GATT_ACCESS_OP_READ_CHR) {
+    if (ctxt->op == BLE_GATT_ACCESS_OP_READ_CHR) 
+    {
 
         ESP_LOGW(TAG, "[BLE] READ CONFIG");
 
@@ -174,13 +157,9 @@ static int gatt_svr_chr_access(uint16_t conn_handle,
                  config_idle_time_s,
                  CRASH_THRESHOLD_G);
 
-        ESP_LOGW(TAG,
-                 "[BLE] Wysyłam konfigurację: %s",
-                 tx_buffer);
+        ESP_LOGW(TAG, "[BLE] Wysyłam konfigurację: %s", tx_buffer);
 
-        int rc = os_mbuf_append(ctxt->om,
-                                tx_buffer,
-                                strlen(tx_buffer));
+        int rc = os_mbuf_append(ctxt->om, tx_buffer, strlen(tx_buffer));
 
         return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
     }
@@ -190,40 +169,28 @@ static int gatt_svr_chr_access(uint16_t conn_handle,
 
         ESP_LOGW(TAG, "[BLE] WRITE CONFIG");
 
-    
         if (attr_handle != gatt_char_val_handle) {
 
-            ESP_LOGE(TAG,
-                     "[BLE] WRITE na nieprawidłowym handle! "
-                     "attr=%d config=%d",
-                     attr_handle,
-                     gatt_char_val_handle);
+            ESP_LOGE(TAG, "[BLE] WRITE na nieprawidłowym handle! " "attr=%d config=%d",
+                     attr_handle, gatt_char_val_handle);
 
             return BLE_ATT_ERR_WRITE_NOT_PERMITTED;
         }
 
         char rx_buffer[128];
-
         uint16_t len = OS_MBUF_PKTLEN(ctxt->om);
 
-        ESP_LOGW(TAG,
-                 "[BLE] Odebrano %d bajtów",
-                 len);
+        ESP_LOGW(TAG, "[BLE] Odebrano %d bajtów", len);
 
         if (len >= sizeof(rx_buffer)) {
             len = sizeof(rx_buffer) - 1;
         }
 
-        int rc = ble_hs_mbuf_to_flat(ctxt->om,
-                                     rx_buffer,
-                                     len,
-                                     NULL);
+        int rc = ble_hs_mbuf_to_flat(ctxt->om, rx_buffer, len, NULL);
 
         if (rc != 0) {
 
-            ESP_LOGE(TAG,
-                     "[BLE] ble_hs_mbuf_to_flat() error=%d",
-                     rc);
+            ESP_LOGE(TAG, "[BLE] ble_hs_mbuf_to_flat() error=%d", rc);
 
             return BLE_ATT_ERR_UNLIKELY;
         }
@@ -233,145 +200,85 @@ static int gatt_svr_chr_access(uint16_t conn_handle,
       
         for (int i = 0; i < len; i++) {
 
-            if (rx_buffer[i] == '\r' ||
-                rx_buffer[i] == '\n') {
-
+            if (rx_buffer[i] == '\r' ||  rx_buffer[i] == '\n') 
+            {
                 rx_buffer[i] = '\0';
                 break;
             }
         }
 
-        ESP_LOGW(TAG,
-                 "[BLE] ODEBRANY TEKST: '%s'",
-                 rx_buffer);
+        ESP_LOGW(TAG, "[BLE] ODEBRANY TEKST: '%s'", rx_buffer);
 
         bool should_save = false;
-
     
-        if (strncmp(rx_buffer, "CMD:WAKE_THS:", 13) == 0) {
-
+        if (strncmp(rx_buffer, "CMD:WAKE_THS:", 13) == 0) 
+        {
             float val;
-
-            if (sscanf(rx_buffer,
-                       "CMD:WAKE_THS:%f",
-                       &val) == 1) {
-
-                ESP_LOGW(TAG,
-                         "[BLE] STARA config_wake_ths_g = %.3f",
-                         config_wake_ths_g);
-
+            if (sscanf(rx_buffer, "CMD:WAKE_THS:%f", &val) == 1)
+            {
+                ESP_LOGW(TAG, "[BLE] STARA config_wake_ths_g = %.3f", config_wake_ths_g);
                 config_wake_ths_g = val;
-
-                ESP_LOGW(TAG,
-                         "[BLE] NOWA config_wake_ths_g = %.3f",
-                         config_wake_ths_g);
-
+                ESP_LOGW(TAG, "[BLE] NOWA config_wake_ths_g = %.3f", config_wake_ths_g);
                 should_save = true;
             }
             else {
 
-                ESP_LOGE(TAG,
-                         "[BLE] Błąd sscanf CMD:WAKE_THS");
+                ESP_LOGE(TAG, "[BLE] Błąd sscanf CMD:WAKE_THS");
             }
         }
-
-      
         else if (strncmp(rx_buffer, "CMD:HIT_THS:", 12) == 0) {
 
             float val;
 
-            if (sscanf(rx_buffer,
-                       "CMD:HIT_THS:%f",
-                       &val) == 1) {
-
-                ESP_LOGW(TAG,
-                         "[BLE] STARA CRASH_THRESHOLD_G = %.3f",
-                         CRASH_THRESHOLD_G);
-
+            if (sscanf(rx_buffer, "CMD:HIT_THS:%f",&val) == 1) 
+            {
+                ESP_LOGW(TAG, "[BLE] STARA CRASH_THRESHOLD_G = %.3f", CRASH_THRESHOLD_G);
                 CRASH_THRESHOLD_G = val;
-
-                ESP_LOGW(TAG,
-                         "[BLE] NOWA CRASH_THRESHOLD_G = %.3f",
-                         CRASH_THRESHOLD_G);
-
+                ESP_LOGW(TAG, "[BLE] NOWA CRASH_THRESHOLD_G = %.3f", CRASH_THRESHOLD_G);
                 should_save = true;
             }
         }
-
-      
-        else if (strncmp(rx_buffer, "CMD:IDLE_TIME:", 14) == 0) {
-
+        else if (strncmp(rx_buffer, "CMD:IDLE_TIME:", 14) == 0) 
+        {
             int val;
+            if (sscanf(rx_buffer, "CMD:IDLE_TIME:%d",&val) == 1) 
+            {
 
-            if (sscanf(rx_buffer,
-                       "CMD:IDLE_TIME:%d",
-                       &val) == 1) {
-
-                ESP_LOGW(TAG,
-                         "[BLE] STARA config_idle_time_s = %d",
-                         config_idle_time_s);
-
+                ESP_LOGW(TAG, "[BLE] STARA config_idle_time_s = %d", config_idle_time_s);
                 config_idle_time_s = val;
-
-                ESP_LOGW(TAG,
-                         "[BLE] NOWA config_idle_time_s = %d",
-                         config_idle_time_s);
-
+                ESP_LOGW(TAG, "[BLE] NOWA config_idle_time_s = %d", config_idle_time_s);
                 should_save = true;
             }
-        }
-
-      
-        else if (strncmp(rx_buffer, "CMD:SLEEP_THS:", 14) == 0) {
+             
+        else if (strncmp(rx_buffer, "CMD:SLEEP_THS:", 14) == 0) 
+        {
 
             float val;
+            if (sscanf(rx_buffer, "CMD:SLEEP_THS:%f", &val) == 1) 
+            {
 
-            if (sscanf(rx_buffer,
-                       "CMD:SLEEP_THS:%f",
-                       &val) == 1) {
-
-                ESP_LOGW(TAG,
-                         "[BLE] STARA config_sleep_ths_g = %.3f",
-                         config_sleep_ths_g);
-
+                ESP_LOGW(TAG, "[BLE] STARA config_sleep_ths_g = %.3f", config_sleep_ths_g);
                 config_sleep_ths_g = val;
-
-                ESP_LOGW(TAG,
-                         "[BLE] NOWA config_sleep_ths_g = %.3f",
-                         config_sleep_ths_g);
-
+                ESP_LOGW(TAG, "[BLE] NOWA config_sleep_ths_g = %.3f", config_sleep_ths_g);
                 should_save = true;
             }
         }
-
-      
         else {
 
-            ESP_LOGE(TAG,
-                     "[BLE] NIEZNANA KOMENDA: '%s'",
-                     rx_buffer);
+            ESP_LOGE(TAG,"[BLE] NIEZNANA KOMENDA: '%s'", rx_buffer);
         }
-
      
         if (should_save) {
 
-            ESP_LOGW(TAG,
-                     "[BLE] Zapis konfiguracji do NVS...");
-
+            ESP_LOGW(TAG, "[BLE] Zapis konfiguracji do NVS...");
             save_config_to_nvs();
-
-            ESP_LOGW(TAG,
-                     "[BLE] NVS zapisane.");
+            ESP_LOGW(TAG,"[BLE] NVS zapisane.");
         }
-
         return 0;
     }
 
 
-    ESP_LOGW(TAG,
-             "[BLE] Nieobsługiwana operacja GATT: %d",
-             ctxt->op);
-
+    ESP_LOGW(TAG, "[BLE] Nieobsługiwana operacja GATT: %d", ctxt->op);
     return BLE_ATT_ERR_REQ_NOT_SUPPORTED;
 }
 
@@ -485,19 +392,8 @@ void ble_config_init(void) {
     
     ble_hs_cfg.reset_cb = ble_app_on_reset;
     ble_hs_cfg.sync_cb = ble_app_on_sync;
-
-    // === DODAJ TE LINIE: KONFIGURACJA TRYBU PAROWANIA "JUST WORKS" ===
-    //parowanie
-    /*
-    ble_hs_cfg.sm_io_cap = BLE_HS_IO_NO_INPUT_OUTPUT; // Brak ekranu i klawiatury
-    ble_hs_cfg.sm_bonding = 1;                        // Pozwól na zapamiętanie telefonu
-    ble_hs_cfg.sm_mitm = 0;                           // Wyłącz ochronę Man-In-The-Middle (brak PIN-u)
-    ble_hs_cfg.sm_our_key_dist = BLE_SM_PAIR_KEY_DIST_ENC;
-    ble_hs_cfg.sm_their_key_dist = BLE_SM_PAIR_KEY_DIST_ENC;
-*/
-
-ble_hs_cfg.sm_io_cap = BLE_HS_IO_NO_INPUT_OUTPUT;
-    ble_hs_cfg.sm_bonding = 0;  // <-- ZMIEŃ Z 1 NA 0! (Wyłącza zapisywanie kluczy)
+    ble_hs_cfg.sm_io_cap = BLE_HS_IO_NO_INPUT_OUTPUT;
+    ble_hs_cfg.sm_bonding = 0; 
     ble_hs_cfg.sm_mitm = 0;
     ble_hs_cfg.sm_sc = 0;
     ble_hs_cfg.sm_our_key_dist = 0;
@@ -526,12 +422,8 @@ ble_hs_cfg.sm_io_cap = BLE_HS_IO_NO_INPUT_OUTPUT;
         ESP_LOGE(TAG, "Błąd ble_svc_gap_device_name_set: %d", rc);
     }
 
-  
     ble_store_config_init();
-
-    
     nimble_port_freertos_init(ble_host_task);
-
     xTaskCreate(ble_data_tx_task, "ble_data_tx_task", 4096, NULL, 5, NULL);
 }
 

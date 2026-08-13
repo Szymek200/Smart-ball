@@ -24,14 +24,15 @@ static const char *TAG = "Sensors_Engine";
 
 bool config_enable_sleep = false;
 
+//stm struct
 static stmdev_ctx_t accel_ctx;
 static stmdev_ctx_t imu_ctx;
 
-//uchwyty do urzadzen na SPI
+//SPI device handle + cs pin
 static sensor_spi_handle_t accel_hardware;
 static sensor_spi_handle_t imu_hardware;
 
-//ostatnie dane z GPS
+//latest gps data
 static float current_lat = 0.0f;
 static float current_lon = 0.0f;
 //czy gps polaczyc sie z satelita
@@ -43,7 +44,7 @@ static global_data_t pre_hit_buffer[PRE_HIT_BUFFER_SIZE];
 static int pre_hit_index = 0;
 static int pre_hit_count = 0;
 
-static nmea_parser_handle_t nmea_hdl = NULL;
+//static nmea_parser_handle_t nmea_hdl = NULL;
 
 static TaskHandle_t sensors_task_handle = NULL;
 
@@ -53,6 +54,7 @@ float config_wake_ths_g = 1.2f;   // prog wybudzenia
 float config_sleep_ths_g = 0.05f; // prog uspiennia
 int config_idle_time_s = 60;      // Wymagany czas bezruchu w sekundach
 
+//how often we measure sensors
 int config_sensor_loop_ms = 30;
 
 bool is_gps_connected = false;
@@ -79,52 +81,43 @@ void lsm6dsv16x_configure_wakeup_threshold(float threshold_g)
 {
     const stmdev_ctx_t *ctx = &imu_ctx; 
 
-    // KROK 1: Powrót do głównego banku rejestrów (User Bank 0)
     lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
-    // KROK 2: Włączenie osi XYZ dla detekcji Tap/Wake-up
+    //all axes enabled
     lsm6dsv16x_tap_detection_t tap_axes = {
         .tap_x_en = PROPERTY_ENABLE,
         .tap_y_en = PROPERTY_ENABLE,
         .tap_z_en = PROPERTY_ENABLE
     };
     lsm6dsv16x_tap_detection_set(ctx, tap_axes);
+    lsm6dsv16x_filt_wkup_act_feed_set(ctx, LSM6DSV16X_WK_FEED_HIGH_PASS);  //cut gravity
 
-    // Aktywacja filtru cyfrowego (SLOPE_FDS) kierowanego do bloku Wake-Up
-    lsm6dsv16x_filt_wkup_act_feed_set(ctx, LSM6DSV16X_WK_FEED_HIGH_PASS); // Wybór High-Pass / Slope
-
-    // KROK 3 & 2 (cd.): Konfiguracja trybu przerwań (Włączenie przerwań globalnych oraz trybu LATCHED)
     lsm6dsv16x_interrupt_mode_t int_mode = {
         .enable = PROPERTY_ENABLE,
-        .lir = PROPERTY_ENABLE // Włączenie trybu Latched (Zatrzask)
+        .lir = PROPERTY_ENABLE //latch int
     };
     lsm6dsv16x_interrupt_enable_set(ctx, int_mode);
-
-    // KROK 4: Wyłączenie trybu impulsowego danych (tryb ciągły/latched)
+   
     lsm6dsv16x_data_ready_mode_set(ctx, LSM6DSV16X_DRDY_LATCHED);
 
-    // KROK 5 & 6: Ustawienie progu Wake-Up oraz czasu trwania (Duration = 0)
-    // Obliczenie wartości progu (1 LSB = 31.25 mg)
     uint8_t ths_val = (uint8_t)((threshold_g * 1000.0f) / 31.25f);
     if (ths_val > 63) ths_val = 63;
-
     lsm6dsv16x_act_thresholds_t act_ths = {
         .threshold = ths_val,
-        .duration = 2, // Natychmiastowa reakcja (0 dur)
-        .inactivity_ths = 0 // Inactivity nas w tym miejscu nie interesuje, zostawiamy 0
+        .duration = 2, 
+        .inactivity_ths = 0 
     };
     lsm6dsv16x_act_thresholds_set(ctx, &act_ths);
 
-    // KROK 7: Przekierowanie sygnału Wake-Up na pin sprzętowy INT1
+    //internat int signal to pin
     lsm6dsv16x_pin_int_route_t int1_route;
-    // Dobrą praktyką jest odczyt aktualnej konfiguracji pinu, by nie nadpisać innych przerwań (np. FIFO)
     lsm6dsv16x_pin_int1_route_get(ctx, &int1_route);
-    int1_route.wakeup = PROPERTY_ENABLE; // Włączenie routingu Wake-Up na INT1
+    int1_route.wakeup = PROPERTY_ENABLE; 
     lsm6dsv16x_pin_int1_route_set(ctx, &int1_route);
 
-    // KROK KRYTYCZNY DLA TRYBU LATCHED: Czytanie źródeł przerwań w celu skasowania flagi startowej
+    
     lsm6dsv16x_all_sources_t dummy_clear;
-    lsm6dsv16x_all_sources_get(ctx, &dummy_clear);
+    lsm6dsv16x_all_sources_get(ctx, &dummy_clear); //read equals reset(of olf interrrupts)
 
     ESP_LOGI(TAG, "LSM6DSV16X: Skonfigurowano LATCHED Wake-Up za pomocą API. Próg = %.2f G", threshold_g);
 
@@ -163,6 +156,7 @@ static int32_t sensor_write(void *handle, uint8_t header, const uint8_t *bufp, u
     return spi_device_polling_transmit(sensor->spi_handle, &trans) == ESP_OK ? 0 : -1;
 }
 
+
 static int32_t sensor_read(void *handle, uint8_t reg, uint8_t *bufp, uint16_t len)
 {
 
@@ -174,9 +168,9 @@ static int32_t sensor_read(void *handle, uint8_t reg, uint8_t *bufp, uint16_t le
     uint8_t header = reg | 0x80;
 
     if (sensor->cs_pin == PIN_ACCEL_CS && len > 1) {
-        header |= 0x40; 
+        header |= 0x40; //auto increment address while reading
     }
-
+    //header + 16 bytes
     uint8_t tx_data[16+1] = {0};
     uint8_t rx_data[16+1] = {0};
     tx_data[0] = header;
@@ -191,6 +185,7 @@ static int32_t sensor_read(void *handle, uint8_t reg, uint8_t *bufp, uint16_t le
         return -1;
     }
 
+    //rx_data[0] - rubbish, because device didn't read header yet
     memcpy(bufp, &rx_data[1], len);
     return 0;
 }
@@ -234,7 +229,6 @@ void sensors_set(bool GPS_on)
     };
     ret = spi_bus_add_device(SPI2_HOST, &devcfg_imu, &spi_imu_handle);
     ESP_ERROR_CHECK(ret);
-
     
     accel_hardware.spi_handle = spi_accel_handle;
     accel_hardware.cs_pin = PIN_ACCEL_CS;
@@ -298,33 +292,30 @@ void sensors_enter_light_sleep(void)
 {
     ESP_LOGI(TAG, "ZASILANIE: Przygotowanie peryferiów do uśpienia...");
 
-    // 1. Włączamy monitorowanie poziomu wysokiego na pinie akcelerometru H3LIS331DL
+    // wake up on H3LIS331DL
     gpio_wakeup_enable(PIN_ACCEL_INT1, GPIO_INTR_HIGH_LEVEL);
     esp_sleep_enable_gpio_wakeup();
 
     ESP_LOGW(TAG, "ZASILANIE: Wchodzę w tryb LIGHT SLEEP. Silne uderzenie wybudzi urządzenie.");
     
-    // Czekamy na opróżnienie bufora konsoli UART, aby logi nie uległy uszkodzeniu
+    // clearing UART console
     uart_wait_tx_idle_polling(CONFIG_ESP_CONSOLE_UART_NUM);
 
-    // 2. TUTAJ PROCESOR ZASYPIA (Zatrzymanie zegarów, pobór prądu spada)
+    // going to sleep
     esp_light_sleep_start(); 
 
     // =================================================================
-    //         PROCESOR SIĘ WYBUDZA (Kod rusza dokładnie stąd!)
+    //         WAKE UP
     // =================================================================
-    
-    // 3. Natychmiast blokujemy ponowne wybudzanie, żeby stan wysoki pinu nam nie przeszkadzał
+
     gpio_wakeup_disable(PIN_ACCEL_INT1);
 
     ESP_LOGW(TAG, "ZASILANIE: ESP32 wybudzony przez H3LIS! Czyszczę zatrzask przerwania przez SPI...");
 
-    // 4. Odczyt rejestru źródła przerwań INT1_SRC (0x31) z H3LIS331DL.
-    // Ten odczyt informuje akcelerometr, że odebraliśmy zdarzenie, co wymusza opadnięcie linii INT1 (GPIO 21) do 0V.
+    //reading int - flag down
     uint8_t accel_src = 0;
     if (h3lis331dl_read_reg(&accel_ctx, 0x31, &accel_src, 1) == 0) {
-        // Bit 6 (IA) w rejestrze INT1_SRC informuje, czy przerwanie faktycznie zostało wygenerowane
-        if (accel_src & 0x40) { 
+        if (accel_src & 0x40) { //if active source
             ESP_LOGI(TAG, "ZASILANIE: Potwierdzono wybudzenie przez blok przerwań H3LIS331DL (SRC: 0x%02X).", accel_src);
         } else {
             ESP_LOGW(TAG, "ZASILANIE: Wybudzenie nastąpiło, ale rejestr H3LIS nie zgłasza aktywnego źródła (SRC: 0x%02X).", accel_src);
@@ -342,11 +333,12 @@ accel_data accel_get(void)
 
     accel_data received_data = {0};
 
+    //if new data available
     if(reg.zyxda) {
         
         h3lis331dl_acceleration_raw_get(&accel_ctx, data_raw);
 
-        // ZMIANA: Przeliczenie ze skali 200g na mg, a potem na g
+        // converting from mg to g
         received_data.x = h3lis331dl_from_fs200_to_mg(data_raw[0]) / 1000.0f;
         received_data.y = h3lis331dl_from_fs200_to_mg(data_raw[1]) / 1000.0f;
         received_data.z = h3lis331dl_from_fs200_to_mg(data_raw[2]) / 1000.0f;
@@ -376,18 +368,18 @@ imu_data imu_get(void)
 
         if (all_status.drdy_gy) {
             lsm6dsv16x_angular_rate_raw_get(&imu_ctx, data_raw_gy);
-            //stopnie na sekunde
+            //degrees per second
             received_data.gyro.x = lsm6dsv16x_from_fs4000_to_mdps(data_raw_gy[0]) / 1000.0f;
             received_data.gyro.y = lsm6dsv16x_from_fs4000_to_mdps(data_raw_gy[1]) / 1000.0f;
             received_data.gyro.z = lsm6dsv16x_from_fs4000_to_mdps(data_raw_gy[2]) / 1000.0f;
         }
 
         if (all_status.drdy_gy) {
+            //getting internall quaternion
             if (lsm6dsv16x_ln_pg_read(&imu_ctx, 0x6EU, (uint8_t *)data_raw_quat, 6) == 0) {
 
-                //sami musimy wyznaczyc skladowa w
-
-                //zamiana wartosci ze staloprzecinkowej na -1, 1
+                
+                //scalling to -1, 1
                 received_data.quat.x = (float)data_raw_quat[0] / 16384.0f;
                 received_data.quat.y = (float)data_raw_quat[1] / 16384.0f;
                 received_data.quat.z = (float)data_raw_quat[2] / 16384.0f;
@@ -395,14 +387,14 @@ imu_data imu_get(void)
                 float sum_sq = (received_data.quat.x * received_data.quat.x) +
                                (received_data.quat.y * received_data.quat.y) +
                                (received_data.quat.z * received_data.quat.z);
-                
+                //calculating w
                 if (sum_sq < 1.0f) {
                     received_data.quat.w = sqrtf(1.0f - sum_sq);
                 } else {
                     received_data.quat.w = 0.0f;
-                    //wyliczamy dlugosc kwaterniona, bo wiemy, ze nie jest = 1
+                    
                     float norm = sqrtf(sum_sq);
-                    //normalizujemy wektor
+                    //normalize vector
                     received_data.quat.x /= norm;
                     received_data.quat.y /= norm;
                     received_data.quat.z /= norm;
@@ -429,12 +421,16 @@ static void sensors_reading_task(void *pvParameters)
     ESP_LOGI(TAG, "Sensors production task started with REAL Light Sleep Wakeup.");
 
     static int previous_level = -1;
-    loop_counter_1s = 0; // Reset na starcie
+    loop_counter_1s = 0; //counting till 1 second
 
     //how many loops - one loop 30 ms
     static int log_counter_3s = 0; // wyswietlanie danych raz na 3 sekundy
 
+    //how many loops done per one second
     int loops_per_second = 1000 / config_sensor_loop_ms; 
+
+
+    int loops_per_3_seconds = 3000 / config_sensor_loop_ms;
 
     while (1)
     {
@@ -445,7 +441,7 @@ static void sensors_reading_task(void *pvParameters)
             ESP_LOGW("GPIO", "INT1 changed state -> %d", level);
         }
 
-        // Pobranie danych z SPI
+        // getting dana from SPI
         global_data_t current_frame = convert_to_global_frame();
 
         float imu_x = current_frame.accel_imu.x;
@@ -460,8 +456,8 @@ static void sensors_reading_task(void *pvParameters)
         // moveless detection
         
         if (loop_counter_1s >= loops_per_second)
-        {
-            loop_counter_1s = 0; // Resetujemy licznik pod-pętli
+        {//one second reached
+            loop_counter_1s = 0; 
 
             if (imu_delta_g < config_sleep_ths_g)
             {
@@ -470,45 +466,33 @@ static void sensors_reading_task(void *pvParameters)
             }
             else
             {
-                // Jeśli wykryto ruch, zerujemy licznik bezruchu
+                //there is move
                 seconds_in_immobility = 0; 
             }
         }
 
         if (seconds_in_immobility >= config_idle_time_s)
         {
-            if (config_enable_sleep)
+            if (config_enable_sleep && !is_phone_connected)
             {
-                ESP_LOGW(TAG, "!!! MIKROKONTROLER WCHODZI W LIGHT SLEEP (Brak ruchu przez %d s) !!!", config_idle_time_s);
+                ESP_LOGW(TAG, "!!! BRAK RUCHU (%d s) I BRAK POŁĄCZENIA Z TELEFONEM -> LIGHT SLEEP !!!", config_idle_time_s);
 
-               // gps_stop();
-            
-                gpio_wakeup_enable(PIN_ACCEL_INT1, GPIO_INTR_HIGH_LEVEL);
-                esp_sleep_enable_gpio_wakeup();
-                uart_wait_tx_idle_polling(CONFIG_ESP_CONSOLE_UART_NUM);
-
-                // MASZYNA ZASYPIA
-                esp_light_sleep_start();
-
-                // MASZYNA SIĘ WYBUDZA
-                gpio_wakeup_disable(PIN_ACCEL_INT1);
-
-                ESP_LOGW(TAG, "!!! MIKROKONTROLER WYBUDZONY PRZEZ H3LIS !!! Czyszczenie rejestrów...");
-
-                uint8_t accel_src = 0;
-                h3lis331dl_read_reg(&accel_ctx, 0x31, &accel_src, 1); 
-
-                // gps_start(); 
+                sensors_enter_light_sleep();
 
                 seconds_in_immobility = 0;
                 loop_counter_1s = 0;
             }
+            else if (is_phone_connected)
+            {
+                seconds_in_immobility = 0;
+                ESP_LOGI(TAG, "Telefon podłączony – pomijam uśpienie.");
+            }
         }
 
 
-        //wypisywanie w logach raz na 3 sekundy
+        //printing logs per 3 seconds
         log_counter_3s++;
-        int loops_per_3_seconds = 3000 / config_sensor_loop_ms;
+        
 
         if (log_counter_3s >= loops_per_3_seconds)
         {

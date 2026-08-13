@@ -47,6 +47,7 @@ static void ble_app_advertise(void);
 static int ble_app_gap_event(struct ble_gap_event *event, void *arg);
 static int gatt_svr_chr_access(uint16_t conn_handle, uint16_t attr_handle, struct ble_gatt_access_ctxt *ctxt, void *arg);
 
+//notifications
 static void ble_data_tx_task(void *pvParameters)
 {
     global_data_t sensor_data;
@@ -75,9 +76,9 @@ static void ble_data_tx_task(void *pvParameters)
 static const struct ble_gatt_chr_def gatt_svr_chrs[] = {
     {
         // 1. Charakterystyka konfiguracyjna (ZAPIS / ODCZYT)
-        .uuid = &gatt_svr_chr_uuid.u,
-        .access_cb = gatt_svr_chr_access,
-        .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE | BLE_GATT_CHR_F_WRITE_NO_RSP,
+        .uuid = &gatt_svr_chr_uuid.u, //uuid
+        .access_cb = gatt_svr_chr_access, //function
+        .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE | BLE_GATT_CHR_F_WRITE_NO_RSP, //last - save without reply
         .val_handle = &gatt_char_val_handle,
     },
     {
@@ -90,7 +91,7 @@ static const struct ble_gatt_chr_def gatt_svr_chrs[] = {
     { 0 } 
 };
 
-/* Tablica usług GATT */
+// Tablica usług GATT - services
 static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
     {
         .type = BLE_GATT_SVC_TYPE_PRIMARY,
@@ -116,7 +117,7 @@ void save_config_to_nvs(void) {
     }
 }
 
-
+//read, write callback
 static int gatt_svr_chr_access(uint16_t conn_handle,
                                uint16_t attr_handle,
                                struct ble_gatt_access_ctxt *ctxt,
@@ -249,7 +250,7 @@ static int gatt_svr_chr_access(uint16_t conn_handle,
                 ESP_LOGW(TAG, "[BLE] NOWA config_idle_time_s = %d", config_idle_time_s);
                 should_save = true;
             }
-             
+        } 
         else if (strncmp(rx_buffer, "CMD:SLEEP_THS:", 14) == 0) 
         {
 
@@ -291,7 +292,7 @@ static int ble_app_gap_event(struct ble_gap_event *event, void *arg) {
                 is_phone_connected = true;
                 active_conn_handle = event->connect.conn_handle;
             } else {
-                ble_app_advertise();
+                ble_app_advertise(); //failed connection
             }
             break;
 
@@ -332,7 +333,7 @@ static void ble_app_advertise(void) {
     const char *name = "SmartBall-Config";
 
     memset(&fields, 0, sizeof(fields));
-    fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP;
+    fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP; //generally visible, only BLE
     fields.name = (uint8_t *)name;
     fields.name_len = strlen(name);
     fields.name_is_complete = 1;
@@ -344,9 +345,10 @@ static void ble_app_advertise(void) {
     }
 
     memset(&adv_params, 0, sizeof(adv_params));
-    adv_params.conn_mode = BLE_GAP_CONN_MODE_UND;
-    adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN;
+    adv_params.conn_mode = BLE_GAP_CONN_MODE_UND; //every MAC connectable
+    adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN; //all visible
 
+    //radio on
     rc = ble_gap_adv_start(ble_addr_type, NULL, BLE_HS_FOREVER, &adv_params, ble_app_gap_event, NULL);
     if (rc != 0) {
         ESP_LOGE(TAG, "Błąd ble_gap_adv_start: %d", rc);
@@ -354,6 +356,8 @@ static void ble_app_advertise(void) {
 }
 
 static void ble_app_on_sync(void) {
+
+    //getting MAC
     int rc = ble_hs_util_ensure_addr(0);
     if (rc != 0) {
         ESP_LOGE(TAG, "Błąd ble_hs_util_ensure_addr: %d", rc);
@@ -369,13 +373,14 @@ static void ble_app_on_sync(void) {
     ble_app_advertise();
 }
 
+
 static void ble_app_on_reset(int reason) {
     ESP_LOGE(TAG, "Reset stosu BLE, powód: %d", reason);
 }
 
 static void ble_host_task(void *param) {
     ESP_LOGI(TAG, "NimBLE Host Task uruchomiony.");
-    nimble_port_run();
+    nimble_port_run(); //bluetooth start
     nimble_port_freertos_deinit();
 }
 

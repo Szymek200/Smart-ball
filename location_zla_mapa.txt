@@ -1,0 +1,218 @@
+package com.example.odbior_pomiarow
+
+import android.graphics.Color
+import android.os.Bundle
+import android.util.Log
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.*
+import org.json.JSONObject
+import org.osmdroid.config.Configuration
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
+import org.eclipse.paho.client.mqttv3.*
+import com.example.odbior_pomiarow.SettingsActivity
+
+
+class LocationActivity : AppCompatActivity() {
+
+    // Adres Twojego publicznego skryptu/serwera w chmurze (np. VPS, Heroku, Firebase)
+    private val SERVER_URL = "http://twoj-serwer-w-chmurze.com/api/rocket"
+
+
+
+    private lateinit var mqttClient: MqttClient
+    private val BROKER_URI = "tcp://broker.hivemq.com:1883"
+
+    private lateinit var mapView: MapView
+    private lateinit var tvCoordinates: TextView
+    private lateinit var btnBuzzer: Button
+
+    private var espMarker: Marker? = null
+    private val scope = CoroutineScope(Dispatchers.Main + Job())
+    private var trackingJob: Job? = null
+    private var isBuzzerOn = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Inicjalizacja konfiguracji osmdroid (wymagana dla bufora mapy)
+        Configuration.getInstance().load(this, android.preference.PreferenceManager.getDefaultSharedPreferences(this))
+        setContentView(R.layout.activity_location)
+
+        mapView = findViewById(R.id.mapView)
+        tvCoordinates = findViewById(R.id.tvCoordinates)
+        btnBuzzer = findViewById(R.id.btnTriggerBuzzer)
+
+        BleManager.onGpsDataReceivedListener = { lat, lon, fix ->
+            runOnUiThread {
+                updateMapPosition(lat, lon, fix)
+            }
+        }
+        val btnBack = findViewById<Button>(R.id.btnBackFromLocation)
+
+        // Ustawienia początkowe mapy
+        mapView.setMultiTouchControls(true)
+        val mapController = mapView.controller
+        mapController.setZoom(18.0)
+        // Domyślny punkt startowy (środek Polski)
+        mapController.setCenter(GeoPoint(52.0, 19.0))
+
+        btnBack.setOnClickListener { finish() }
+
+        // Obsługa włączania głośnika (Wysyła flagę buzzer=1 na serwer)
+        btnBuzzer.setOnClickListener {
+            isBuzzerOn = !isBuzzerOn
+            if (isBuzzerOn) {
+                btnBuzzer.text = "WYŁĄCZ GŁOŚNIK (BUZER)"
+                btnBuzzer.setBackgroundColor(Color.BLACK)
+                manageBuzzerState(true)
+            } else {
+                btnBuzzer.text = "WŁĄCZ GŁOŚNIK (BUZER)"
+                btnBuzzer.setBackgroundColor(Color.parseColor("#D32F2F"))
+                manageBuzzerState(false)
+            }
+        }
+
+        setupMqttClient()
+    }
+
+
+    private fun setupMqttClient() {
+        try {
+            val clientId = MqttClient.generateClientId()
+            mqttClient = MqttClient(BROKER_URI, clientId, null)
+
+            mqttClient.setCallback(object : MqttCallback {
+                override fun connectionLost(cause: Throwable?) {
+                    // LOG 1: Połączenie MQTT zerwane
+                    Log.e("SMART_BALL", "MQTT: Połączenie zerwane!", cause)
+                }
+
+                override fun messageArrived(topic: String?, message: MqttMessage?) {
+                    val payload = String(message?.payload ?: ByteArray(0))
+
+                    // LOG 2: Odebrano wiadomość MQTT
+                    Log.d("SMART_BALL", "MQTT Odebrano z topicu [$topic]: $payload")
+
+                    if (topic == "esp32/device/location" && message != null) {
+                        runOnUiThread {
+                            try {
+                                val json = JSONObject(payload)
+                                val lat = json.getDouble("lat").toFloat()
+                                val lon = json.getDouble("lon").toFloat()
+                                val fix = json.getInt("fix") == 1
+
+                                // LOG 3: Parsowanie JSON zakończone sukcesem
+                                Log.d("SMART_BALL", "MQTT JSON Wyparsowany: lat=$lat, lon=$lon, fix=$fix")
+
+                                updateMapPosition(lat, lon, fix)
+                            } catch (e: Exception) {
+                                // LOG 4: Błąd parsowania JSON (np. złe nazwy pól w JSON z ESP32)
+                                Log.e("SMART_BALL", "MQTT Błąd parsowania JSON-a! Sprawdź klucze.", e)
+                            }
+                        }
+                    }
+                }
+                override fun deliveryComplete(token: IMqttDeliveryToken?) {}
+            })
+
+            val options = MqttConnectOptions().apply { isCleanSession = true }
+            mqttClient.connect(options)
+
+            // Subskrybujemy kanał, na którym ESP32 nadaje koordynaty satelitarne
+            mqttClient.subscribe("esp32/device/location", 0)
+            Toast.makeText(this, "Połączono z siecią lokalizacji GSM", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    // Zaktualizowana metoda przycisku głośnika — wysyła rozkaz bezpośrednio do ESP32
+
+
+    private fun updateMapPosition(lat: Float, lon: Float, fix: Boolean) {
+        if (lat == 0.0f && lon == 0.0f) {
+            tvCoordinates.text = "Oczekiwanie na pierwszy pakiet telemetryczny GSM..."
+            return
+        }
+
+        tvCoordinates.text = String.format(
+            "Szerokość: %.5f°\nDługość: %.5f°\nStatus FIX: %s",
+            lat, lon, if (fix) "ZABLOKOWANY (Dobre dane)" else "BRAK FIX (Słaby sygnał)"
+        )
+
+        val espPoint = GeoPoint(lat.toDouble(), lon.toDouble())
+
+        if (espMarker == null) {
+            espMarker = Marker(mapView).apply {
+                title = "Lokalizacja ESP32"
+                setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+            }
+            mapView.overlays.add(espMarker)
+        }
+
+        espMarker?.position = espPoint
+        mapView.controller.animateTo(espPoint)
+        mapView.invalidate() // Odśwież rysowanie mapy
+    }
+
+    private fun manageBuzzerState(turnOn: Boolean) {
+        scope.launch(Dispatchers.IO) {
+            // 1. KROK: Sprawdzamy czy BLE z ESP32 jest połączone
+            if (SettingsActivity.isBleConnected()) {
+
+                // 2. KROK: Wysyłamy komendę przez BLE
+                val success = SettingsActivity.sendSoundCommandBle(turnOn)
+
+                withContext(Dispatchers.Main) {
+                    if (success) {
+                        val mode = if (turnOn) "włączony" else "wyłączony"
+                        Toast.makeText(applicationContext, "Głośnik $mode przez BLE!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        sendBuzzerRequestMqtt(turnOn)
+                    }
+                }
+            } else {
+                // 3. KROK: Brak BLE -> przełączenie na GSM (MQTT)
+                withContext(Dispatchers.Main) {
+                    sendBuzzerRequestMqtt(turnOn)
+                }
+            }
+        }
+    }
+
+    private fun sendBuzzerRequestMqtt(turnOn: Boolean) {
+        if (::mqttClient.isInitialized && mqttClient.isConnected) {
+            val messageText = if (turnOn) "PLAY" else "STOP"
+            val message = MqttMessage(messageText.toByteArray())
+            message.qos = 1
+            mqttClient.publish("esp32/device/audio", message)
+            Toast.makeText(this, "Brak Wi-Fi. Wysłano przez GSM (MQTT)", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Brak połączenia Wi-Fi oraz sieciowego z brokerem GSM!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        trackingJob?.cancel() // Zatrzymanie starego joba (jeśli był używany)
+
+        // POPRAWKA: Bezpieczne odpięcie od brokera i zwolnienie zasobów sieciowych
+        try {
+            if (::mqttClient.isInitialized && mqttClient.isConnected) {
+                mqttClient.disconnect()
+                mqttClient.close()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+}

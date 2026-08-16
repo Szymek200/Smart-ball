@@ -13,35 +13,24 @@ import java.util.*
 
 @SuppressLint("MissingPermission")
 object BleManager {
-
+    //object - singleton, don't need to instantiate
     private const val TAG = "BLE_MANAGER"
-
-
     val SERVICE_UUID: UUID = UUID.fromString("12341234-5678-1234-5678-123412345678")
-
-
     val CONFIG_CHAR_UUID: UUID = UUID.fromString("87654321-4321-6789-4321-876543210987")
-
-
     val DATA_CHAR_UUID: UUID = UUID.fromString("78563412-7856-3412-7856-341278563412")
-
-
     val CCCD_UUID: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
 
     private var configCharacteristic: BluetoothGattCharacteristic? = null
     private var dataCharacteristic: BluetoothGattCharacteristic? = null
 
     var onGpsDataReceivedListener: ((lat: Float, lon: Float, fix: Boolean) -> Unit)? = null
-
     var onDataSampleReceivedListener: ((h3x: Float, h3y: Float, h3z: Float, ax: Float, ay: Float, az: Float, gx: Float, gy: Float, gz: Float) -> Unit)? = null
 
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothGatt: BluetoothGatt? = null
 
-
     var isConnected = false
         private set
-
 
     var onDataReceivedListener: ((String) -> Unit)? = null
     var onConnectionStateChanged: ((Boolean) -> Unit)? = null
@@ -52,7 +41,7 @@ object BleManager {
     }
 
     fun startScanAndConnect(context: Context) {
-
+        //I guarantee that variable is not null
         if (bluetoothAdapter == null || !bluetoothAdapter!!.isEnabled) {
             Log.e(TAG, "Bluetooth jest wyłączony lub niedostępny na tym urządzeniu!")
             return
@@ -74,6 +63,7 @@ object BleManager {
                 .build()
 
             scanner.startScan(listOf(filter), settings, object : ScanCallback() {
+                //funtions of ScanCallBack, because it is abstract class and I enlarge it
                 override fun onScanResult(callbackType: Int, result: ScanResult?) {
                     val device = result?.device ?: return
                     Log.i(TAG, "Znaleziono urządzenie: ${device.name} [${device.address}]")
@@ -94,6 +84,7 @@ object BleManager {
 
         bluetoothGatt = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             device.connectGatt(context, false, gattCallback, BluetoothDevice.TRANSPORT_LE)
+            //autoconnect - on background
         } else {
             device.connectGatt(context, false, gattCallback)
         }
@@ -156,6 +147,8 @@ object BleManager {
             }
         }
 
+
+        //receiving notify
         @Deprecated("Deprecated in Java")
         override fun onCharacteristicChanged(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?) {
             @Suppress("DEPRECATION")
@@ -184,10 +177,6 @@ object BleManager {
             }
         }
     }
-
-    /**
-     * Przetwarza dane pomiarowe spływające z ESP32 (Struktura global_data_t)
-     */
     /**
      * Przetwarza dane pomiarowe spływające z ESP32 (Struktura global_data_t)
      */
@@ -225,7 +214,6 @@ object BleManager {
             val lon = buffer.float
             val fix = buffer.get() != 0.toByte()
 
-            // --- NOWE LOGI W LOGCAT DLA ACCEL I GYRO ---
             Log.d("SMART_BALL", "BLE ACCEL H3 (High-G) -> X: $h3x, Y: $h3y, Z: $h3z [G]")
             Log.d("SMART_BALL", "BLE ACCEL IMU --------> X: $ax, Y: $ay, Z: $az [mg]")
             Log.d("SMART_BALL", "BLE GYRO -------------> X: $gx, Y: $gy, Z: $gz [dps]")
@@ -246,8 +234,6 @@ object BleManager {
             Log.e("SMART_BALL", "BLE BŁĄD: Dekompresja/Parsowanie ramki BLE nie powiodło się: ${e.message}", e)
         }
     }
-
-
     /**
      * Odczytuje aktualną konfigurację z ESP32 (Odpowiednik ctxt->op == BLE_ATT_ACCESS_OP_READ)
      */

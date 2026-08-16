@@ -17,7 +17,7 @@ class ShotDetailsActivity : AppCompatActivity() {
         // Przechowywanie danych przekazanych z zewnątrz (MainActivity lub HistoryActivity)
         var selectedSamples: List<SampleData> = emptyList()
         var peakValue: Float = 0f
-        var entryType: EntryType = EntryType.HIT // NOWOŚĆ: Przekazujemy typ zdarzenia
+        var entryType: EntryType = EntryType.HIT
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,10 +30,8 @@ class ShotDetailsActivity : AppCompatActivity() {
         val tvStats = findViewById<TextView>(R.id.tvDetailsMetrics)
         val chart = findViewById<LineChart>(R.id.detailsChart)
 
-        if (entryType == EntryType.HIT) {
-            // ==========================================
-            // LOGIKA DLA UDERZENIA (💥 CRASH / SHOT PROFILE)
-            // ==========================================
+        if (entryType == EntryType.HIT)
+        {
             val exitVelocity = MetricsCalculator.calculateExitVelocityKmH(selectedSamples)
             val contactTime = MetricsCalculator.calculateContactTimeMs(selectedSamples)
             val smashFactor = MetricsCalculator.calculateSmashFactor(selectedSamples, peakValue)
@@ -48,14 +46,13 @@ class ShotDetailsActivity : AppCompatActivity() {
                 📐 Kąt uderzenia (Poziom / Azymut): ${String.format("%.1f", angles.first)}°
                 📈 Kąt uderzenia (Pion / Podbicie): ${String.format("%.1f", angles.second)}°
             """.trimIndent()
-        } else {
-            // ==========================================
-            // LOGIKA DLA LOTU (✈️ FLIGHT / SPIN ANALYSIS)
-            // ==========================================
+        }
+        else
+        {
             val hangTime = MetricsCalculator.calculateHangTimeSeconds(selectedSamples)
             val spinAxis = MetricsCalculator.determineSpinAxisAndMagnus(selectedSamples)
 
-            // Średni obrót wyliczony z całej serii próbek lotu
+            // Średnia predkosc obrótu wyliczona z całej serii próbek lotu
             val avgRotation = selectedSamples.map {
                 sqrt((it.gx * it.gx + it.gy * it.gy + it.gz * it.gz).toDouble()).toFloat()
             }.average().toFloat()

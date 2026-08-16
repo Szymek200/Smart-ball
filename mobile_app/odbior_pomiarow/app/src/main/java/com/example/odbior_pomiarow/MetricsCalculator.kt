@@ -9,18 +9,13 @@ import kotlin.math.sqrt
 
 object MetricsCalculator {
 
-    // Piłka Smart Ball (załóżmy standardową wagę piłki nożnej FIFA: 430 gramów = 0.43 kg)
     const val BALL_MASS_KG = 0.43f
-
-    // ====================================================================
-    // 1. STATYSTYKI FAZY LOTU (Na bazie próbek typu live / flight)
-    // ====================================================================
-
     /**
      * Oblicza prędkość obrotową (Spin Rate) w RPM dla pojedynczej próbki.
      * Żyroskop zwraca stopnie na sekundę (dps).
      */
     fun calculateSpinRPM(sample: SampleData): Float {
+        //double for sqrt, float in the end
         val magnitudeDps = sqrt((sample.gx * sample.gx + sample.gy * sample.gy + sample.gz * sample.gz).toDouble()).toFloat()
         return magnitudeDps / 6.0f // (magnitudeDps / 360.0f) * 60.0f
     }
@@ -62,11 +57,6 @@ object MetricsCalculator {
         }
         return airSamplesCount * 0.010f // Każda próbka w systemie to 10 ms
     }
-
-    // ====================================================================
-    // 2. STATYSTYKI MOMENTU UDERZENIA (Na bazie bufora 200 próbek zderzenia)
-    // ====================================================================
-
     /**
      * Prędkość początkowa piłki (Exit Velocity) w km/h.
      * Wyliczana poprzez numeryczne całkowanie (metodą prostokątów) pola pod wykresem przyspieszenia w fazie zderzenia.
@@ -90,7 +80,6 @@ object MetricsCalculator {
         }
         return deltaVelocityMS * 3.6f // Konwersja z m/s na km/h
     }
-
     /**
      * Czas kontaktu stopy/rakiety z piłką (Contact Time) w milisekundach.
      */
@@ -113,7 +102,6 @@ object MetricsCalculator {
         if (contactTimeMs == 0L) return 0f
         return (peakValueMg / 1000f) / contactTimeMs // G / ms
     }
-
     /**
      * Wylicza kierunek (kąt horyzontalny i wertykalny) wektora uderzenia w stopniach.
      */
@@ -131,11 +119,6 @@ object MetricsCalculator {
 
         return Pair(azimuthDeg, elevationDeg)
     }
-
-    // ====================================================================
-    // 3. STATYSTYKI ZAGREGOWANE SESJI (Dla MainActivity)
-    // ====================================================================
-
     /**
      * Całkowita energia kinetyczna przekazana piłce we wszystkich uderzeniach sesji (w Dżulach [J]).
      * Ek = 0.5 * m * v^2

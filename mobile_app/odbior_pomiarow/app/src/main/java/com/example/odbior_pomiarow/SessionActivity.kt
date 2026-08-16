@@ -88,7 +88,7 @@ class SessionActivity : AppCompatActivity() {
 
             val titleTv = TextView(this).apply {
                 text = "📁 " + folder.name
-                textSize = 15f // POPRAWIONO: 15f zamiast 15sp
+                textSize = 15f
                 setTypeface(null, android.graphics.Typeface.BOLD)
                 setTextColor(Color.BLACK)
             }
@@ -103,7 +103,7 @@ class SessionActivity : AppCompatActivity() {
 
             val btnHistory = Button(this).apply {
                 text = "PRZEGLĄDAJ HISTORIĘ"
-                textSize = 11f // POPRAWIONO: 11f zamiast 11sp
+                textSize = 11f
                 val params = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
                 layoutParams = params
                 setOnClickListener {

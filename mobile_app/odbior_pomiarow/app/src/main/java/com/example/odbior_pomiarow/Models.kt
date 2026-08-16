@@ -2,21 +2,17 @@ package com.example.odbior_pomiarow
 
 import java.util.Date
 
-
-// Definicja stanów maszyny odbierającej dane przez UDP
 enum class ReceiveState {
     NORMAL,
     EVENT_RECEIVING
 }
 
-
-// Typ zarejestrowanego zdarzenia w historii
 enum class EntryType {
     HIT,
     FLIGHT
 }
 
-//kompletne dane o jednym historycznym zdarzeniu
+//history item
 data class HistoryEntry(
     val type: EntryType,
     val date: Date,
@@ -25,8 +21,6 @@ data class HistoryEntry(
     val peakValue: Float
 )
 
-
-//pojedyncza probka pomiarowa
 data class SampleData(
     val ax: Float, val ay: Float, val az: Float,
     val gx: Float, val gy: Float, val gz: Float,

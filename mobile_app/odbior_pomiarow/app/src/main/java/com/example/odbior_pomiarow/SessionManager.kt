@@ -9,12 +9,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object SessionManager {
-
     private const val SESSIONS_DIR_NAME = "SmartBall_Sessions"
-
     var currentSessionFolderName: String? = null
         private set
-
     private var sessionWriter: FileWriter? = null
     var isSessionActive = false
         private set
@@ -24,7 +21,7 @@ object SessionManager {
      */
     fun getSessionsBaseDir(context: Context): File {
         val baseDir = File(context.getExternalFilesDir(null), SESSIONS_DIR_NAME)
-        if (!baseDir.exists()) baseDir.mkdirs()
+        if (!baseDir.exists()) baseDir.mkdirs() //creates tree of folders
         return baseDir
     }
 

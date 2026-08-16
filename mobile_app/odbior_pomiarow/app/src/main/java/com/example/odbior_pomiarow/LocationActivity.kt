@@ -17,20 +17,15 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import org.eclipse.paho.client.mqttv3.*
+import org.eclipse.paho.client.mqttv3.* //mqtt
 import com.example.odbior_pomiarow.SettingsActivity
 
 
 class LocationActivity : AppCompatActivity() {
 
-
     private val SERVER_URL = "http://twoj-serwer-w-chmurze.com/api/rocket"
-
-
-
     private lateinit var mqttClient: MqttClient
     private val BROKER_URI = "tcp://broker.hivemq.com:1883"
-
     private lateinit var mapView: MapView
     private lateinit var tvCoordinates: TextView
     private lateinit var btnBuzzer: Button
@@ -43,7 +38,6 @@ class LocationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         val ctx = applicationContext
         Configuration.getInstance().userAgentValue = "SmartBallApp_Mobile_Client_v1"
         Configuration.getInstance().load(ctx, android.preference.PreferenceManager.getDefaultSharedPreferences(ctx))
@@ -53,7 +47,6 @@ class LocationActivity : AppCompatActivity() {
         mapView = findViewById(R.id.mapView)
         tvCoordinates = findViewById(R.id.tvCoordinates)
         btnBuzzer = findViewById(R.id.btnTriggerBuzzer)
-
 
         mapView.setTileSource(
             org.osmdroid.tileprovider.tilesource.XYTileSource(
@@ -74,15 +67,11 @@ class LocationActivity : AppCompatActivity() {
         }
         val btnBack = findViewById<Button>(R.id.btnBackFromLocation)
 
-
         mapView.setMultiTouchControls(true)
         val mapController = mapView.controller
         mapController.setZoom(18.0)
-
         mapController.setCenter(GeoPoint(52.0, 19.0))
-
         btnBack.setOnClickListener { finish() }
-
 
         btnBuzzer.setOnClickListener {
             isBuzzerOn = !isBuzzerOn
@@ -99,7 +88,6 @@ class LocationActivity : AppCompatActivity() {
 
         setupMqttClient()
     }
-
 
     private fun setupMqttClient() {
         try {
@@ -126,12 +114,10 @@ class LocationActivity : AppCompatActivity() {
                                 val lon = json.getDouble("lon").toFloat()
                                 val fix = json.getInt("fix") == 1
 
-                                // LOG 3: Parsowanie JSON zakończone sukcesem
                                 Log.d("SMART_BALL", "MQTT JSON Wyparsowany: lat=$lat, lon=$lon, fix=$fix")
 
                                 updateMapPosition(lat, lon, fix)
                             } catch (e: Exception) {
-                                // LOG 4: Błąd parsowania JSON (np. złe nazwy pól w JSON z ESP32)
                                 Log.e("SMART_BALL", "MQTT Błąd parsowania JSON-a! Sprawdź klucze.", e)
                             }
                         }
@@ -162,11 +148,10 @@ class LocationActivity : AppCompatActivity() {
 
         tvCoordinates.text = String.format(
             "Szerokość: %.5f°\nDługość: %.5f°\nStatus FIX: %s",
-            lat, lon, if (fix) "ZABLOKOWANY (Dobre dane)" else "BRAK FIX (Słaby sygnał)"
-        )
-
+            lat, lon, if (fix) "ZABLOKOWANY (Dobre dane)" else "BRAK FIX (Słaby sygnał)")
+        //just two variables
         val espPoint = GeoPoint(lat.toDouble(), lon.toDouble())
-
+        //graphical reprezentation of espPoint on the map
         if (espMarker == null) {
             espMarker = Marker(mapView).apply {
                 title = "Lokalizacja ESP32"
@@ -183,11 +168,9 @@ class LocationActivity : AppCompatActivity() {
     private fun manageBuzzerState(turnOn: Boolean) {
         scope.launch(Dispatchers.IO) {
 
-            if (SettingsActivity.isBleConnected()) {
-
-
+            if (SettingsActivity.isBleConnected())
+            {
                 val success = SettingsActivity.sendSoundCommandBle(turnOn)
-
                 withContext(Dispatchers.Main) {
                     if (success) {
                         val mode = if (turnOn) "włączony" else "wyłączony"
@@ -196,8 +179,9 @@ class LocationActivity : AppCompatActivity() {
                         sendBuzzerRequestMqtt(turnOn)
                     }
                 }
-            } else {
-
+            }
+            else
+            {
                 withContext(Dispatchers.Main) {
                     sendBuzzerRequestMqtt(turnOn)
                 }
@@ -211,17 +195,16 @@ class LocationActivity : AppCompatActivity() {
             val message = MqttMessage(messageText.toByteArray())
             message.qos = 1
             mqttClient.publish("esp32/device/audio", message)
-            Toast.makeText(this, "Brak Wi-Fi. Wysłano przez GSM (MQTT)", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Brak BLE. Wysłano przez GSM (MQTT)", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(this, "Brak połączenia Wi-Fi oraz sieciowego z brokerem GSM!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Brak połączenia BLE oraz sieciowego z brokerem GSM!", Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        trackingJob?.cancel() // Zatrzymanie starego joba (jeśli był używany)
-
-        // POPRAWKA: Bezpieczne odpięcie od brokera i zwolnienie zasobów sieciowych
+        trackingJob?.cancel() // Zatrzymanie starego joba
+        // Bezpieczne odpięcie od brokera i zwolnienie zasobów sieciowych
         try {
             if (::mqttClient.isInitialized && mqttClient.isConnected) {
                 mqttClient.disconnect()

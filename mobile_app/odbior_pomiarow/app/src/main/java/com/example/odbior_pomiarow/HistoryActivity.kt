@@ -21,15 +21,12 @@ import android.content.Intent
 
 class HistoryActivity : AppCompatActivity() {
 
-    private lateinit var historyChart: LineChart // Wykres
+    private lateinit var historyChart: LineChart
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_history) // Upewnij się, że w activity_history.xml usunąłeś widok wykresu z dołu układu!
-
+        setContentView(R.layout.activity_history)
         findViewById<Button>(R.id.btnBack)?.setOnClickListener { finish() }
-
-        // Kontener zawierający listę wpisów
         val container = findViewById<LinearLayout>(R.id.historyListContainer)
         val timeFormatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
 
@@ -58,12 +55,11 @@ class HistoryActivity : AppCompatActivity() {
                 setPadding(30, 30, 30, 30)
                 textSize = 16f
 
-                // POPRAWKA: Kliknięcie w dowolny element przenosi nas do pełnego widoku ShotDetailsActivity
+                // Klikniecie na element przenosi do ShotDetailsActivity
                 setOnClickListener {
                     ShotDetailsActivity.selectedSamples = entry.samples
                     ShotDetailsActivity.peakValue = entry.peakValue
-                    ShotDetailsActivity.entryType =
-                        entry.type // Przekazujemy czy to był lot czy uderzenie
+                    ShotDetailsActivity.entryType = entry.type
 
                     val intent = Intent(context, ShotDetailsActivity::class.java)
                     startActivity(intent)

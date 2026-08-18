@@ -20,13 +20,11 @@ static const char *TAG = "main";
 QueueHandle_t data_queue = NULL; 
 QueueHandle_t gps_queue = NULL;  
 
-// Zmienne konfiguracyjne zdefiniowane w measure.c
 extern float config_wake_ths_g;
 extern float config_sleep_ths_g;
 extern int config_idle_time_s;
 extern float CRASH_THRESHOLD_G;
 
-// Funkcja wczytująca zapisane parametry z NVS podczas startu urządzenia
 void load_config_from_nvs(void) {
     nvs_handle_t my_handle;
     esp_err_t err = nvs_open("nvs", NVS_READONLY, &my_handle);
@@ -51,12 +49,9 @@ void load_config_from_nvs(void) {
 
 void app_main(void)
 {
-    
-
-   // esp_log_level_set("NimBLE", ESP_LOG_WARN); //wylaczenie powiadomien Bluetooth
+    // esp_log_level_set("NimBLE", ESP_LOG_WARN); //wylaczenie powiadomien Bluetooth
     ESP_LOGI(TAG, "Uruchamianie aplikacji bez SPIFFS i Audio...");
 
-    // Inicjalizacja pamięci NVS
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
         ESP_ERROR_CHECK(nvs_flash_erase());
@@ -64,10 +59,8 @@ void app_main(void)
     }
     ESP_ERROR_CHECK(ret);
 
-    // Wczytanie konfiguracji z pamięci nieulotnej
     load_config_from_nvs();
 
-    // Kolejki danych
     data_queue = xQueueCreate(250, sizeof(global_data_t));
     if (data_queue == NULL) {
         ESP_LOGE(TAG, "Failed to create data_queue");

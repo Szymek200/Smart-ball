@@ -22,7 +22,7 @@ static const char *TAG = "Sensors_Engine";
 
 #define GPS_UART_NUM UART_NUM_1 
 
-bool config_enable_sleep = false;
+bool config_enable_sleep = true;
 
 //stm struct
 static stmdev_ctx_t accel_ctx;
@@ -253,6 +253,23 @@ void sensors_set(bool GPS_on)
     // settings of ACCEL
     h3lis331dl_data_rate_set(&accel_ctx, H3LIS331DL_ODR_100Hz); 
     h3lis331dl_full_scale_set(&accel_ctx, H3LIS331DL_200g);
+
+    uint8_t reg_val = 0;
+
+    h3lis331dl_read_reg(&accel_ctx, 0x22, &reg_val, 1);
+    reg_val |= 0x82; 
+    h3lis331dl_write_reg(&accel_ctx, 0x22, &reg_val, 1);
+
+    uint8_t ths_val = (uint8_t)(config_wake_ths_g / 1.57f); 
+    if (ths_val == 0) ths_val = 1; 
+    if (ths_val > 127) ths_val = 127; 
+    h3lis331dl_write_reg(&accel_ctx, 0x32, &ths_val, 1);
+
+    reg_val = 0x00; 
+    h3lis331dl_write_reg(&accel_ctx, 0x33, &reg_val, 1);
+
+    reg_val = 0x2A; 
+    h3lis331dl_write_reg(&accel_ctx, 0x30, &reg_val, 1);
 
     lsm6dsv16x_device_id_get(&imu_ctx, &whoamI);
     if(whoamI != LSM6DSV16X_ID) {
@@ -589,7 +606,7 @@ void log_global_data(const global_data_t *data)
         ESP_LOGE(TAG, "log_global_data: Wskaźnik do danych jest NULL!");
         return;
     }
-
+ESP_LOGI(TAG, "polaczenie tel: %s", is_phone_connected ? "true" : "false");
     ESP_LOGI(TAG, "================ GLOBAL DATA FRAME ================");
     ESP_LOGI(TAG, "Typ pakietu (Packet Type): %u (%s)", 
              data->packet_type, 

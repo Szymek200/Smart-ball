@@ -1,153 +1,245 @@
 package com.example.odbior_pomiarow
 
-import java.util.Date
+import android.content.Context
+import android.content.SharedPreferences
 import kotlin.math.abs
-import kotlin.math.acos
 import kotlin.math.atan2
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 object MetricsCalculator {
 
-    const val BALL_MASS_KG = 0.43f
+    // --- Parametry konfiguracyjne (zmienne) ---
+    var ballMassKg: Float = 0.43f
+    var hitThresholdG: Float = 3.5f // Domyślnie 3.5G, synchronizowany z parametrem HIT z BLE
+    var airThresholdMg: Float = 300f // Próg wykrywania lotu (nieważkości)
+    var minSpinThresholdDps: Float = 10.0f // Minimalny próg rotacji
+
+    const val SAMPLE_TIME_S = 0.010f // 10 ms = 100 Hz
+    const val GRAVITY_MS2 = 9.81f
+
+    private const val PREFS_NAME = "SmartBall_Metrics_Prefs"
+    private const val KEY_BALL_MASS = "key_ball_mass"
+    private const val KEY_AIR_THS = "key_air_ths"
+    private const val KEY_MIN_SPIN = "key_min_spin"
+
     /**
-     * Oblicza prędkość obrotową (Spin Rate) w RPM dla pojedynczej próbki.
-     * Żyroskop zwraca stopnie na sekundę (dps).
+     * Wczytuje lokalne ustawienia kalkulatora z pamięci telefonu
      */
-    fun calculateSpinRPM(sample: SampleData): Float {
-        //double for sqrt, float in the end
-        val magnitudeDps = sqrt((sample.gx * sample.gx + sample.gy * sample.gy + sample.gz * sample.gz).toDouble()).toFloat()
-        return magnitudeDps / 6.0f // (magnitudeDps / 360.0f) * 60.0f
+    fun loadPreferences(context: Context) {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        ballMassKg = prefs.getFloat(KEY_BALL_MASS, 0.43f)
+        airThresholdMg = prefs.getFloat(KEY_AIR_THS, 300f)
+        minSpinThresholdDps = prefs.getFloat(KEY_MIN_SPIN, 10.0f)
     }
 
     /**
-     * Określa dominującą oś rotacji oraz jej charakterystykę fizyczną (Top-spin, Back-spin, Side-spin).
+     * Zapisuje parametry algorytmu zmienione w widoku Ustawień
+     */
+    fun savePreferences(context: Context, mass: Float, airThs: Float, minSpin: Float) {
+        ballMassKg = mass
+        airThresholdMg = airThs
+        minSpinThresholdDps = minSpin
+
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit().apply {
+            putFloat(KEY_BALL_MASS, mass)
+            putFloat(KEY_AIR_THS, airThs)
+            putFloat(KEY_MIN_SPIN, minSpin)
+            apply()
+        }
+    }
+
+    /**
+     * Aktualizuje próg uderzenia na podstawie wartości HIT_THS pobranej z ESP32 przez BLE
+     */
+    fun updateHitThresholdFromBle(hitThsG: Float) {
+        hitThresholdG = hitThsG
+    }
+
+    fun calculateSpinRPM(sample: SampleData): Float {
+        val magnitudeDps = sqrt((sample.gx * sample.gx + sample.gy * sample.gy + sample.gz * sample.gz).toDouble()).toFloat()
+        return magnitudeDps / 6.0f
+    }
+
+    /**
+     * Określa dominującą oś rotacji oraz jej charakterystykę fizyczną.
+     * Zgodnie z orientacją: Z - pion, Y - oś w poprzek, X - oś wzdłużna.
      */
     fun determineSpinAxisAndMagnus(samples: List<SampleData>): String {
         if (samples.isEmpty()) return "Brak danych"
 
-        // Wyliczamy średnie wartości dla osi z całego lotu
         val avgGx = samples.map { it.gx }.average().toFloat()
         val avgGy = samples.map { it.gy }.average().toFloat()
         val avgGz = samples.map { it.gz }.average().toFloat()
 
         val total = sqrt((avgGx * avgGx + avgGy * avgGy + avgGz * avgGz).toDouble()).toFloat()
-        if (total < 10.0f) return "Brak rotacji"
+        if (total < minSpinThresholdDps) return "Brak rotacji"
 
-        // Interpretacja osi żyroskopu w piłce:
-        // Gx - obrót wokół osi poprzecznej (Top-spin / Back-spin)
-        // Gy - obrót wokół osi pionowej (Side-spin / podkręcenie lewo-prawo)
-        // Gz - obrót wokół osi podłużnej (Rifle-spin / rotacja śrubowa)
+        // Gz - oś pionowa (Side-spin lewo/prawo)
+        // Gy - oś poprzeczna (Top-spin / Back-spin)
+        // Gx - oś wzdłużna lotu (Rifle-spin)
         return when {
-            abs(avgGx) > abs(avgGy) && abs(avgGx) > abs(avgGz) -> if (avgGx > 0) "Top-spin (Opadająca)" else "Back-spin (Nośna)"
-            abs(avgGy) > abs(avgGx) && abs(avgGy) > abs(avgGz) -> if (avgGy > 0) "Side-spin (Prawo)" else "Side-spin (Lewo)"
+            abs(avgGz) > abs(avgGy) && abs(avgGz) > abs(avgGx) -> if (avgGz > 0) "Side-spin (Prawo)" else "Side-spin (Lewo)"
+            abs(avgGy) > abs(avgGz) && abs(avgGy) > abs(avgGx) -> if (avgGy > 0) "Top-spin (Opadająca)" else "Back-spin (Nośna)"
             else -> "Rifle-spin (Śrubowa)"
         }
     }
 
-    /**
-     * Oblicza czas zawieszenia w powietrzu (Hang Time) na podstawie próbek lotu.
-     * Wykrywa stan nieważkości (gdy wypadkowe przyspieszenie IMU odpina grawitację i spada blisko 0 mg).
-     */
     fun calculateHangTimeSeconds(flightSamples: List<SampleData>): Float {
-        // Filtrujemy próbki, gdzie wypadkowe przyspieszenie jest mniejsze niż 300 mg (swobodny lot)
         val airSamplesCount = flightSamples.count {
             val aMag = sqrt((it.ax * it.ax + it.ay * it.ay + it.az * it.az).toDouble()).toFloat()
-            aMag < 300f // próg 300 mg
+            aMag < airThresholdMg // Konfigurowalny próg nieważkości
         }
-        return airSamplesCount * 0.010f // Każda próbka w systemie to 10 ms
+        return airSamplesCount * SAMPLE_TIME_S
     }
+
     /**
-     * Prędkość początkowa piłki (Exit Velocity) w km/h.
-     * Wyliczana poprzez numeryczne całkowanie (metodą prostokątów) pola pod wykresem przyspieszenia w fazie zderzenia.
+     * Oblicza średnią wypadkową prędkość obrotową w stopniach na sekundę (dps).
      */
-    fun calculateExitVelocityKmH(hitSamples: List<SampleData>): Float {
-        if (hitSamples.isEmpty()) return 0f
+    fun calculateAverageRotationDps(samples: List<SampleData>): Float {
+        if (samples.isEmpty()) return 0f
+        return samples.map {
+            sqrt((it.gx * it.gx + it.gy * it.gy + it.gz * it.gz).toDouble()).toFloat()
+        }.average().toFloat()
+    }
 
-        var deltaVelocityMS = 0f
-        // Całkujemy tylko próbki, które rejestrują realne uderzenie (wycinamy szum tła)
+    /**
+     * Oblicza średnią prędkość obrotową w obrotach na minutę (RPM).
+     */
+    fun calculateAverageRotationRPM(samples: List<SampleData>): Float {
+        return calculateAverageRotationDps(samples) / 6.0f
+    }
+
+    fun calculateExitVelocityFromPacketKmH(eventSamples: List<SampleData>): Float {
+        if (eventSamples.size < 5) return 0f
+
+        val magnitudes = eventSamples.map { s ->
+            sqrt((s.ax * s.ax + s.ay * s.ay + s.az * s.az).toDouble()).toFloat()
+        }
+
+        val maxPeakMg = magnitudes.maxOrNull() ?: 0f
+        val peakIndex = magnitudes.indexOf(maxPeakMg)
+
+        // Próg uderzenia z BLE przeliczony na mg (1G = 1000 mg)
+        val hitPeakThresholdMg = hitThresholdG * 1000f
+        if (maxPeakMg < hitPeakThresholdMg || peakIndex == -1) return 0f
+
+        // Dolna granica zderzenia: 50% progu uderzenia lub min 1500 mg
+        val collisionBoundaryMg = (hitPeakThresholdMg * 0.5f).coerceAtLeast(1500f)
+
+        var hitStartIndex = peakIndex
+        while (hitStartIndex > 0 && magnitudes[hitStartIndex - 1] > collisionBoundaryMg) {
+            hitStartIndex--
+        }
+        var hitEndIndex = peakIndex
+        while (hitEndIndex < eventSamples.size - 1 && magnitudes[hitEndIndex + 1] > collisionBoundaryMg) {
+            hitEndIndex++
+        }
+
+        val preHitSamples = eventSamples.subList(0, hitStartIndex)
+        val hitSamples = eventSamples.subList(hitStartIndex, hitEndIndex + 1)
+        val postFlightSamples = eventSamples.subList(hitEndIndex + 1, eventSamples.size)
+
+        // Kąt wznoszenia w momencie piku (oś Z pionowa)
+        val peakSample = eventSamples[peakIndex]
+        val horizontalMag = sqrt((peakSample.ax * peakSample.ax + peakSample.ay * peakSample.ay).toDouble()).toFloat()
+        val elevationRad = atan2(peakSample.az.toDouble(), horizontalMag.toDouble()).toFloat()
+
+        // Całkowanie wektorowe (grawitację odejmujemy tylko w pionie Z)
+        var deltaVx = 0f
+        var deltaVy = 0f
+        var deltaVz = 0f
+
         hitSamples.forEach { s ->
-            // Konwersja przyspieszenia IMU z mg na m/s^2 (1000 mg = 1G = 9.81 m/s^2)
-            val axMS2 = (s.ax / 1000f) * 9.81f
-            val ayMS2 = (s.ay / 1000f) * 9.81f
-            val azMS2 = (s.az / 1000f) * 9.81f
-            val totalAccMS2 = sqrt((axMS2 * axMS2 + ayMS2 * ayMS2 + azMS2 * azMS2).toDouble()).toFloat()
+            val axMS2 = (s.ax / 1000f) * GRAVITY_MS2
+            val ayMS2 = (s.ay / 1000f) * GRAVITY_MS2
+            val azMS2 = ((s.az / 1000f) * GRAVITY_MS2) - GRAVITY_MS2
 
-            if (totalAccMS2 > 15f) { // Próg uderzenia (powyżej ~1.5G)
-                // dV = a * dt (gdzie dt = 10ms = 0.01s)
-                deltaVelocityMS += totalAccMS2 * 0.010f
+            deltaVx += axMS2 * SAMPLE_TIME_S
+            deltaVy += ayMS2 * SAMPLE_TIME_S
+            deltaVz += azMS2 * SAMPLE_TIME_S
+        }
+
+        val deltaVelocityMS = sqrt((deltaVx * deltaVx + deltaVy * deltaVy + deltaVz * deltaVz).toDouble()).toFloat()
+
+        var estimatedInitialSpeedMS = 0f
+        if (preHitSamples.isNotEmpty()) {
+            val wasInAir = preHitSamples.any {
+                val aMag = sqrt((it.ax * it.ax + it.ay * it.ay + it.az * it.az).toDouble()).toFloat()
+                aMag < airThresholdMg
+            }
+            if (wasInAir) {
+                estimatedInitialSpeedMS = 14f
             }
         }
-        return deltaVelocityMS * 3.6f // Konwersja z m/s na km/h
-    }
-    /**
-     * Czas kontaktu stopy/rakiety z piłką (Contact Time) w milisekundach.
-     */
-    fun calculateContactTimeMs(hitSamples: List<SampleData>): Long {
-        // Zliczamy próbki, w których przyspieszenie przekroczyło próg uderzenia
-        val activeSamples = hitSamples.count {
-            val aMag = sqrt((it.ax * it.ax + it.ay * it.ay + it.az * it.az).toDouble()).toFloat()
-            aMag > 2000f // Powyżej 2G (moment kontaktu)
+
+        val exitSpeedMS = if (estimatedInitialSpeedMS > 0f) {
+            val COR = 0.7f
+            (deltaVelocityMS - ((1f - COR) * estimatedInitialSpeedMS)).coerceAtLeast(deltaVelocityMS * 0.6f)
+        } else {
+            deltaVelocityMS
         }
-        return activeSamples * 10L // 1 próbka = 10 ms
+
+        var finalSpeedMS = exitSpeedMS
+        if (postFlightSamples.isNotEmpty()) {
+            val hangTimeS = calculateHangTimeSeconds(postFlightSamples)
+            if (hangTimeS > 0.25f && elevationRad > 0.15f) {
+                val vVertical = (GRAVITY_MS2 * hangTimeS) / 2f
+                val sinElev = kotlin.math.sin(elevationRad.toDouble()).toFloat()
+                if (sinElev > 0.1f) {
+                    val ballisticSpeed = vVertical / sinElev
+                    finalSpeedMS = maxOf(finalSpeedMS, ballisticSpeed)
+                }
+            }
+        }
+
+        return (finalSpeedMS * 3.6f).coerceIn(0f, 150f)
     }
 
-    /**
-     * Wskaźnik czystości uderzenia (Smash Factor).
-     * W sporcie to stosunek prędkości piłki do prędkości rakiety/stopy.
-     * Bez czujnika na nodze wyliczamy go jako stosunek szczytowego G do czasu kontaktu (im wyższy pik w krótszym czasie, tym czystsze uderzenie).
-     */
+    fun calculateContactTimeMs(hitSamples: List<SampleData>): Long {
+        val boundaryMg = (hitThresholdG * 1000f * 0.5f).coerceAtLeast(1500f)
+        val activeSamples = hitSamples.count {
+            val aMag = sqrt((it.ax * it.ax + it.ay * it.ay + it.az * it.az).toDouble()).toFloat()
+            aMag > boundaryMg
+        }
+        return activeSamples * 10L
+    }
+
     fun calculateSmashFactor(hitSamples: List<SampleData>, peakValueMg: Float): Float {
         val contactTimeMs = calculateContactTimeMs(hitSamples)
         if (contactTimeMs == 0L) return 0f
-        return (peakValueMg / 1000f) / contactTimeMs // G / ms
+        return (peakValueMg / 1000f) / contactTimeMs
     }
-    /**
-     * Wylicza kierunek (kąt horyzontalny i wertykalny) wektora uderzenia w stopniach.
-     */
+
     fun calculateImpactAngle(hitSamples: List<SampleData>): Pair<Float, Float> {
         if (hitSamples.isEmpty()) return Pair(0f, 0f)
-        // Szukamy próbki z maksymalną siłą uderzenia
         val maxSample = hitSamples.maxByOrNull { sqrt((it.ax * it.ax + it.ay * it.ay + it.az * it.az).toDouble()) } ?: hitSamples[0]
-
-        // Kąt w płaszczyźnie poziomej (Azymut X-Y)
         val azimuthDeg = Math.toDegrees(atan2(maxSample.ay.toDouble(), maxSample.ax.toDouble())).toFloat()
-
-        // Kąt w płaszczyźnie pionowej (Elewacja / Kąt podbicia)
         val totalHorizontal = sqrt((maxSample.ax * maxSample.ax + maxSample.ay * maxSample.ay).toDouble()).toFloat()
         val elevationDeg = Math.toDegrees(atan2(maxSample.az.toDouble(), totalHorizontal.toDouble())).toFloat()
-
         return Pair(azimuthDeg, elevationDeg)
     }
-    /**
-     * Całkowita energia kinetyczna przekazana piłce we wszystkich uderzeniach sesji (w Dżulach [J]).
-     * Ek = 0.5 * m * v^2
-     */
+
     fun calculateTotalEnergyExpenditureJ(history: List<HistoryEntry>): Float {
         var totalEnergy = 0f
         history.forEach { entry ->
             if (entry.type == EntryType.HIT) {
-                val velocityKmH = calculateExitVelocityKmH(entry.samples)
+                val velocityKmH = calculateExitVelocityFromPacketKmH(entry.samples)
                 val velocityMS = velocityKmH / 3.6f
-                totalEnergy += 0.5f * BALL_MASS_KG * velocityMS.pow(2)
+                totalEnergy += 0.5f * ballMassKg * velocityMS.pow(2) // Użycie konfigurowalnej masy piłki
             }
         }
         return totalEnergy
     }
 
-    /**
-     * Oblicza wskaźnik powtarzalności zawodnika (Consistency Score) w skali 0-100%.
-     * Wyliczany na podstawie odchylenia standardowego siły uderzeń (im mniejsze odchylenie, tym wyższa powtarzalność).
-     */
     fun calculateConsistencyScore(history: List<HistoryEntry>): Int {
         val hitPeaks = history.filter { it.type == EntryType.HIT }.map { it.peakValue }
-        if (hitPeaks.size < 3) return 0 // Wymagane minimum 3 uderzenia do analizy stabilności
+        if (hitPeaks.size < 3) return 0
 
         val avg = hitPeaks.average().toFloat()
         val variance = hitPeaks.map { (it - avg).pow(2) }.sum() / hitPeaks.size
         val stdDeviation = sqrt(variance.toDouble()).toFloat()
 
-        // Mapujemy odchylenie standardowe na procenty (np. odchylenie 5G to utrata 20% powtarzalności)
         val score = 100 - (stdDeviation / 1000f) * 4
         return score.coerceIn(0f, 100f).toInt()
     }

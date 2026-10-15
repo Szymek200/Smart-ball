@@ -7,9 +7,9 @@ import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
-import android.os.ParcelUuid
 import android.util.Log
 import java.util.*
+import android.content.SharedPreferences
 
 @SuppressLint("MissingPermission")
 object BleManager {
@@ -20,11 +20,24 @@ object BleManager {
     val DATA_CHAR_UUID: UUID = UUID.fromString("78563412-7856-3412-7856-341278563412")
     val CCCD_UUID: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
 
+    //Bufor przechowujący próbki od ostatniego zderzenia
+    private val flightBuffer = mutableListOf<SampleData>()
+    // Zabezpieczenie przed przepełnieniem RAMu (np. gdy piłka leży w bezruchu przez 10 minut)
+    private const val MAX_BUFFER_SIZE = 12000 // ok. 2 minuty przy 100Hz
+    var onHitEventReceivedListener: ((HistoryEntry) -> Unit)? = null
+
+    private var sharedPrefs: SharedPreferences? = null
+
     private var configCharacteristic: BluetoothGattCharacteristic? = null
     private var dataCharacteristic: BluetoothGattCharacteristic? = null
 
     var onGpsDataReceivedListener: ((lat: Float, lon: Float, fix: Boolean) -> Unit)? = null
     var onDataSampleReceivedListener: ((h3x: Float, h3y: Float, h3z: Float, ax: Float, ay: Float, az: Float, gx: Float, gy: Float, gz: Float) -> Unit)? = null
+
+    var latestBatteryVoltage: Float = 0.0f
+    var latestBatteryPercent: Float = 0.0f
+    var onBatteryDataUpdateMain: ((voltage: Float, percent: Float) -> Unit)? = null
+    var onBatteryDataUpdateSettings: ((voltage: Float, percent: Float) -> Unit)? = null
 
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothGatt: BluetoothGatt? = null
@@ -38,6 +51,7 @@ object BleManager {
     fun init(context: Context) {
         val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         bluetoothAdapter = bluetoothManager.adapter
+        sharedPrefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
     }
 
     fun startScanAndConnect(context: Context) {
@@ -96,8 +110,6 @@ object BleManager {
                 Log.i(TAG, "Połączono bezautoryzacyjnie z GATT! Żądamy MTU 512...")
                 isConnected = true
                 onConnectionStateChanged?.invoke(true)
-
-
                 gatt?.requestMtu(512)
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 Log.w(TAG, "Rozłączono z BLE!")
@@ -139,6 +151,10 @@ object BleManager {
                                 gatt.writeDescriptor(desc)
                             }
                             Log.i(TAG, "Wysłano zapis do deskryptora CCCD (0x2902)!")
+                            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                                Log.i(TAG, "Wysyłam automatyczne zapytanie o konfigurację...")
+                                readConfiguration()
+                            }, 500)
                         }
                     }
                 } else {
@@ -173,20 +189,41 @@ object BleManager {
             if (status == BluetoothGatt.GATT_SUCCESS && characteristic.uuid == CONFIG_CHAR_UUID) {
                 val response = String(value)
                 Log.d(TAG, "Odebrano tekst konfiguracyjny (READ): $response")
+                parseAndSaveConfiguration(response)
                 onDataReceivedListener?.invoke(response)
             }
         }
     }
+
+    private fun parseAndSaveConfiguration(response: String) {
+        if (response.startsWith("CFG:")) {
+            val tokens = response.trim().split(":")
+            if (tokens.size >= 5) {
+                // Nadpisujemy pamięć telefonu tym, co przyszło z mikrokontrolera
+                sharedPrefs?.edit()?.apply {
+                    putString("ESP_WAKE_THS", tokens[1])
+                    putString("ESP_SLEEP_THS", tokens[2])
+                    putString("ESP_IDLE_TIME", tokens[3])
+                    putString("ESP_HIT_THS", tokens[4])
+                    apply()
+                }
+
+                // Aktualizujemy główny kalkulator w aplikacji
+                tokens[4].toFloatOrNull()?.let { hitG ->
+                    MetricsCalculator.updateHitThresholdFromBle(hitG)
+                }
+                Log.i(TAG, "Zsynchronizowano pamięć telefonu z fizycznymi ustawieniami ESP32!")
+            }
+        }
+    }
+
     /**
      * Przetwarza dane pomiarowe spływające z ESP32 (Struktura global_data_t)
      */
     private fun handleIncomingData(bytes: ByteArray) {
-
-        Log.d("SMART_BALL", "BLE: Odebrano ramkę o rozmiarze ${bytes.size} bajtów")
-
         if (bytes.size < 40) {
             val text = String(bytes)
-            Log.d("SMART_BALL", "BLE: Odebrano ramkę konfiguracyjną (tekst): $text")
+            parseAndSaveConfiguration(text)
             onDataReceivedListener?.invoke(text)
             return
         }
@@ -194,48 +231,95 @@ object BleManager {
         val buffer = java.nio.ByteBuffer.wrap(bytes).order(java.nio.ByteOrder.LITTLE_ENDIAN)
 
         try {
-            val packetType = buffer.get()
+            val packetType = buffer.get() // 1 = Telemetria (Lot/Spoczynek), 2 = Zderzenie
 
-            // --- ODCZYT CZUJNIKÓW IMU / ACCEL / GYRO ---
-            val h3x = buffer.float
-            val h3y = buffer.float
-            val h3z = buffer.float
-
-            val ax = buffer.float
-            val ay = buffer.float
-            val az = buffer.float
-
-            val gx = buffer.float
-            val gy = buffer.float
-            val gz = buffer.float
-
-            // --- ODCZYT GPS ---
-            val lat = buffer.float
-            val lon = buffer.float
+            // --- ODCZYT CZUJNIKÓW ---
+            val h3x = buffer.float; val h3y = buffer.float; val h3z = buffer.float
+            val ax = buffer.float; val ay = buffer.float; val az = buffer.float
+            val gx = buffer.float; val gy = buffer.float; val gz = buffer.float
+            val lat = buffer.float; val lon = buffer.float
             val fix = buffer.get() != 0.toByte()
 
-            Log.d("SMART_BALL", "BLE ACCEL H3 (High-G) -> X: $h3x, Y: $h3y, Z: $h3z [G]")
-            Log.d("SMART_BALL", "BLE ACCEL IMU --------> X: $ax, Y: $ay, Z: $az [mg]")
-            Log.d("SMART_BALL", "BLE GYRO -------------> X: $gx, Y: $gy, Z: $gz [dps]")
-            Log.d("SMART_BALL", "BLE GPS Wyparsowany -> lat=$lat, lon=$lon, fix=$fix")
-
-            // Rejestracja w SessionManager
-            SessionManager.logSampleToCurrentSession(h3x, h3y, h3z, ax, ay, az, gx, gy, gz, lat, lon, fix)
-
-            onDataSampleReceivedListener?.invoke(h3x, h3y, h3z, ax, ay, az, gx, gy, gz)
-
-            if (onGpsDataReceivedListener != null) {
-                onGpsDataReceivedListener?.invoke(lat, lon, fix)
-            } else {
-                Log.w("SMART_BALL", "BLE OSTRZEŻENIE: onGpsDataReceivedListener jest NULL!")
+            if (buffer.remaining() >= 8) {
+                latestBatteryVoltage = buffer.float
+                latestBatteryPercent = buffer.float
+                onBatteryDataUpdateMain?.invoke(latestBatteryVoltage, latestBatteryPercent)
+                onBatteryDataUpdateSettings?.invoke(latestBatteryVoltage, latestBatteryPercent)
             }
 
+            // ZAWSZE logujemy próbkę (do CSV na dysk i na żywy wykres)
+            SessionManager.logSampleToCurrentSession(h3x, h3y, h3z, ax, ay, az, gx, gy, gz, lat, lon, fix)
+            onDataSampleReceivedListener?.invoke(h3x, h3y, h3z, ax, ay, az, gx, gy, gz)
+            onGpsDataReceivedListener?.invoke(lat, lon, fix)
+
+            val sample = SampleData(ax, ay, az, gx, gy, gz, System.currentTimeMillis(), false)
+
+            if (packetType == 1.toByte()) {
+                // TRYB 1: Zbieramy dane do bufora
+                if (flightBuffer.size < MAX_BUFFER_SIZE) {
+                    flightBuffer.add(sample)
+                }
+            } else if (packetType == 2.toByte()) {
+                // TRYB 2: ZDERZENIE - Wyzwalacz! Najpierw zamykamy poprzedni lot, potem logujemy uderzenie
+
+                // --- A. ZAMKNIĘCIE I ANALIZA LOTU ---
+                if (flightBuffer.isNotEmpty()) {
+                    val hangTimeS = MetricsCalculator.calculateHangTimeSeconds(flightBuffer)
+
+                    if (hangTimeS > 0.15f) { // Rejestrujemy tylko rzeczywisty lot (> 150ms nieważkości)
+                        val maxSpinDps = flightBuffer.maxOfOrNull {
+                            kotlin.math.sqrt((it.gx * it.gx + it.gy * it.gy + it.gz * it.gz).toDouble()).toFloat()
+                        } ?: 0f
+
+                        val flightDurationMs = (hangTimeS * 1000).toLong()
+                        val flightEntry = HistoryEntry(
+                            type = EntryType.FLIGHT,
+                            date = java.util.Date(System.currentTimeMillis() - flightDurationMs),
+                            durationMs = flightDurationMs,
+                            samples = flightBuffer.toList(), // Przekazujemy CAŁĄ historię lotu!
+                            peakValue = maxSpinDps
+                        )
+                        HistoryCacheManager.addEvent(flightEntry)
+                        onHitEventReceivedListener?.invoke(flightEntry)
+                    }
+                    flightBuffer.clear() // Zderzenie resetuje bufor
+                }
+
+                // --- B. REJESTRACJA UDERZENIA ---
+                val hitMagG = kotlin.math.sqrt((h3x * h3x + h3y * h3y + h3z * h3z).toDouble()).toFloat()
+                val hitEntry = HistoryEntry(
+                    type = EntryType.HIT,
+                    date = java.util.Date(),
+                    durationMs = 150, // Można to w przyszłości też wyciągnąć z pakietu
+                    samples = listOf(sample),
+                    peakValue = hitMagG * 1000f // Mnożymy przez 1000 (jednostki mg w reszcie apki)
+                )
+                HistoryCacheManager.addEvent(hitEntry)
+                onHitEventReceivedListener?.invoke(hitEntry)
+            }
         } catch (e: Exception) {
-            Log.e("SMART_BALL", "BLE BŁĄD: Dekompresja/Parsowanie ramki BLE nie powiodło się: ${e.message}", e)
+            Log.e("SMART_BALL", "BLE BŁĄD: ${e.message}", e)
         }
     }
-    /**
-     * Odczytuje aktualną konfigurację z ESP32 (Odpowiednik ctxt->op == BLE_ATT_ACCESS_OP_READ)
+
+    // Wysyła całą konfigurację z telefonu do ESP przed treningiem
+    fun applyMasterConfiguration(sharedPrefs: SharedPreferences) {
+        if (!isConnected) return
+
+        // Przelatujemy przez WSZYSTKIE zapisane ustawienia w telefonie
+        sharedPrefs.all.forEach { (key, value) ->
+            // Jeśli klucz zaczyna się od "ESP_", wiemy, że to parametr dla mikrokontrolera
+            if (key.startsWith("ESP_")) {
+                // Usuwamy "ESP_" z nazwy klucza. Zostaje nam np. "HIT_THS"
+                val commandName = key.removePrefix("ESP_")
+
+                // Tworzymy dynamiczną komendę i ją wysyłamy, np. CMD:HIT_THS:12.5
+                sendCommand("CMD:$commandName:$value")
+            }
+        }
+    }
+    /*
+     * Odczytuje aktualną konfigurację z ESP32
      */
     fun readConfiguration() {
         val char = configCharacteristic ?: return
@@ -243,7 +327,7 @@ object BleManager {
     }
 
     /**
-     * Wysyła komendę tekstową do ESP32 (Odpowiednik ctxt->op == BLE_ATT_ACCESS_OP_WRITE)
+     * Wysyła komendę tekstową do ESP32
      */
     fun sendCommand(command: String): Boolean {
         val gatt = bluetoothGatt ?: return false

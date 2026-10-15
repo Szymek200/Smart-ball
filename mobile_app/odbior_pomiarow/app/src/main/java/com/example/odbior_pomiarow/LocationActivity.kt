@@ -23,9 +23,10 @@ import com.example.odbior_pomiarow.SettingsActivity
 
 class LocationActivity : AppCompatActivity() {
 
-    private val SERVER_URL = "http://twoj-serwer-w-chmurze.com/api/rocket"
+
     private lateinit var mqttClient: MqttClient
-    private val BROKER_URI = "tcp://broker.hivemq.com:1883"
+    //private val BROKER_URI = "tcp://broker.hivemq.com:1883"
+    private val BROKER_URI = "tcp://broker.emqx.io:1883"
     private lateinit var mapView: MapView
     private lateinit var tvCoordinates: TextView
     private lateinit var btnBuzzer: Button
@@ -90,50 +91,52 @@ class LocationActivity : AppCompatActivity() {
     }
 
     private fun setupMqttClient() {
-        try {
-            val clientId = MqttClient.generateClientId()
-            mqttClient = MqttClient(BROKER_URI, clientId, null)
+        scope.launch(Dispatchers.IO) {
+            try {
+                System.setProperty("java.net.preferIPv4Stack", "true")
 
-            mqttClient.setCallback(object : MqttCallback {
-                override fun connectionLost(cause: Throwable?) {
+                val clientId = MqttClient.generateClientId()
+                mqttClient = MqttClient(BROKER_URI, clientId, org.eclipse.paho.client.mqttv3.persist.MemoryPersistence())
 
-                    Log.e("SMART_BALL", "MQTT: Połączenie zerwane!", cause)
-                }
+                mqttClient.setCallback(object : MqttCallback {
+                    override fun connectionLost(cause: Throwable?) {
+                        Log.e("SMART_BALL", "MQTT: Połączenie zerwane!", cause)
+                    }
 
-                override fun messageArrived(topic: String?, message: MqttMessage?) {
-                    val payload = String(message?.payload ?: ByteArray(0))
+                    override fun messageArrived(topic: String?, message: MqttMessage?) {
+                        val payload = String(message?.payload ?: ByteArray(0))
+                        Log.d("SMART_BALL", "MQTT Odebrano z topicu [$topic]: $payload")
 
+                        if (topic == "esp32/device/location" && message != null) {
+                            runOnUiThread {
+                                try {
+                                    val json = JSONObject(payload)
+                                    val lat = json.getDouble("lat").toFloat()
+                                    val lon = json.getDouble("lon").toFloat()
+                                    val fix = json.getInt("fix") == 1
 
-                    Log.d("SMART_BALL", "MQTT Odebrano z topicu [$topic]: $payload")
-
-                    if (topic == "esp32/device/location" && message != null) {
-                        runOnUiThread {
-                            try {
-                                val json = JSONObject(payload)
-                                val lat = json.getDouble("lat").toFloat()
-                                val lon = json.getDouble("lon").toFloat()
-                                val fix = json.getInt("fix") == 1
-
-                                Log.d("SMART_BALL", "MQTT JSON Wyparsowany: lat=$lat, lon=$lon, fix=$fix")
-
-                                updateMapPosition(lat, lon, fix)
-                            } catch (e: Exception) {
-                                Log.e("SMART_BALL", "MQTT Błąd parsowania JSON-a! Sprawdź klucze.", e)
+                                    Log.d("SMART_BALL", "MQTT JSON Wyparsowany: lat=$lat, lon=$lon, fix=$fix")
+                                    updateMapPosition(lat, lon, fix)
+                                } catch (e: Exception) {
+                                    Log.e("SMART_BALL", "MQTT Błąd parsowania JSON-a! Sprawdź klucze.", e)
+                                }
                             }
                         }
                     }
+
+                    override fun deliveryComplete(token: IMqttDeliveryToken?) {}
+                })
+
+                val options = MqttConnectOptions().apply { isCleanSession = true }
+                mqttClient.connect(options)
+                mqttClient.subscribe("esp32/device/location", 0)
+
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@LocationActivity, "Połączono z siecią lokalizacji GSM", Toast.LENGTH_SHORT).show()
                 }
-                override fun deliveryComplete(token: IMqttDeliveryToken?) {}
-            })
-
-            val options = MqttConnectOptions().apply { isCleanSession = true }
-            mqttClient.connect(options)
-
-
-            mqttClient.subscribe("esp32/device/location", 0)
-            Toast.makeText(this, "Połączono z siecią lokalizacji GSM", Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            e.printStackTrace()
+            } catch (e: Exception) {
+                Log.e("SMART_BALL", "Błąd inicjalizacji MQTT", e)
+            }
         }
     }
 

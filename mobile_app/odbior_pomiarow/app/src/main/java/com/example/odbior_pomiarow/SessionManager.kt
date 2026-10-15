@@ -7,11 +7,16 @@ import java.io.File
 import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.*
+import com.google.gson.Gson
+import androidx.preference.PreferenceManager
+
 
 object SessionManager {
     private const val SESSIONS_DIR_NAME = "SmartBall_Sessions"
     var currentSessionFolderName: String? = null
         private set
+
+    private var eventsWriter: FileWriter? = null
     private var sessionWriter: FileWriter? = null
     var isSessionActive = false
         private set
@@ -38,18 +43,51 @@ object SessionManager {
         currentSessionFolderName = folderName
         isSessionActive = true
 
-        // Tworzymy główny plik CSV sesji
+        // 1. Zapis konfiguracji i progów do pliku metadata.json
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val allSettingsMap = sharedPrefs.all // Zwraca mapę wszystkich zapisanych kluczy i wartości
+
+        // Konwertujemy mapę ustawień na gotowy obiekt JSON za pomocą Gson
+        val settingsJson = Gson().toJson(allSettingsMap)
+
+        // 2. Zapis konfiguracji i progów do pliku metadata.json
+        val metaFile = File(sessionFolder, "metadata.json")
+        metaFile.writeText("""
+            {
+                "sessionName": "$sessionName",
+                "startTime": ${System.currentTimeMillis()},
+                "appVersion": "1.0",
+                "settings": $settingsJson
+            }
+        """.trimIndent())
+
+        // 2. Otwarcie strumienia na telemetrię
         val csvFile = File(sessionFolder, "telemetry_data.csv")
         try {
             sessionWriter = FileWriter(csvFile, true)
             sessionWriter?.write("Timestamp,H3_AX,H3_AY,H3_AZ,IMU_AX,IMU_AY,IMU_AZ,IMU_GX,IMU_GY,IMU_GZ,Lat,Lon,Fix\n")
             sessionWriter?.flush()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        } catch (e: Exception) { e.printStackTrace() }
+
+        // 3. Otwarcie strumienia na uderzenia (JSON Lines)
+        val eventsFile = File(sessionFolder, "events.jsonl")
+        eventsWriter = FileWriter(eventsFile, true)
 
         return folderName
     }
+
+    fun saveEventToSession(entry: HistoryEntry) {
+        if (!isSessionActive || eventsWriter == null) return
+        try {
+            val json = Gson().toJson(entry)
+            eventsWriter?.write(json + "\n")
+            eventsWriter?.flush()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
 
     /**
      * Zapisuje pojedynczą próbkę do pliku CSV aktywnej sesji.
@@ -77,10 +115,13 @@ object SessionManager {
         try {
             sessionWriter?.flush()
             sessionWriter?.close()
+            eventsWriter?.flush()
+            eventsWriter?.close()
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
             sessionWriter = null
+            eventsWriter = null
             isSessionActive = false
             currentSessionFolderName = null
         }

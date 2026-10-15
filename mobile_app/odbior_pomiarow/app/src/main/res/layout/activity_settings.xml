@@ -14,13 +14,23 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="KONFIGURACJA URZĄDZENIA"
+            android:text="USTAWIENIA"
             android:textSize="20sp"
             android:textStyle="bold"
             android:gravity="center"
             android:textColor="#37474F"
             android:layout_marginBottom="24dp" />
 
+        <Button
+            android:id="@+id/btnClearCache"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="WYCZYŚĆ PAMIĘĆ PODRĘCZNĄ (RAM)"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#D32F2F"
+            android:layout_marginTop="16dp" />
+
+        <!-- 1. Czułość wybudzenia -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,6 +56,7 @@
                 android:text="USTAW" />
         </LinearLayout>
 
+        <!-- 2. Próg siły uderzenia -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,6 +82,7 @@
                 android:text="USTAW" />
         </LinearLayout>
 
+        <!-- 3. Czas bezruchu -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,6 +108,7 @@
                 android:text="USTAW" />
         </LinearLayout>
 
+        <!-- 4. Czułość uśpienia -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -106,7 +119,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="32dp">
+            android:layout_marginBottom="16dp">
             <EditText
                 android:id="@+id/etSleepThreshold"
                 android:layout_width="0dp"
@@ -116,6 +129,84 @@
                 android:inputType="numberDecimal" />
             <Button
                 android:id="@+id/btnSetSleepThs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USTAW" />
+        </LinearLayout>
+
+        <!-- 5. Masa piłki -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Masa piłki [kg]"
+            android:textStyle="bold"
+            android:textColor="#263238" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+            <EditText
+                android:id="@+id/etBallMass"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="np. 0.43"
+                android:inputType="numberDecimal" />
+            <Button
+                android:id="@+id/btnSetBallMass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USTAW" />
+        </LinearLayout>
+
+        <!-- 6. Próg lotu -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Próg swobodnego lotu / nieważkości [mg]"
+            android:textStyle="bold"
+            android:textColor="#263238" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+            <EditText
+                android:id="@+id/etAirThreshold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="np. 300"
+                android:inputType="numberDecimal" />
+            <Button
+                android:id="@+id/btnSetAirThreshold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USTAW" />
+        </LinearLayout>
+
+        <!-- 7. Minimalny próg rotacji -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Minimalny próg rotacji [dps]"
+            android:textStyle="bold"
+            android:textColor="#263238" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+            <EditText
+                android:id="@+id/etMinSpin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="np. 10.0"
+                android:inputType="numberDecimal" />
+            <Button
+                android:id="@+id/btnSetMinSpin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="USTAW" />

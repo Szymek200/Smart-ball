@@ -4,38 +4,62 @@ import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import java.util.Date
 import kotlin.math.sqrt
 
 class ShotDetailsActivity : AppCompatActivity() {
-
-    companion object {
-        // Przechowywanie danych przekazanych z zewnątrz (MainActivity lub HistoryActivity)
-        var selectedSamples: List<SampleData> = emptyList()
-        var peakValue: Float = 0f
-        var entryType: EntryType = EntryType.HIT
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shot_details)
 
+        MetricsCalculator.loadPreferences(this)
+
         findViewById<Button>(R.id.btnBackFromDetails).setOnClickListener { finish() }
+
+
+        val historyEntry = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra("EXTRA_HIT_ENTRY", HistoryEntry::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra("EXTRA_HIT_ENTRY") as? HistoryEntry
+        }
+
+        // Jeśli obiekt nie dotarł, bezpiecznie zamykamy
+        if (historyEntry == null) {
+            Toast.makeText(this, "Błąd wczytywania szczegółów zdarzenia", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        val selectedSamples = historyEntry.samples
+        val peakValue = historyEntry.peakValue
+        val entryType = historyEntry.type
 
         val tvHeader = findViewById<TextView>(R.id.tvDetailsHeader)
         val tvStats = findViewById<TextView>(R.id.tvDetailsMetrics)
         val chart = findViewById<LineChart>(R.id.detailsChart)
 
-        if (entryType == EntryType.HIT)
-        {
-            val exitVelocity = MetricsCalculator.calculateExitVelocityKmH(selectedSamples)
+        if (entryType == EntryType.HIT) {
+
+            val exitVelocity = MetricsCalculator.calculateExitVelocityFromPacketKmH(selectedSamples)
             val contactTime = MetricsCalculator.calculateContactTimeMs(selectedSamples)
             val smashFactor = MetricsCalculator.calculateSmashFactor(selectedSamples, peakValue)
             val angles = MetricsCalculator.calculateImpactAngle(selectedSamples)
+
+            // Wyliczenie RPM dla piku zderzenia
+            val peakSample = selectedSamples.maxByOrNull { sqrt((it.ax * it.ax + it.ay * it.ay + it.az * it.az).toDouble()) } ?: selectedSamples[0]
+            val spinAtImpactRPM = MetricsCalculator.calculateSpinRPM(peakSample)
+
+            // Energia kinetyczna tylko dla tego pojedynczego strzału
+            val tempHistory = listOf(HistoryEntry(EntryType.HIT, Date(), 0, selectedSamples, peakValue))
+            val energyJoules = MetricsCalculator.calculateTotalEnergyExpenditureJ(tempHistory)
 
             tvHeader.text = String.format("ANALIZA STRZAŁU: %.2f G", peakValue / 1000f)
             tvStats.text = """
@@ -45,24 +69,27 @@ class ShotDetailsActivity : AppCompatActivity() {
                 💎 Wskaźnik czystości (Smash): ${String.format("%.2f", smashFactor)}
                 📐 Kąt uderzenia (Poziom / Azymut): ${String.format("%.1f", angles.first)}°
                 📈 Kąt uderzenia (Pion / Podbicie): ${String.format("%.1f", angles.second)}°
+                ⚡ Energia kinetyczna: ${String.format("%.1f", energyJoules)} J
+                --- EFEKT PO UDERZENIU ---
+                🔄 Rotacja w piku zderzenia: ${String.format("%.0f", spinAtImpactRPM)} RPM
             """.trimIndent()
-        }
-        else
-        {
+        } else {
             val hangTime = MetricsCalculator.calculateHangTimeSeconds(selectedSamples)
             val spinAxis = MetricsCalculator.determineSpinAxisAndMagnus(selectedSamples)
 
-            // Średnia predkosc obrótu wyliczona z całej serii próbek lotu
-            val avgRotation = selectedSamples.map {
-                sqrt((it.gx * it.gx + it.gy * it.gy + it.gz * it.gz).toDouble()).toFloat()
-            }.average().toFloat()
+            val avgRotationDps = MetricsCalculator.calculateAverageRotationDps(selectedSamples)
+            val avgRotationRPM = MetricsCalculator.calculateAverageRotationRPM(selectedSamples)
+
+            val initialVelocityIfAny = MetricsCalculator.calculateExitVelocityFromPacketKmH(selectedSamples)
 
             tvHeader.text = "ANALIZA FAZY LOTU PIŁKI"
             tvStats.text = """
                 ✈️ Czas zawieszenia (Hang Time): ${String.format("%.2f", hangTime)} sekundy
-                🔄 Średnia prędkość obrotowa: ${String.format("%.0f", avgRotation / 6f)} RPM (${String.format("%.1f", avgRotation)} dps)
+                🔄 Średnia rotacja: ${String.format("%.0f", avgRotationRPM)} RPM (${String.format("%.1f", avgRotationDps)} dps)
                 🧭 Maksymalna rotacja: ${String.format("%.0f", peakValue / 6f)} RPM
                 🌀 Charakterystyka osi obrotu: $spinAxis
+                --- DODATKOWO ---
+                ⚽ Prędkość wybicia w tej ramce: ${String.format("%.1f", initialVelocityIfAny)} km/h
             """.trimIndent()
         }
 

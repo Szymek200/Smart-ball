@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -26,38 +25,22 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
-import kotlinx.coroutines.*
-import java.io.File
-import java.io.FileWriter
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity() {
 
-    //like static
-    //every activity has access to it
-    companion object {
-        val fullHitHistory = mutableListOf<HistoryEntry>()
-    }
-
-    //permissing from android for bluetooth
     private val BLE_PERMISSION_REQUEST_CODE = 101
     private val LOG_TAG = "MAIN_ACTIVITY"
-    private val LOG_FILE_PREFIX = "pomiary"
-    private val UI_UPDATE_INTERVAL_MS = 50L
 
-    //charts
     private lateinit var accelChart: LineChart
     private lateinit var gyroChart: LineChart
     private var chartSampleCount = 0f
     private val MAX_VISIBLE_SAMPLES = 200
 
-    // Flag zabezpieczający przed nieskończoną pętlą synchronizacji gestów
     private var isSyncingCharts = false
 
-    // UI elements
-    private lateinit var lastHitTextView: TextView
+
     private lateinit var statusTextView: TextView
     private lateinit var connectionStatusTextView: TextView
     private lateinit var btnOpenLastShot: Button
@@ -71,22 +54,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var gyroX: TextView; private lateinit var gyroY: TextView; private lateinit var gyroZ: TextView
     private lateinit var gpsLat: TextView; private lateinit var gpsLon: TextView; private lateinit var gpsFix: TextView
 
-    private lateinit var hitHistoryContainer: LinearLayout
-    private lateinit var logSwitch: Switch
 
-    private val scope = CoroutineScope(Dispatchers.IO)
-    private var logWriter: FileWriter? = null
-    private var isLoggingEnabled = false
-    private var logFile: File? = null
-    private var lastUiUpdateTime = 0L
-
-    private val logFileName: String
-        get() = "${LOG_FILE_PREFIX}_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}.csv"
+    private var currentLat: Float = 0.0f
+    private var currentLon: Float = 0.0f
+    private var currentFix: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        MetricsCalculator.loadPreferences(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -94,8 +71,11 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-
         BleManager.onGpsDataReceivedListener = { lat, lon, fix ->
+            currentLat = lat
+            currentLon = lon
+            currentFix = fix
+
             runOnUiThread {
                 gpsLat.text = String.format("Lat: %.5f", lat)
                 gpsLon.text = String.format("Lon: %.5f", lon)
@@ -121,6 +101,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        BleManager.onHitEventReceivedListener = { entry ->
+            runOnUiThread {
+                if (entry.type == EntryType.HIT) {
+                    val gForce = entry.peakValue / 1000f
+                    Toast.makeText(this, "💥 ZDERZENIE: ${String.format("%.1f", gForce)} G!", Toast.LENGTH_SHORT).show()
+                } else {
+                    val rpm = entry.peakValue / 6f
+                    Toast.makeText(this, "✈️ LOT: ${entry.durationMs}ms | ${String.format("%.0f", rpm)} RPM", Toast.LENGTH_SHORT).show()
+                }
+
+               
+                updateSessionStatistics()
+            }
+        }
+
         initializeViews()
 
         BleManager.init(this)
@@ -140,9 +135,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupDualCharts() {
-        // ====================================================================
-        // accel chart
-        // ====================================================================
         accelChart.apply {
             description.text = "Przyspieszenie (Lewa: IMU [mg], Prawa: H3 High-G [G])"
             setTouchEnabled(true)
@@ -152,108 +144,47 @@ class MainActivity : AppCompatActivity() {
             setPinchZoom(false)
             setBackgroundColor(Color.WHITE)
         }
-
-        // imu, left axis
         val setImuAccel = LineDataSet(mutableListOf(), "IMU Accel [mg]").apply {
-            color = Color.RED
-            setDrawCircles(false)
-            lineWidth = 2f
-            setDrawValues(false)
+            color = Color.RED; setDrawCircles(false); lineWidth = 2f; setDrawValues(false)
             axisDependency = YAxis.AxisDependency.LEFT
         }
-
         val setH3Accel = LineDataSet(mutableListOf(), "H3 High-G [G]").apply {
-            color = Color.BLACK
-            setDrawCircles(false)
-            lineWidth = 2f
-            setDrawValues(false)
+            color = Color.BLACK; setDrawCircles(false); lineWidth = 2f; setDrawValues(false)
             axisDependency = YAxis.AxisDependency.RIGHT
         }
-
         accelChart.data = LineData(setImuAccel, setH3Accel)
+        accelChart.axisLeft.apply { textColor = Color.RED; setDrawGridLines(true) }
+        accelChart.axisRight.apply { isEnabled = true; textColor = Color.BLACK; setDrawGridLines(false) }
 
-        accelChart.axisLeft.apply {
-            textColor = Color.RED
-            setDrawGridLines(true)
-            resetAxisMinimum()
-            resetAxisMaximum()
-        }
-
-        accelChart.axisRight.apply {
-            isEnabled = true
-            textColor = Color.BLACK
-            setDrawGridLines(false)
-            resetAxisMinimum()
-            resetAxisMaximum()
-        }
-
-        // ====================================================================
-        // gyro chart
-        // ====================================================================
         gyroChart.apply {
             description.text = "Rotacja [dps]"
-            setTouchEnabled(true)
-            isDragEnabled = true
-            isScaleXEnabled = true
-            isScaleYEnabled = false
-            setPinchZoom(false)
-            setBackgroundColor(Color.WHITE)
+            setTouchEnabled(true); isDragEnabled = true; isScaleXEnabled = true; isScaleYEnabled = false
+            setPinchZoom(false); setBackgroundColor(Color.WHITE)
         }
-
-        //x axis
         val setGyroX = LineDataSet(mutableListOf(), "Żyroskop X").apply {
-            color = Color.BLUE
-            setDrawCircles(false)
-            lineWidth = 2.5f
-            setDrawValues(false)
+            color = Color.BLUE; setDrawCircles(false); lineWidth = 2.5f; setDrawValues(false)
             axisDependency = YAxis.AxisDependency.LEFT
         }
-
-        // y axis
         val setGyroY = LineDataSet(mutableListOf(), "Żyroskop Y").apply {
-            color = Color.parseColor("#4CAF50")
-            setDrawCircles(false)
-            lineWidth = 2.5f
-            setDrawValues(false)
+            color = Color.parseColor("#4CAF50"); setDrawCircles(false); lineWidth = 2.5f; setDrawValues(false)
             axisDependency = YAxis.AxisDependency.LEFT
         }
-
-        // z axis
         val setGyroZ = LineDataSet(mutableListOf(), "Żyroskop Z").apply {
-            color = Color.parseColor("#FF9800")
-            setDrawCircles(false)
-            lineWidth = 2.5f
-            setDrawValues(false)
+            color = Color.parseColor("#FF9800"); setDrawCircles(false); lineWidth = 2.5f; setDrawValues(false)
             axisDependency = YAxis.AxisDependency.LEFT
         }
-
         gyroChart.data = LineData(setGyroX, setGyroY, setGyroZ)
-
-        gyroChart.axisLeft.apply {
-            textColor = Color.BLACK
-            setDrawGridLines(true)
-            resetAxisMinimum()
-            resetAxisMaximum()
-            spaceTop = 20f
-            spaceBottom = 20f
-        }
+        gyroChart.axisLeft.apply { textColor = Color.BLACK; setDrawGridLines(true); spaceTop = 20f; spaceBottom = 20f }
         gyroChart.axisRight.isEnabled = false
 
-        //sync when zooming
         accelChart.onChartGestureListener = createSyncGestureListener(accelChart, gyroChart)
         gyroChart.onChartGestureListener = createSyncGestureListener(gyroChart, accelChart)
     }
 
     private fun createSyncGestureListener(srcChart: LineChart, dstChart: LineChart): OnChartGestureListener {
         return object : OnChartGestureListener {
-            override fun onChartScale(me: MotionEvent?, scaleX: Float, scaleY: Float) {
-                syncCharts(srcChart, dstChart)
-            }
-
-            override fun onChartTranslate(me: MotionEvent?, dX: Float, dY: Float) {
-                syncCharts(srcChart, dstChart)
-            }
-
+            override fun onChartScale(me: MotionEvent?, scaleX: Float, scaleY: Float) { syncCharts(srcChart, dstChart) }
+            override fun onChartTranslate(me: MotionEvent?, dX: Float, dY: Float) { syncCharts(srcChart, dstChart) }
             override fun onChartGestureStart(me: MotionEvent?, lastPerformedGesture: ChartTouchListener.ChartGesture?) {}
             override fun onChartGestureEnd(me: MotionEvent?, lastPerformedGesture: ChartTouchListener.ChartGesture?) {}
             override fun onChartLongPressed(me: MotionEvent?) {}
@@ -266,88 +197,77 @@ class MainActivity : AppCompatActivity() {
     private fun syncCharts(src: LineChart, dst: LineChart) {
         if (isSyncingCharts) return
         isSyncingCharts = true
-
         val srcMatrix = src.viewPortHandler.matrixTouch
         val dstMatrix = dst.viewPortHandler.matrixTouch
-
         val vals = FloatArray(9)
         srcMatrix.getValues(vals)
-
         val dstVals = FloatArray(9)
         dstMatrix.getValues(dstVals)
-        dstVals[0] = vals[0] // Scale X
-        dstVals[2] = vals[2] // Translate X
-
+        dstVals[0] = vals[0]
+        dstVals[2] = vals[2]
         dstMatrix.setValues(dstVals)
         dst.viewPortHandler.refresh(dstMatrix, dst, true)
-
         isSyncingCharts = false
     }
 
     private fun addSampleToChart(h3x: Float, h3y: Float, h3z: Float, ax: Float, ay: Float, az: Float, gx: Float, gy: Float, gz: Float) {
-
-        scope.launch(Dispatchers.IO) {
-            SessionManager.logSampleToCurrentSession(
-                h3x, h3y, h3z,
-                ax, ay, az,
-                gx, gy, gz,
-                0f, 0f, false
-                //GPS EMPTY
-            )
-        }
-
         runOnUiThread {
-            //if charts aren't available
             val accelData = accelChart.data ?: return@runOnUiThread
             val gyroData = gyroChart.data ?: return@runOnUiThread
 
             val setImu = accelData.getDataSetByIndex(0)
             val setH3 = accelData.getDataSetByIndex(1)
-
             val setGyroX = gyroData.getDataSetByIndex(0)
             val setGyroY = gyroData.getDataSetByIndex(1)
             val setGyroZ = gyroData.getDataSetByIndex(2)
 
-            //calculating result force
             val imuMagMg = sqrt((ax * ax + ay * ay + az * az).toDouble()).toFloat()
-
             val h3MagG = sqrt((h3x * h3x + h3y * h3y + h3z * h3z).toDouble()).toFloat()
 
             accelData.addEntry(Entry(chartSampleCount, imuMagMg), 0)
             accelData.addEntry(Entry(chartSampleCount, h3MagG), 1)
 
-            // 2. Dodawanie osobnych próbek wartości składowych dla Żyroskopu
-            gyroData.addEntry(Entry(chartSampleCount, gx), 0) // Niebieski (X)
-            gyroData.addEntry(Entry(chartSampleCount, gy), 1) // Zielony (Y)
-            gyroData.addEntry(Entry(chartSampleCount, gz), 2) // Pomarańczowy (Z)
+            gyroData.addEntry(Entry(chartSampleCount, gx), 0)
+            gyroData.addEntry(Entry(chartSampleCount, gy), 1)
+            gyroData.addEntry(Entry(chartSampleCount, gz), 2)
 
             chartSampleCount++
 
-            // to many samples
             if (setImu.entryCount > MAX_VISIBLE_SAMPLES) setImu.removeEntry(0)
             if (setH3.entryCount > MAX_VISIBLE_SAMPLES) setH3.removeEntry(0)
-
             if (setGyroX.entryCount > MAX_VISIBLE_SAMPLES) setGyroX.removeEntry(0)
             if (setGyroY.entryCount > MAX_VISIBLE_SAMPLES) setGyroY.removeEntry(0)
             if (setGyroZ.entryCount > MAX_VISIBLE_SAMPLES) setGyroZ.removeEntry(0)
 
-            //charts refresh appearance
             accelData.notifyDataChanged()
             gyroData.notifyDataChanged()
             accelChart.notifyDataSetChanged()
             gyroChart.notifyDataSetChanged()
 
-            // moving chart left
             val minX = (chartSampleCount - MAX_VISIBLE_SAMPLES).coerceAtLeast(0f)
             accelChart.xAxis.axisMinimum = minX
             accelChart.xAxis.axisMaximum = chartSampleCount
-
             gyroChart.xAxis.axisMinimum = minX
             gyroChart.xAxis.axisMaximum = chartSampleCount
 
             accelChart.invalidate()
             gyroChart.invalidate()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Odtwarzamy wykresy po powrocie do aktywności
+        BleManager.onDataSampleReceivedListener = { h3x, h3y, h3z, ax, ay, az, gx, gy, gz ->
+            addSampleToChart(h3x, h3y, h3z, ax, ay, az, gx, gy, gz)
+        }
+        // Odtwarzamy statystyki po powrocie do aktywności
+        updateSessionStatistics()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        BleManager.onDataSampleReceivedListener = null
     }
 
     private fun initializeViews() {
@@ -364,27 +284,24 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, SessionActivity::class.java))
         }
 
-
         accelChart = findViewById(R.id.accelLiveChart)
         gyroChart = findViewById(R.id.gyroLiveChart)
         setupDualCharts()
 
-        lastHitTextView = findViewById(R.id.lastHitTextView)
+
         statusTextView = findViewById(R.id.statusTextView)
         connectionStatusTextView = findViewById(R.id.connectionStatusTextView)
 
         btnOpenLastShot = findViewById(R.id.btnOpenLastShot)
         btnOpenLastShot.setOnClickListener {
-            if (fullHitHistory.isNotEmpty()) {
-                val lastEntry = fullHitHistory[0]
-                ShotDetailsActivity.selectedSamples = lastEntry.samples
-                ShotDetailsActivity.peakValue = lastEntry.peakValue
-                ShotDetailsActivity.entryType = lastEntry.type
-
-                val intent = Intent(this, ShotDetailsActivity::class.java)
+            val history = HistoryCacheManager.history
+            if (history.isNotEmpty()) {
+                val intent = Intent(this, ShotDetailsActivity::class.java).apply {
+                    putExtra("EXTRA_HIT_ENTRY", history[0]) // Wysyłamy najświeższy obiekt
+                }
                 startActivity(intent)
             } else {
-                Toast.makeText(this, "Brak zarejestrowanych zdarzeń w obecnej sesji!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Brak zarejestrowanych zdarzeń w pamięci!", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -408,18 +325,6 @@ class MainActivity : AppCompatActivity() {
         gpsLon = findViewById(R.id.gpsLon)
         gpsFix = findViewById(R.id.gpsFix)
 
-        hitHistoryContainer = findViewById(R.id.hitHistoryContainer)
-        logSwitch = findViewById(R.id.logSwitch)
-
-        logSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) initLogFile()
-            else {
-                isLoggingEnabled = false
-                logWriter?.close()
-                logWriter = null
-                Log.i(LOG_TAG, "Logowanie CSV wyłączone.")
-            }
-        }
     }
 
     private fun checkAndRequestBlePermissions() {
@@ -456,27 +361,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initLogFile() {
-        val appDirectory = getExternalFilesDir(null) ?: return
-        logFile = File(appDirectory, logFileName)
-        try {
-            logWriter = FileWriter(logFile, true)
-            logWriter?.write("Timestamp,H3_AX,H3_AY,H3_AZ,IMU_AX,IMU_AY,IMU_AZ,IMU_GX,IMU_GY,IMU_GZ,Lat,Lon,Fix\n")
-            isLoggingEnabled = true
-            Toast.makeText(this, "Zapis do: ${logFile?.name}", Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            isLoggingEnabled = false
-            logSwitch.isChecked = false
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         try {
-            logWriter?.close()
             BleManager.disconnect()
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Błąd zamykania zasobów: ${e.message}")
         }
+    }
+
+
+    private fun updateSessionStatistics() {
+        val history = HistoryCacheManager.history
+        val hits = history.filter { it.type == EntryType.HIT }
+
+
+        tvSessionShots.text = "Uderzenia: ${hits.size}"
+
+
+        val energy = MetricsCalculator.calculateTotalEnergyExpenditureJ(history)
+        tvSessionEnergy.text = "Energia: ${String.format("%.1f", energy)} J"
+
+
+        val consistency = MetricsCalculator.calculateConsistencyScore(history)
+        tvSessionConsistency.text = "Powtarzalność: $consistency%"
     }
 }

@@ -1,14 +1,10 @@
 #include "normalize.h"
 #include "measure.h"
 
-// function from measure.c
-//void get_last_gps_data(float *lat, float *lon, bool *fix);
-
 static vector3d_t rotate_vector_by_quaternion(vector3d_t v, imu_data imu)
 {
     vector3d_t result;
 
-    // Przypisanie dla czytelności wzoru
     float qx = imu.quat.x;
     float qy = imu.quat.y;
     float qz = imu.quat.z;
@@ -29,7 +25,7 @@ static vector3d_t rotate_vector_by_quaternion(vector3d_t v, imu_data imu)
 
 global_data_t convert_to_global_frame(void)
 {
-    accel_data raw_h3lis = accel_get();
+    vector3d_t raw_h3lis = accel_get();
     imu_data raw_imu = imu_get();
 
     global_data_t global = {0};

@@ -5,6 +5,8 @@ idf_component_register(
         "normalize.c"
         "ble_config.c"
         "gsm.c"
+        "audio_player.c"
+        "config_manager.c"
     INCLUDE_DIRS
         "."
     REQUIRES
@@ -24,4 +26,6 @@ idf_component_register(
         esp_http_client                  
         lis331
         lsm6
+        spiffs
+        esp_driver_i2s
 )

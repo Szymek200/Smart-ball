@@ -8,6 +8,8 @@
 #include "host/util/util.h"
 #include "services/gap/ble_svc_gap.h"
 #include "services/gatt/ble_svc_gatt.h"
+#include "host/ble_store.h"
+#include "freertos/timers.h"
 
 #include "measure.h"
 #include "config_manager.h"
@@ -16,6 +18,11 @@ static const char *TAG = "BLE_CONFIG";
 
 static uint16_t gatt_char_val_handle;
 static uint8_t ble_addr_type;
+
+static bool is_pairing_mode = false;
+static TimerHandle_t pairing_timer = NULL;
+static void pairing_timer_cb(TimerHandle_t xTimer);
+
 
 // from measure
 extern float config_wake_ths_g;
@@ -26,19 +33,18 @@ extern float crash_threshold_g;
 bool is_phone_connected = false;
 static volatile bool is_notify_enabled = false;
 
-void ble_store_config_init(void);
-
-// Usługa GATT: "12341234-5678-1234-5678-123412345678"
+// Usługa GATT: "D7863B5F-AD11-431D-8A2D-05BD307ACB96"
 static const ble_uuid128_t gatt_svr_svc_uuid =
-    BLE_UUID128_INIT(0x78, 0x56, 0x34, 0x12, 0x34, 0x12, 0x78, 0x56, 0x34, 0x12, 0x78, 0x56, 0x34, 0x12, 0x34, 0x12);
+    BLE_UUID128_INIT(0x96, 0xCB, 0x7A, 0x30, 0xBD, 0x05, 0x2D, 0x8A, 0x1D, 0x43, 0x11, 0xAD, 0x5F, 0x3B, 0x86, 0xD7);
 
-// Charakterystyka konfiguracyjna: "87654321-4321-6789-4321-876543210987"
+// Charakterystyka konfiguracyjna (Write/Read): "07694EBE-272D-4D30-ADB0-223B449DBF48"
 static const ble_uuid128_t gatt_svr_chr_uuid =
-    BLE_UUID128_INIT(0x87, 0x09, 0x21, 0x43, 0x65, 0x87, 0x21, 0x43, 0x89, 0x67, 0x21, 0x43, 0x21, 0x43, 0x65, 0x87);
+    BLE_UUID128_INIT(0x48, 0xBF, 0x9D, 0x44, 0x3B, 0x22, 0xB0, 0xAD, 0x30, 0x4D, 0x2D, 0x27, 0xBE, 0x4E, 0x69, 0x07);
 
-// Charakterystyka danych: "78563412-7856-3412-7856-341278563412"
+// Charakterystyka danych (Notify): "1C081A8B-3707-4E39-A5BA-2D10191AE744"
 static const ble_uuid128_t gatt_data_chr_uuid =
-    BLE_UUID128_INIT(0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78);
+    BLE_UUID128_INIT(0x44, 0xE7, 0x1A, 0x19, 0x10, 0x2D, 0xBA, 0xA5, 0x39, 0x4E, 0x07, 0x37, 0x8B, 0x1A, 0x08, 0x1C);
+
 
 void ble_store_config_init(void);
 static void ble_app_on_reset(int reason);
@@ -59,14 +65,14 @@ static const struct ble_gatt_chr_def gatt_svr_chrs[] = {
         // 1. Charakterystyka konfiguracyjna (ZAPIS / ODCZYT)
         .uuid = &gatt_svr_chr_uuid.u, //uuid
         .access_cb = gatt_svr_chr_access, //function
-        .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE | BLE_GATT_CHR_F_WRITE_NO_RSP, //last - save without response to phone
+        .flags = BLE_GATT_CHR_F_READ_ENC | BLE_GATT_CHR_F_WRITE_ENC | BLE_GATT_CHR_F_WRITE_NO_RSP,
         .val_handle = &gatt_char_val_handle,
     },
     {
         // 2. Charakterystyka NOTIFY
         .uuid = &gatt_data_chr_uuid.u,
         .access_cb = gatt_svr_chr_access,
-        .flags = BLE_GATT_CHR_F_NOTIFY,
+        .flags = BLE_GATT_CHR_F_NOTIFY | BLE_GATT_CHR_F_READ_ENC,
         .val_handle = &gatt_data_char_val_handle,
     },
     { 0 } 
@@ -96,12 +102,17 @@ void ble_config_init(void) {
 
     ble_hs_cfg.reset_cb = ble_app_on_reset;
     ble_hs_cfg.sync_cb = ble_app_on_sync;
-    ble_hs_cfg.sm_io_cap = BLE_HS_IO_NO_INPUT_OUTPUT;
-    ble_hs_cfg.sm_bonding = 0; 
-    ble_hs_cfg.sm_mitm = 0;
-    ble_hs_cfg.sm_sc = 0;
-    ble_hs_cfg.sm_our_key_dist = 0;
-    ble_hs_cfg.sm_their_key_dist = 0;
+    ble_hs_cfg.sm_io_cap = BLE_HS_IO_NO_INPUT_OUTPUT; 
+    
+    // zapamietywanie sparowanych urzadzen
+    ble_hs_cfg.sm_bonding = 1; 
+    
+    //  Secure Connections
+    ble_hs_cfg.sm_sc = 1;      
+    
+    // key distribution
+    ble_hs_cfg.sm_our_key_dist = BLE_SM_PAIR_KEY_DIST_ENC | BLE_SM_PAIR_KEY_DIST_ID;
+    ble_hs_cfg.sm_their_key_dist = BLE_SM_PAIR_KEY_DIST_ENC | BLE_SM_PAIR_KEY_DIST_ID;
  
     ble_svc_gap_init();
     ble_svc_gatt_init();
@@ -158,7 +169,7 @@ static void ble_app_on_sync(void) {
 static void ble_app_advertise(void) {
     struct ble_gap_adv_params adv_params;
     struct ble_hs_adv_fields fields;
-    const char *name = "SmartBall-Config";
+    const char *name = "SmartBall";
 
     memset(&fields, 0, sizeof(fields));
     fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP; //generally visible(all the time), only BLE
@@ -176,7 +187,27 @@ static void ble_app_advertise(void) {
     adv_params.conn_mode = BLE_GAP_CONN_MODE_UND; //every MAC connectable
     adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN; //all visible
 
-    //radio on
+    // MECHANIZM WHITE-LIST
+    ble_addr_t bonded_addrs[3];
+    int num_bonded = 0;
+    
+    rc = ble_store_util_bonded_peers(bonded_addrs, &num_bonded, 3);
+    
+    if (is_pairing_mode) {
+        ESP_LOGI(TAG, "[BLE] Tryb parowania AKTYWNY. Rozgłaszanie otwarte!");
+        adv_params.filter_policy = BLE_HCI_ADV_FILT_NONE;
+    } 
+    else if (rc == 0 && num_bonded > 0) {
+        ESP_LOGI(TAG, "[BLE] Znaleziono %d sparowanych urządzeń. Włączam WhiteList!", num_bonded);
+        ble_gap_wl_set(bonded_addrs, num_bonded);
+        adv_params.filter_policy = BLE_HCI_ADV_FILT_CONN; 
+    } else {
+        ESP_LOGI(TAG, "[BLE] Brak sparowanych urządzeń. Rozgłaszanie otwarte.");
+        adv_params.filter_policy = BLE_HCI_ADV_FILT_NONE;
+    }
+    // ----------------------------
+
+    // Uruchomienie radia
     rc = ble_gap_adv_start(ble_addr_type, NULL, BLE_HS_FOREVER, &adv_params, ble_app_gap_event, NULL);
     if (rc != 0) {
         ESP_LOGE(TAG, "Błąd ble_gap_adv_start: %d", rc);
@@ -357,6 +388,33 @@ static int gatt_svr_chr_access(uint16_t conn_handle, uint16_t attr_handle,
             ESP_LOGW(TAG, "[BLE] Nieobsługiwana operacja GATT: %d", ctxt->op);
             return BLE_ATT_ERR_REQ_NOT_SUPPORTED;
     }
+}
+
+//pairing functions
+
+static void pairing_timer_cb(TimerHandle_t xTimer) {
+    ESP_LOGI(TAG, "Czas otwartego parowania (60s) minął. Zamykam Bluetooth.");
+    is_pairing_mode = false;
+
+    //restart bluetooth
+    ble_gap_adv_stop();
+    ble_app_advertise();
+}
+
+void ble_enable_pairing_mode(void) {
+    if (is_pairing_mode) return; 
+
+    is_pairing_mode = true;
+ 
+    //reset radio
+    ble_gap_adv_stop(); 
+    ble_app_advertise(); 
+
+    // Timer (60 sekund)
+    if (pairing_timer == NULL) {
+        pairing_timer = xTimerCreate("pair_timer", pdMS_TO_TICKS(60000), pdFALSE, (void *)0, pairing_timer_cb);
+    }
+    xTimerStart(pairing_timer, 0);
 }
 
 

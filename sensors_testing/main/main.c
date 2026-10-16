@@ -16,6 +16,7 @@
 #include "ble_config.h"
 #include "measure.h"
 #include "config_manager.h"
+#include "button.h"
 
 static const char *TAG = "main";
 
@@ -39,6 +40,10 @@ void app_main(void)
     esp_log_level_set("mqtt_client", ESP_LOG_VERBOSE);        // Surowe pakiety MQTT
     esp_log_level_set("esp-netif_lwip-ppp", ESP_LOG_VERBOSE); // Szczegóły łącza internetowego PPP
     esp_log_level_set("modem_gsm", ESP_LOG_DEBUG);            // Logi z Twojego pliku gsm.c
+
+    button_init();
+
+    xTaskCreate(button_task, "button_task", 2048, NULL, 5, NULL);
 
     config_manager_init();
 

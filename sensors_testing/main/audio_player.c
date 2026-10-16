@@ -181,7 +181,7 @@ void play_raw(const char *filepath)
         "audio_loop",
         4096,
         NULL,
-        4,
+        7,
         &audio_task_handle
     );
 

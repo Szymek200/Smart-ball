@@ -476,9 +476,19 @@ static void handle_normal_event(const global_data_t *current_frame)
         pre_hit_count++;
     }
 
+    //downsampling
+    static int normal_tx_divider = 0;
+    if (++normal_tx_divider >= 5) {
+        normal_tx_divider = 0;
+        if (data_queue != NULL) {
+            xQueueSend(data_queue, current_frame, 0);
+        }
+    }
+
+    /*
     if (data_queue != NULL) {
         xQueueSend(data_queue, current_frame, 0);
-    }
+    }*/
 }
 
 static void sensors_reading_task(void *pvParameters)
@@ -539,7 +549,7 @@ void sensors_task_start(void)
         "sensors_task",         
         4096,                   
         NULL,   //parameters                
-        5,                      
+        6,                      
         &sensors_task_handle,            
         1                       
     );

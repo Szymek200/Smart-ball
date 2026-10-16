@@ -7,6 +7,7 @@ idf_component_register(
         "gsm.c"
         "audio_player.c"
         "config_manager.c"
+        "button.c"
     INCLUDE_DIRS
         "."
     REQUIRES

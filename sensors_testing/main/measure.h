@@ -27,27 +27,27 @@ extern bool is_gps_connected;
 extern bool is_phone_connected;
 
 // Piny magistrali SPI
-#define PIN_MISO            17
-#define PIN_MOSI            18
-#define PIN_SCLK            8
+#define PIN_MISO            1
+#define PIN_MOSI            2
+#define PIN_SCLK            4
 
-// Akcelerometr H3LIS331DL
-#define PIN_ACCEL_CS        14
-#define PIN_ACCEL_INT1      21  // Pin wybudzania ESP32 z trybu Light Sleep
+// Akcelerometr H3LIS331DL SDO - 1 
+#define PIN_ACCEL_CS        47
+#define PIN_ACCEL_INT1      42  // Pin wybudzania ESP32 z trybu Light Sleep
 
 // IMU LSM6DSV16X
-#define PIN_IMU_CS          13  
+#define PIN_IMU_CS          40  
 
 // GPS UART
-#define GPS_RX_PIN          5   // TX z modułu GPS -> RX w ESP32
-#define GPS_TX_PIN          15  // RX w module GPS <- TX z ESP32
+#define GPS_RX_PIN          6   // TX z modułu GPS -> RX w ESP32
+#define GPS_TX_PIN          5  // RX w module GPS <- TX z ESP32
 
 // Parametry buforowania zderzenia
 #define PRE_HIT_BUFFER_SIZE  100
 #define POST_HIT_SAMPLES     100
 
 // Struktury danych
-typedef struct {
+typedef struct __attribute__((packed)) {
     float x;
     float y;
     float z;

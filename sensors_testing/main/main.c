@@ -11,6 +11,7 @@
 #include "esp_event.h"
 #include "audio_player.h"
 #include "esp_spiffs.h"
+#include "driver/gpio.h"
 
 #include "gsm.h"
 #include "ble_config.h"
@@ -46,6 +47,21 @@ void app_main(void)
     xTaskCreate(button_task, "button_task", 2048, NULL, 5, NULL);
 
     config_manager_init();
+
+    #define CONVERTER_EN_PIN 38
+
+// Inicjalizacja pinu EN konwertera 5V
+gpio_config_t conv_conf = {
+    .pin_bit_mask = (1ULL << CONVERTER_EN_PIN),
+    .mode = GPIO_MODE_OUTPUT,
+    .pull_up_en = GPIO_PULLUP_DISABLE,
+    .pull_down_en = GPIO_PULLDOWN_DISABLE,
+    .intr_type = GPIO_INTR_DISABLE
+};
+ESP_ERROR_CHECK(gpio_config(&conv_conf));
+
+// Włączenie konwertera (podanie stanu wysokiego)
+gpio_set_level(CONVERTER_EN_PIN, 1);
 
     // Montowanie partycji SPIFFS - pliki .raw
     esp_vfs_spiffs_conf_t spiffs_conf = {
@@ -85,7 +101,7 @@ void app_main(void)
     ble_config_init();
 
     //wylaczam gps na czas jego symulacji do testow mqtt
-    sensors_set(false); 
+    sensors_set(true); 
 
     vTaskDelay(pdMS_TO_TICKS(300));
 
@@ -99,7 +115,7 @@ void app_main(void)
     ESP_LOGI(TAG, "Uruchamianie modemu GSM i MQTT...");
     startGSMtwo();
 
-    // Uruchomienie w pętli zadania wysyłającego dane na serwer
+    // wysylanie lokalizacji poprzez gsm
     ESP_LOGI(TAG, "Tworzenie zadania lte_sender_task...");
     xTaskCreate(lte_sender_task, "lte_sender_task", 4096, NULL, 5, NULL);
 

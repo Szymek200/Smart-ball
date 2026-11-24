@@ -21,11 +21,11 @@
 
 //dla dev board
 
-#define MODEM_UART_TX_PIN      4//4  // Pin RX w modemie- czerowny
-#define MODEM_UART_RX_PIN      5  // Pin TX w modemie - bialy
+#define MODEM_UART_TX_PIN      11//4  // Pin RX w modemie- czerowny
+#define MODEM_UART_RX_PIN      10  // Pin TX w modemie - bialy
 //#define MODEM_UART_RTS_PIN     19  // niepodlaczone
-//#define MODEM_PWRKEY_PIN       4   // Sterowanie włączeniem (P/R)
-//#define MODEM_PEN_PIN          5   // niepodlaczone
+//#define MODEM_PWRKEY_PIN       9   // Sterowanie włączeniem (P/R)
+//#define MODEM_PEN_PIN          12   // niepodlaczone
 
 extern QueueHandle_t gps_queue; 
 

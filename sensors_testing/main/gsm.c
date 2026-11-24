@@ -50,7 +50,6 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 
 void start_mqtt_client(void) {
     esp_mqtt_client_config_t mqtt_cfg = {
-        //.broker.address.uri = "mqtt://broker.hivemq.com:1883", 
         .broker.address.uri = "mqtt://broker.emqx.io:1883",
     };
     mqtt_client = esp_mqtt_client_init(&mqtt_cfg);
@@ -78,9 +77,10 @@ bool sim7070g_send_cmd_check(const char *cmd, const char *expected_resp, uint32_
 
     while ((xTaskGetTickCount() - start) < timeout_ticks) {
         uint8_t temp[128];
-        int len = uart_read_bytes(UART_PORT_NUM, temp, sizeof(temp), pdMS_TO_TICKS(100));
+        int len = uart_read_bytes(UART_PORT_NUM, temp, sizeof(temp) - 1, pdMS_TO_TICKS(100));
 
         if (len > 0) {
+            temp[len] = '\0';
             size_t available = sizeof(data) - 1 - total;
             if ((size_t)len > available) len = (int)available;
 
@@ -95,29 +95,28 @@ bool sim7070g_send_cmd_check(const char *cmd, const char *expected_resp, uint32_
                 return true;
             }
 
-            if (strstr(data, "\r\nERROR\r\n") != NULL ||
-                strstr(data, "+CME ERROR:") != NULL ||
-                strstr(data, "+CMS ERROR:") != NULL) {
-                ESP_LOGE(TAG, "Modem zwrócił błąd:\n%s", data);
+            // NOWOŚĆ: Ulepszone wyłapywanie ERROR, od razu przerywa czekanie
+            if (strstr(data, "ERROR") != NULL) {
+                ESP_LOGE(TAG, "Modem natychmiast odrzucił komendę (zwrócił ERROR):\n%s", data);
                 return false;
             }
 
             if (total >= sizeof(data) - 1) break;
         }
     }
+    ESP_LOGE(TAG, "Timeout po %lu ms dla komendy: %s", timeout_ms, cmd);
     return false;
 }
 
 // --- GŁÓWNA INICJALIZACJA GSM ---
 
 void startGSMtwo(void) {
-    // 1. Czekamy na samoistny start modemu (bez sterowania GPIO)
-    ESP_LOGI(TAG, "Oczekiwanie na uruchomienie modemu SIM7070G (10s)...");
-    vTaskDelay(pdMS_TO_TICKS(10000)); 
+    ESP_LOGI(TAG, "Oczekiwanie na uruchomienie modemu SIM7070G...");
+    vTaskDelay(pdMS_TO_TICKS(2000)); 
 
-    // 2. Tymczasowa inicjalizacja UART do wstrzyknięcia działającej konfiguracji
+    // Konfiguracja UART 
     uart_config_t uart_config = {
-        .baud_rate = 115200,
+        .baud_rate = 115200, // Zastąpienie Auto-Baudu sztywną prędkością
         .data_bits = UART_DATA_8_BITS,
         .parity = UART_PARITY_DISABLE,
         .stop_bits = UART_STOP_BITS_1,
@@ -128,20 +127,71 @@ void startGSMtwo(void) {
     uart_driver_install(UART_PORT_NUM, BUF_SIZE, 0, 0, NULL, 0);
     uart_param_config(UART_PORT_NUM, &uart_config);
     uart_set_pin(UART_PORT_NUM, MODEM_UART_TX_PIN, MODEM_UART_RX_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+    
+    // Zabezpieczenie przed stanami nieustalonymi po włączeniu zasilania (krzaczki)
+    gpio_pullup_en(MODEM_UART_RX_PIN); 
 
-    ESP_LOGI(TAG, "Synchronizacja Auto-Baud...");
-    bool sync_ok = false;
-    for(int i = 0; i < 10; i++) {
+    //ESP_LOGI(TAG, "Synchronizacja z modemem...");
+    //bool sync_ok = false;
+    //synchronizacja start
+    ESP_LOGI(TAG, "Synchronizacja z modemem...");
+bool sync_ok = false;
+
+// Najpierw sprawdzamy normalny tryb AT
+for (int i = 0; i < 5; i++) {
+    if (sim7070g_send_cmd_check("AT", "OK", 1000)) {
+        sync_ok = true;
+        break;
+    }
+}
+
+// Modem może pozostać w trybie PPP po restarcie ESP32
+if (!sync_ok) {
+    ESP_LOGW(TAG, "Brak odpowiedzi AT. Próba wyjścia z PPP...");
+
+    // Cisza przed sekwencją escape
+    uart_flush_input(UART_PORT_NUM);
+    vTaskDelay(pdMS_TO_TICKS(1500));
+
+    // UWAGA: bez \r\n
+    uart_write_bytes(UART_PORT_NUM, "+++", 3);
+    uart_wait_tx_done(UART_PORT_NUM, pdMS_TO_TICKS(500));
+
+    // Cisza po sekwencji escape
+    vTaskDelay(pdMS_TO_TICKS(1500));
+
+    // Sprawdzenie, czy wróciliśmy do trybu AT
+    if (sim7070g_send_cmd_check("AT", "OK", 2000)) {
+        ESP_LOGI(TAG, "Odzyskano komunikację AT!");
+
+        // Próba zakończenia poprzedniej sesji danych
+        sim7070g_send_cmd_check("ATH", "OK", 3000);
+
+        sync_ok = true;
+    } else {
+        ESP_LOGE(TAG, "Nie udało się odzyskać modemu przez +++");
+    }
+}
+
+if (sync_ok) {
+    sim7070g_send_cmd_check("AT+IPR=115200", "OK", 1000);
+}
+
+//synchronizacja koniec
+
+
+
+    for(int i = 0; i < 20; i++) {
         uart_flush(UART_PORT_NUM); 
-        if (sim7070g_send_cmd_check("AT", "OK", 3000)) {
+        if (sim7070g_send_cmd_check("AT", "OK", 500)) {
+            sim7070g_send_cmd_check("AT+IPR=115200", "OK", 1000); // Zablokowanie prędkości
             sync_ok = true;
             break;
         }
-        vTaskDelay(pdMS_TO_TICKS(500));
     }
 
     if (sync_ok) {
-        ESP_LOGI(TAG, "Wstrzykiwanie sprawdzonej konfiguracji Orange IoT...");
+        ESP_LOGI(TAG, "Wstrzykiwanie sprawdzonej konfiguracji Orange IoT (w trybie samolotowym)...");
         
         sim7070g_send_cmd_check("AT+CFUN=0", "OK", 10000); 
         vTaskDelay(pdMS_TO_TICKS(1000));
@@ -149,7 +199,7 @@ void startGSMtwo(void) {
         sim7070g_send_cmd_check("AT+CNMP=38", "OK", 2000); 
         sim7070g_send_cmd_check("AT+CMNB=3", "OK", 2000);  
         sim7070g_send_cmd_check("AT+CGDCONT=1,\"IP\",\"iot\"", "OK", 2000); 
-        sim7070g_send_cmd_check("AT+CGAUTH=1,1,\"iot\",\"\"", "OK", 2000); 
+        sim7070g_send_cmd_check("AT+CNCFG=0,1,\"iot\",\"iot\",\"\",1", "OK", 2000); // Usunięto AT+CGAUTH z uwagi na standard Orange IoT
         
         sim7070g_send_cmd_check("AT+CFUN=1", "OK", 10000); 
         
@@ -161,6 +211,7 @@ void startGSMtwo(void) {
                 network_ok = true;
                 break;
             }
+            vTaskDelay(pdMS_TO_TICKS(1000));
         }
         
         if(!network_ok) {
@@ -191,8 +242,9 @@ void startGSMtwo(void) {
     esp_netif_config_t netif_ppp_config = ESP_NETIF_DEFAULT_PPP();
     esp_netif_t *esp_netif = esp_netif_new(&netif_ppp_config);
     
+    // Zmieniono wbudowany sterownik na uniwersalny SIM7070, który lepiej współgra z tą konfiguracją (zamiast SIM7000)
     esp_modem_dce_config_t dce_config = ESP_MODEM_DCE_DEFAULT_CONFIG("iot"); 
-    esp_modem_dce_t *dce = esp_modem_new_dev(ESP_MODEM_DCE_SIM7000, &dte_config, &dce_config, esp_netif);
+    esp_modem_dce_t *dce = esp_modem_new_dev(ESP_MODEM_DCE_SIM7070, &dte_config, &dce_config, esp_netif);
     
     ESP_LOGI(TAG, "Przełączanie modemu w tryb DATA (PPP)...");
     esp_err_t err = esp_modem_set_mode(dce, ESP_MODEM_MODE_DATA);
@@ -208,8 +260,57 @@ void startGSMtwo(void) {
 
 // --- TASK WYSYŁAJĄCY DANE LOKALIZACYJNE ---
 
+
+void lte_sender_task(void *pvParameters)
+{
+    char json_payload[128];
+
+    while (1)
+    {
+        if (is_mqtt_connected && mqtt_client != NULL)
+        {
+            float lat = 0.0f;
+            float lon = 0.0f;
+            bool fix = false;
+
+            get_last_gps_data(&lat, &lon, &fix);
+
+            snprintf(json_payload, sizeof(json_payload),
+                     "{\"lat\":%.6f,\"lon\":%.6f,\"fix\":%d}",
+                     lat, lon, fix ? 1 : 0);
+
+            int msg_id = esp_mqtt_client_publish(
+                mqtt_client,
+                "esp32/device/location",
+                json_payload,
+                0,
+                1,
+                0
+            );
+
+            //ESP_LOGI("LTE_MQTT",  "Publikacja lokalizacji: msg_id=%d, %s", msg_id, json_payload);
+        }
+        else
+        {
+            ESP_LOGW("LTE_MQTT",
+                     "Brak polaczenia MQTT. Oczekuje...");
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(4000));
+    }
+}
+
+
+/*
 void lte_sender_task(void *pvParameters) {
     char json_payload[128];
+
+    float lat, lon;
+    bool fix;
+
+
+    //SYMULACJA GPS
+    
     float sim_lat = 52.2297f; 
     float sim_lon = 21.0122f;
 
@@ -230,4 +331,5 @@ void lte_sender_task(void *pvParameters) {
         
         vTaskDelay(pdMS_TO_TICKS(4000));
     }
-}
+        
+}*/

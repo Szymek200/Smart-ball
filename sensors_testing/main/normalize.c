@@ -30,6 +30,9 @@ global_data_t convert_to_global_frame(void)
 
     global_data_t global = {0};
 
+    
+    //FAKTYCZNE POBIERANIE DANYCH Z CZUJNIKOW
+    
     //default data to GPS
     float temp_lat = 0.0f;
     float temp_lon = 0.0f;
@@ -59,6 +62,29 @@ global_data_t convert_to_global_frame(void)
         global.accel_imu   = local_imu_xl;
         global.gyro        = local_imu_gy;
     }
+    
+
+    //PRZYKLADOWE GENEROWANIE DANYCH
+
+    /*
+    global.latitude  = 52.2297f;
+    global.longitude = 21.0122f;
+    global.gps_fix   = true;
+
+   
+    global.accel_h3lis.x = 1.11f;
+    global.accel_h3lis.y = 2.22f;
+    global.accel_h3lis.z = 9.81f;
+
+    
+    global.accel_imu.x = -0.50f;
+    global.accel_imu.y =  0.25f;
+    global.accel_imu.z =  1.00f;
+
+
+    global.gyro.x = 10.5f;
+    global.gyro.y = -20.5f;
+    global.gyro.z = 30.0f;*/
 
     return global;
 }

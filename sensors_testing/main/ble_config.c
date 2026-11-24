@@ -14,6 +14,9 @@
 #include "measure.h"
 #include "config_manager.h"
 
+// Deklaracja prototypu funkcji systemowej magazynu NimBLE w ESP-IDF
+void ble_store_config_init(void);
+
 static const char *TAG = "BLE_CONFIG";
 
 static uint16_t gatt_char_val_handle;
@@ -23,8 +26,7 @@ static bool is_pairing_mode = false;
 static TimerHandle_t pairing_timer = NULL;
 static void pairing_timer_cb(TimerHandle_t xTimer);
 
-
-// from measure
+// Zmienne konfiguracyjne z pliku measure
 extern float config_wake_ths_g;
 extern float config_sleep_ths_g;
 extern int config_idle_time_s;
@@ -45,8 +47,6 @@ static const ble_uuid128_t gatt_svr_chr_uuid =
 static const ble_uuid128_t gatt_data_chr_uuid =
     BLE_UUID128_INIT(0x44, 0xE7, 0x1A, 0x19, 0x10, 0x2D, 0xBA, 0xA5, 0x39, 0x4E, 0x07, 0x37, 0x8B, 0x1A, 0x08, 0x1C);
 
-
-void ble_store_config_init(void);
 static void ble_app_on_reset(int reason);
 static void ble_app_on_sync(void);
 static void ble_host_task(void *param);
@@ -55,16 +55,16 @@ static void ble_app_advertise(void);
 static int ble_app_gap_event(struct ble_gap_event *event, void *arg);
 static int gatt_svr_chr_access(uint16_t conn_handle, uint16_t attr_handle, struct ble_gatt_access_ctxt *ctxt, void *arg);
 
-// Przechowujemy identyfikator aktywnego połączenia i uchwyt nowej charakterystyki
+// Przechowujemy identyfikator aktywnego połączenia i uchwyt charakterystyki
 static uint16_t active_conn_handle = BLE_HS_CONN_HANDLE_NONE;
 static uint16_t gatt_data_char_val_handle;
 
-//arrays configuring GATT
+// Tablica charakterystyk GATT
 static const struct ble_gatt_chr_def gatt_svr_chrs[] = {
     {
         // 1. Charakterystyka konfiguracyjna (ZAPIS / ODCZYT)
-        .uuid = &gatt_svr_chr_uuid.u, //uuid
-        .access_cb = gatt_svr_chr_access, //function
+        .uuid = &gatt_svr_chr_uuid.u,
+        .access_cb = gatt_svr_chr_access,
         .flags = BLE_GATT_CHR_F_READ_ENC | BLE_GATT_CHR_F_WRITE_ENC | BLE_GATT_CHR_F_WRITE_NO_RSP,
         .val_handle = &gatt_char_val_handle,
     },
@@ -78,19 +78,17 @@ static const struct ble_gatt_chr_def gatt_svr_chrs[] = {
     { 0 } 
 };
 
-// Tablica usług GATT - services
+// Tablica usług GATT
 static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
     {
         .type = BLE_GATT_SVC_TYPE_PRIMARY,
         .uuid = &gatt_svr_svc_uuid.u,
         .characteristics = gatt_svr_chrs,
     },
-    {
-        0, 
-    },
+    { 0 }
 };
 
-//turning on ble
+// Inicjalizacja stosu BLE
 void ble_config_init(void) {
     int rc;
 
@@ -104,13 +102,11 @@ void ble_config_init(void) {
     ble_hs_cfg.sync_cb = ble_app_on_sync;
     ble_hs_cfg.sm_io_cap = BLE_HS_IO_NO_INPUT_OUTPUT; 
     
-    // zapamietywanie sparowanych urzadzen
+    // Włączenie trwałego parowania (Bonding)
     ble_hs_cfg.sm_bonding = 1; 
+    ble_hs_cfg.sm_sc = 1; // Secure Connections    
     
-    //  Secure Connections
-    ble_hs_cfg.sm_sc = 1;      
-    
-    // key distribution
+    // Dystrybucja kluczy szyfrujących
     ble_hs_cfg.sm_our_key_dist = BLE_SM_PAIR_KEY_DIST_ENC | BLE_SM_PAIR_KEY_DIST_ID;
     ble_hs_cfg.sm_their_key_dist = BLE_SM_PAIR_KEY_DIST_ENC | BLE_SM_PAIR_KEY_DIST_ID;
  
@@ -134,22 +130,23 @@ void ble_config_init(void) {
         ESP_LOGE(TAG, "Błąd ble_svc_gap_device_name_set: %d", rc);
     }
 
+    ble_hs_cfg.store_status_cb = ble_store_util_status_rr;
+    // Wywołanie rejestracji sterownika NVS w NimBLE
     ble_store_config_init();
+
     nimble_port_freertos_init(ble_host_task);
-    //tasks for sending notifications
+
+    // Zadanie wysyłające powiadomienia danych
     xTaskCreate(ble_data_tx_task, "ble_data_tx_task", 4096, NULL, 5, NULL);
 }
 
 static void ble_host_task(void *param) {
     ESP_LOGI(TAG, "NimBLE Host Task uruchomiony.");
-    nimble_port_run(); //bluetooth event loop - it is separate task(for all general BLE tasks)
+    nimble_port_run();
     nimble_port_freertos_deinit();
 }
 
-//setting MAC
 static void ble_app_on_sync(void) {
-
-    //getting MAC
     int rc = ble_hs_util_ensure_addr(0);
     if (rc != 0) {
         ESP_LOGE(TAG, "Błąd ble_hs_util_ensure_addr: %d", rc);
@@ -165,14 +162,13 @@ static void ble_app_on_sync(void) {
     ble_app_advertise();
 }
 
-//broadcasting that we are available
 static void ble_app_advertise(void) {
     struct ble_gap_adv_params adv_params;
     struct ble_hs_adv_fields fields;
     const char *name = "SmartBall";
 
     memset(&fields, 0, sizeof(fields));
-    fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP; //generally visible(all the time), only BLE
+    fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP;
     fields.name = (uint8_t *)name;
     fields.name_len = strlen(name);
     fields.name_is_complete = 1;
@@ -184,8 +180,8 @@ static void ble_app_advertise(void) {
     }
 
     memset(&adv_params, 0, sizeof(adv_params));
-    adv_params.conn_mode = BLE_GAP_CONN_MODE_UND; //every MAC connectable
-    adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN; //all visible
+    adv_params.conn_mode = BLE_GAP_CONN_MODE_UND;
+    adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN;
 
     // MECHANIZM WHITE-LIST
     ble_addr_t bonded_addrs[3];
@@ -205,48 +201,65 @@ static void ble_app_advertise(void) {
         ESP_LOGI(TAG, "[BLE] Brak sparowanych urządzeń. Rozgłaszanie otwarte.");
         adv_params.filter_policy = BLE_HCI_ADV_FILT_NONE;
     }
-    // ----------------------------
 
-    // Uruchomienie radia
     rc = ble_gap_adv_start(ble_addr_type, NULL, BLE_HS_FOREVER, &adv_params, ble_app_gap_event, NULL);
     if (rc != 0) {
         ESP_LOGE(TAG, "Błąd ble_gap_adv_start: %d", rc);
     }
 }
 
-//main entry point when phone connects or disconnects or set notify
 static int ble_app_gap_event(struct ble_gap_event *event, void *arg) {
     switch (event->type) {
-        case BLE_GAP_EVENT_CONNECT:
+case BLE_GAP_EVENT_CONNECT:
             if (event->connect.status == 0) {
                 is_phone_connected = true;
                 active_conn_handle = event->connect.conn_handle;
+                ESP_LOGI(TAG, "[BLE] Nawiązano połączenie (conn_handle=%d). Żądam szyfrowania/identyfikacji...", active_conn_handle);
+
+                /*
+                 * Wywołujemy inicjalizację bezpieczeństwa bez względu na stan desc.sec_state.bonded.
+                 * Jeśli telefon używa zmiennego adresu MAC (RPA), to wywołanie zmusi NimBLE
+                 * do dopasowania klucza IRK z pamięci NVS i przywrócenia szyfrowania.
+                 */
+                int rc = ble_gap_security_initiate(active_conn_handle);
+                if (rc != 0) {
+                    ESP_LOGE(TAG, "[BLE] Błąd ble_gap_security_initiate: %d", rc);
+                }
             } else {
-                ble_app_advertise(); //failed connection
+                ble_app_advertise();
             }
             break;
+        case BLE_GAP_EVENT_SUBSCRIBE:
+                    if (event->subscribe.attr_handle == gatt_data_char_val_handle) {
+                        is_notify_enabled = (event->subscribe.cur_notify != 0);
+                        ESP_LOGI(TAG, "[BLE] Subskrypcja notyfikacji zmieniona na: %d", is_notify_enabled);
+                    }
+                    break;
+        
+
+        case BLE_GAP_EVENT_ENC_CHANGE:
+            if (event->enc_change.status == 0) {
+                ESP_LOGI(TAG, ">>> SZYFROWANIE AKTYWNE - Klucze z NVS zweryfikowane pomyślnie! <<<");
+            } else {
+                ESP_LOGE(TAG, "[BLE] Błąd szyfrowania (status=%d). Brak zgodnych kluczy NVS.", event->enc_change.status);
+            }
+            break;
+
+        case BLE_GAP_EVENT_REPEAT_PAIRING: {
+            /* Wywoływane gdy telefon skasował klucze, a ESP32 nadal je ma w NVS */
+            struct ble_gap_conn_desc desc;
+            if (ble_gap_conn_find(event->repeat_pairing.conn_handle, &desc) == 0) {
+                ble_store_util_delete_peer(&desc.peer_id_addr);
+            }
+            return BLE_GAP_REPEAT_PAIRING_RETRY;
+        }
 
         case BLE_GAP_EVENT_DISCONNECT:
+            ESP_LOGI(TAG, "[BLE] Rozłączono.");
             is_phone_connected = false;
-            is_notify_enabled = false; 
+            is_notify_enabled = false;
             active_conn_handle = BLE_HS_CONN_HANDLE_NONE;
             ble_app_advertise();
-            break;
-
-        case BLE_GAP_EVENT_SUBSCRIBE:
-            ESP_LOGI(TAG, "Zdarzenie SUBSCRIBE: attr_handle=%d, gatt_data_handle=%d, cur_notify=%d",
-                     event->subscribe.attr_handle, 
-                     gatt_data_char_val_handle, 
-                     event->subscribe.cur_notify);
-
-            if (event->subscribe.attr_handle == gatt_data_char_val_handle) {
-                is_notify_enabled = event->subscribe.cur_notify;
-                if (is_notify_enabled) {
-                    ESP_LOGI(TAG, ">>> SUBSRYPCJA NOTIFY WŁĄCZONA DLA TELEFONU! <<<");
-                } else {
-                    ESP_LOGI(TAG, ">>> SUBSRYPCJA NOTIFY WYŁĄCZONA! <<<");
-                }
-            }
             break;
 
         default:
@@ -255,17 +268,22 @@ static int ble_app_gap_event(struct ble_gap_event *event, void *arg) {
     return 0;
 }
 
-
-//sending streaming data
 static void ble_data_tx_task(void *pvParameters)
 {
     global_data_t sensor_data;
 
     while (1) {
-        
         if (xQueueReceive(data_queue, &sensor_data, portMAX_DELAY)) {
-            
             if (is_phone_connected && is_notify_enabled && active_conn_handle != BLE_HS_CONN_HANDLE_NONE) {
+
+                // ESP_LOGI(TAG, "[BLE TX] Wysyłam (%zu B) | Typ: %u | H3[%.2f, %.2f, %.2f] | IMU[%.2f, %.2f, %.2f] | GYRO[%.1f, %.1f, %.1f] | GPS[%.5f, %.5f, fix=%d] | BAT[%.2fV, %.0f%%]",
+                //          sizeof(global_data_t),
+                //          sensor_data.packet_type,
+                //          sensor_data.accel_h3lis.x, sensor_data.accel_h3lis.y, sensor_data.accel_h3lis.z,
+                //          sensor_data.accel_imu.x, sensor_data.accel_imu.y, sensor_data.accel_imu.z,
+                //          sensor_data.gyro.x, sensor_data.gyro.y, sensor_data.gyro.z,
+                //          sensor_data.latitude, sensor_data.longitude, sensor_data.gps_fix,
+                //          sensor_data.battery_voltage, sensor_data.battery_percent);
 
                 struct os_mbuf *om = ble_hs_mbuf_from_flat(&sensor_data, sizeof(global_data_t));
                 if (om != NULL) {
@@ -281,7 +299,7 @@ static void ble_data_tx_task(void *pvParameters)
     }
 }
 
-//read, write callback - main way to communicate
+// Parsowanie komend i obsługa odtwarzania dzwonka
 static bool process_ble_command(const char *cmd)
 {
     float f_val;
@@ -307,12 +325,12 @@ static bool process_ble_command(const char *cmd)
         config_sleep_ths_g = f_val;
         return true;
     }
-    if (strcmp(cmd, "CMD:PLAY") == 0) {
+    if (strcmp(cmd, "CMD:PLAY") == 0 || strcmp(cmd, "CMD:PLAY_SOUND") == 0) {
         ESP_LOGI(TAG, "[BLE] Komenda PLAY");
-        play_raw("/spiffs/dzwonek.raw");
+        play_raw("/spiffs/ring.raw");
         return false; 
     }
-    if (strcmp(cmd, "CMD:STOP") == 0) {
+    if (strcmp(cmd, "CMD:STOP") == 0 || strcmp(cmd, "CMD:STOP_SOUND") == 0) {
         ESP_LOGI(TAG, "[BLE] Komenda STOP");
         stop_raw();
         return false;
@@ -337,7 +355,6 @@ static int handle_config_write(struct ble_gatt_access_ctxt *ctxt)
         return BLE_ATT_ERR_UNLIKELY;
     }
 
-    // Ucinanie znaków nowej linii i zakończenie stringa
     rx_buffer[len] = '\0';
     for (int i = 0; i < len; i++) {
         if (rx_buffer[i] == '\r' || rx_buffer[i] == '\n') {
@@ -348,7 +365,6 @@ static int handle_config_write(struct ble_gatt_access_ctxt *ctxt)
 
     ESP_LOGI(TAG, "[BLE] ODEBRANY TEKST: '%s'", rx_buffer);
 
-    // Przekazanie do warstwy decyzyjnej
     bool should_save = process_ble_command(rx_buffer);
     if (should_save) {
         ESP_LOGI(TAG, "[BLE] Zapis konfiguracji do NVS...");
@@ -390,13 +406,10 @@ static int gatt_svr_chr_access(uint16_t conn_handle, uint16_t attr_handle,
     }
 }
 
-//pairing functions
-
 static void pairing_timer_cb(TimerHandle_t xTimer) {
     ESP_LOGI(TAG, "Czas otwartego parowania (60s) minął. Zamykam Bluetooth.");
     is_pairing_mode = false;
 
-    //restart bluetooth
     ble_gap_adv_stop();
     ble_app_advertise();
 }
@@ -406,21 +419,15 @@ void ble_enable_pairing_mode(void) {
 
     is_pairing_mode = true;
  
-    //reset radio
     ble_gap_adv_stop(); 
     ble_app_advertise(); 
 
-    // Timer (60 sekund)
     if (pairing_timer == NULL) {
         pairing_timer = xTimerCreate("pair_timer", pdMS_TO_TICKS(60000), pdFALSE, (void *)0, pairing_timer_cb);
     }
     xTimerStart(pairing_timer, 0);
 }
 
-
 static void ble_app_on_reset(int reason) {
     ESP_LOGE(TAG, "Reset stosu BLE, powód: %d", reason);
 }
-
-
-

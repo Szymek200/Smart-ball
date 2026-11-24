@@ -6,6 +6,7 @@
 #include "freertos/task.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 static const char *TAG = "AUDIO_PLAYER";
 
@@ -29,7 +30,7 @@ void audio_init(void)
     ESP_ERROR_CHECK(gpio_config(&sd_conf));
 
     //włączenie MAX98357A
-    gpio_set_level(MAX_SD_PIN, 1);
+    gpio_set_level(MAX_SD_PIN, 0);
 
     // Utworzenie kanału TX I2S
     i2s_chan_config_t chan_cfg = I2S_CHANNEL_DEFAULT_CONFIG(
@@ -44,10 +45,10 @@ void audio_init(void)
     i2s_std_config_t std_cfg = {
         .clk_cfg = I2S_STD_CLK_DEFAULT_CONFIG(AUDIO_SAMPLE_RATE),
 
-        .slot_cfg = I2S_STD_MSB_SLOT_DEFAULT_CONFIG(
-            I2S_DATA_BIT_WIDTH_16BIT,
-            I2S_SLOT_MODE_MONO
-        ),
+       .slot_cfg = I2S_STD_PHILIPS_SLOT_DEFAULT_CONFIG(
+        I2S_DATA_BIT_WIDTH_16BIT,
+        I2S_SLOT_MODE_MONO
+    ),
 
         .gpio_cfg = {
             .mclk = I2S_GPIO_UNUSED,
@@ -160,8 +161,13 @@ void play_raw(const char *filepath)
     }
 
 
-    if (keep_playing) {
-        stop_raw();
+    if (audio_task_handle != NULL) {
+    stop_raw();
+
+    if (audio_task_handle != NULL) {
+        ESP_LOGW(TAG, "Poprzednie zadanie nadal aktywne");
+        return;
+    }
     }
 
 
@@ -204,39 +210,38 @@ void play_raw(const char *filepath)
         "Uruchomiono odtwarzanie I2S: %s",
         current_filepath
     );
+
+    gpio_set_level(MAX_SD_PIN, 1);
 }
 
 void stop_raw(void)
 {
-    if (!keep_playing) {
+    // Natychmiast wycisz wzmacniacz MAX98357A
+    gpio_set_level(MAX_SD_PIN, 0);
+
+    if (!keep_playing && audio_task_handle == NULL) {
         return;
     }
 
-
-    ESP_LOGW(
-        TAG,
-        "Zatrzymywanie odtwarzania I2S..."
-    );
-
+    ESP_LOGW(TAG, "Zatrzymywanie odtwarzania I2S...");
 
     keep_playing = false;
 
-
     int timeout = 0;
 
-    while (
-        audio_task_handle != NULL &&
-        timeout < 100
-    ) {
+    while (audio_task_handle != NULL && timeout < 100) {
         vTaskDelay(pdMS_TO_TICKS(10));
         timeout++;
     }
 
-
     if (audio_task_handle != NULL) {
-        ESP_LOGW(
-            TAG,
-            "Zadanie audio nie zakończyło się w oczekiwanym czasie"
-        );
+        ESP_LOGW(TAG, "Zadanie audio nadal aktywne!");
+        return;
     }
+
+    // Reset kanału I2S i bufora DMA
+    ESP_ERROR_CHECK(i2s_channel_disable(tx_handle));
+    ESP_ERROR_CHECK(i2s_channel_enable(tx_handle));
+
+    ESP_LOGI(TAG, "Audio zatrzymane i wyciszone.");
 }

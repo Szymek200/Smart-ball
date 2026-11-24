@@ -557,11 +557,13 @@ void sensors_task_start(void)
 
 void log_global_data(const global_data_t *data)
 {
+
+
     if (data == NULL) {
         ESP_LOGE(TAG, "log_global_data: Wskaźnik do danych jest NULL!");
         return;
     }
-    /*
+    
     ESP_LOGI(TAG, "polaczenie tel: %s", is_phone_connected ? "true" : "false");
     ESP_LOGI(TAG, "================ GLOBAL DATA FRAME ================");
     ESP_LOGI(TAG, "Typ pakietu (Packet Type): %u (%s)", 
@@ -579,12 +581,12 @@ void log_global_data(const global_data_t *data)
              
     ESP_LOGI(TAG, "Bateria: Napięcie = %.2f V | Naładowanie = %.1f %%", 
              data->battery_voltage, data->battery_percent);
+    
 
     bool hardware_ok = get_gps_hardware_status();
 
     if (hardware_ok) {
         ESP_LOGI(TAG, "Komunikacja GPS (UART): POŁĄCZONO (Odebrano ramki NMEA)");
-
         if (data->gps_fix) {
             ESP_LOGI(TAG, "Status FIX GPS:        TAK (Pozycja aktualna)");
             ESP_LOGI(TAG, "GPS Pozycja:           Szerokość: %.6f° %c | Długość: %.6f° %c", 
@@ -602,7 +604,7 @@ void log_global_data(const global_data_t *data)
         ESP_LOGE(TAG, "Status FIX GPS:        NIEAKTYWNY");
     }
 
-    ESP_LOGI(TAG, "===================================================");*/
+    ESP_LOGI(TAG, "===================================================");
 
 }
 
@@ -651,6 +653,8 @@ static void parse_nmea_sentence(const char *line)
     }
 }
 
+/*
+odczyt bit po bicie
 static void gps_read_task(void *pvParameters)
 {
     uint8_t rx_byte = 0;
@@ -686,6 +690,8 @@ static void gps_read_task(void *pvParameters)
     }
 }
 
+
+
 void gps_start(void)
 {
     uart_config_t uart_config = {
@@ -705,3 +711,66 @@ void gps_start(void)
     ESP_LOGI(TAG, "Parser danych GPS został pomyślnie uruchomiony.");
 }
 
+*/
+
+static void gps_read_task(void *pvParameters)
+{
+    uint8_t rx_buf[128]; // Zmiana z pojedynczego bajtu na bufor 128-bajtowy
+    char line_buf[256];
+    int line_idx = 0;
+    int no_data_counter = 0;
+
+    ESP_LOGI(TAG, "GPS Parser uruchomiony...");
+
+    while (1) {
+        // Czytanie do 128 bajtów naraz z bufora sprzętowego UART
+        int len = uart_read_bytes(GPS_UART_NUM, rx_buf, sizeof(rx_buf), pdMS_TO_TICKS(100));
+
+        if (len > 0) {
+            no_data_counter = 0;
+
+            // Przetwarzanie całego odebranego bloku danych w pętli
+            for (int i = 0; i < len; i++) {
+                uint8_t rx_byte = rx_buf[i];
+
+                if (rx_byte != '\r' && rx_byte != '\n') {
+                    if (line_idx < sizeof(line_buf) - 1) {
+                        line_buf[line_idx++] = (char)rx_byte;
+                    }
+                } else if (line_idx > 0) {
+                    // Znaleziono koniec linii - parsujemy gotowy łańcuch znaków
+                    line_buf[line_idx] = '\0';
+                    parse_nmea_sentence(line_buf);
+                    line_idx = 0;
+                }
+            }
+        } else {
+            no_data_counter++;
+            if (no_data_counter >= 30) {
+                is_gps_connected = false;
+                current_fix = false;
+                no_data_counter = 30;
+            }
+        }
+    }
+}
+
+void gps_start(void)
+{
+    uart_config_t uart_config = {
+        .baud_rate = 115200,
+        .data_bits = UART_DATA_8_BITS,
+        .parity    = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .source_clk = UART_SCLK_DEFAULT,
+    };
+    
+    ESP_ERROR_CHECK(uart_driver_install(GPS_UART_NUM, BUF_SIZE * 2, 0, 0, NULL, 0));
+    ESP_ERROR_CHECK(uart_param_config(GPS_UART_NUM, &uart_config));
+    ESP_ERROR_CHECK(uart_set_pin(GPS_UART_NUM, GPS_TX_PIN, GPS_RX_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
+
+    // ZMIANA: Zmniejszono priorytet z 10 na 5, dzięki zastosowaniu buforowania blokowego
+    xTaskCreate(gps_read_task, "gps_read_task", 4096, NULL, 5, NULL);
+    ESP_LOGI(TAG, "Parser danych GPS został pomyślnie uruchomiony.");
+}

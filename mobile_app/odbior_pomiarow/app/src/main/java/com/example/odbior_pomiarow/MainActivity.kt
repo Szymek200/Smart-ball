@@ -71,17 +71,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        BleManager.onGpsDataReceivedListener = { lat, lon, fix ->
-            currentLat = lat
-            currentLon = lon
-            currentFix = fix
 
-            runOnUiThread {
-                gpsLat.text = String.format("Lat: %.5f", lat)
-                gpsLon.text = String.format("Lon: %.5f", lon)
-                gpsFix.text = if (fix) "FIX: TAK" else "FIX: NIE"
-            }
-        }
 
         BleManager.onDataSampleReceivedListener = { h3x, h3y, h3z, ax, ay, az, gx, gy, gz ->
             runOnUiThread {
@@ -257,19 +247,53 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Odtwarzamy wykresy po powrocie do aktywności
-        BleManager.onDataSampleReceivedListener = { h3x, h3y, h3z, ax, ay, az, gx, gy, gz ->
-            addSampleToChart(h3x, h3y, h3z, ax, ay, az, gx, gy, gz)
+
+        // 1. Natychmiastowe odświeżenie GPS z pamięci BleManager po powrocie do menu głównego
+        if (BleManager.isConnected && (BleManager.latestLat != 0.0f || BleManager.latestLon != 0.0f)) {
+            gpsLat.text = String.format("Lat: %.5f", BleManager.latestLat)
+            gpsLon.text = String.format("Lon: %.5f", BleManager.latestLon)
+            gpsFix.text = if (BleManager.latestFix) "FIX: TAK" else "FIX: NIE"
         }
-        // Odtwarzamy statystyki po powrocie do aktywności
+
+        // 2. Nasłuch na żywo dla MainActivity
+        BleManager.onGpsDataUpdateMain = { lat, lon, fix ->
+            currentLat = lat
+            currentLon = lon
+            currentFix = fix
+
+            runOnUiThread {
+                gpsLat.text = String.format("Lat: %.5f", lat)
+                gpsLon.text = String.format("Lon: %.5f", lon)
+                gpsFix.text = if (fix) "FIX: TAK" else "FIX: NIE"
+            }
+        }
+
+        BleManager.onDataSampleReceivedListener = { h3x, h3y, h3z, ax, ay, az, gx, gy, gz ->
+            runOnUiThread {
+                addSampleToChart(h3x, h3y, h3z, ax, ay, az, gx, gy, gz)
+
+                h3AccelX.text = String.format("X: %.2f G", h3x)
+                h3AccelY.text = String.format("Y: %.2f G", h3y)
+                h3AccelZ.text = String.format("Z: %.2f G", h3z)
+
+                imuAccelX.text = String.format("X: %.2f mg", ax)
+                imuAccelY.text = String.format("Y: %.2f mg", ay)
+                imuAccelZ.text = String.format("Z: %.2f mg", az)
+
+                gyroX.text = String.format("X: %.1f dps", gx)
+                gyroY.text = String.format("Y: %.1f dps", gy)
+                gyroZ.text = String.format("Z: %.1f dps", gz)
+            }
+        }
+
         updateSessionStatistics()
     }
 
     override fun onPause() {
         super.onPause()
         BleManager.onDataSampleReceivedListener = null
+        BleManager.onGpsDataUpdateMain = null
     }
-
     private fun initializeViews() {
         findViewById<Button>(R.id.btnSettings).setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))

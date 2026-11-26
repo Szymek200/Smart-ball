@@ -14,6 +14,8 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.CopyrightOverlay
+import org.osmdroid.tileprovider.tilesource.XYTileSource
 
 class LocationActivity : AppCompatActivity() {
 
@@ -36,26 +38,45 @@ class LocationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val ctx = applicationContext
-        Configuration.getInstance().userAgentValue = "SmartBallApp_Mobile_Client_v1"
-        Configuration.getInstance().load(ctx, android.preference.PreferenceManager.getDefaultSharedPreferences(ctx))
 
+        Configuration.getInstance().load(ctx, android.preference.PreferenceManager.getDefaultSharedPreferences(ctx))
+        Configuration.getInstance().userAgentValue =
+            "SmartBallApp/1.0 (com.example.odbior_pomiarow; contact: twoj@email.pl)"
         setContentView(R.layout.activity_location)
 
         mapView = findViewById(R.id.mapView)
         tvCoordinates = findViewById(R.id.tvCoordinates)
         btnBuzzer = findViewById(R.id.btnTriggerBuzzer)
 
-        mapView.setTileSource(
-            org.osmdroid.tileprovider.tilesource.XYTileSource(
-                "CartoDB-Positron",
-                0, 19, 256, ".png",
-                arrayOf(
-                    "https://a.basemaps.cartocdn.com/light_all/",
-                    "https://b.basemaps.cartocdn.com/light_all/",
-                    "https://c.basemaps.cartocdn.com/light_all/"
-                )
-            )
-        )
+        // Klucz API CARTO
+        val cartoApiKey = "cb1_5fvb_1_813690c9312b78b0d14693b9"
+
+        // Konfiguracja źródła mapy CARTO
+        val cartoTileSource = object : XYTileSource(
+            "CARTO-Voyager",
+            0,
+            19,
+            256,
+            ".png",
+            arrayOf(
+                "https://basemaps.cartocdn.com/rastertiles/voyager/"
+            ),
+            "© OpenStreetMap contributors © CARTO"
+        ) {
+            override fun getTileURLString(pMapTileIndex: Long): String {
+                return super.getTileURLString(pMapTileIndex) +
+                        "?key=$cartoApiKey"
+            }
+        }
+
+        mapView.setTileSource(cartoTileSource)
+        mapView.setUseDataConnection(true)
+        mapView.setMultiTouchControls(true)
+
+        mapView.overlays.add(CopyrightOverlay(this))
+
+        mapView.controller.setZoom(18.0)
+        mapView.controller.setCenter(GeoPoint(52.0, 19.0))
 
         // 1. Natychmiastowe wyświetlenie ostatniej pozycji po wejściu na ekran (bez czekania na nowy pakiet)
         if (BleManager.isConnected && (BleManager.latestLat != 0.0f || BleManager.latestLon != 0.0f)) {
@@ -113,6 +134,16 @@ class LocationActivity : AppCompatActivity() {
             tvCoordinates.text = "Utracono BLE. Oczekiwanie na pakiety z GSM..."
             toggleMqttLocationSubscription(subscribe = true)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        mapView.onPause()
+        super.onPause()
     }
 
     private fun toggleMqttLocationSubscription(subscribe: Boolean) {
@@ -260,6 +291,8 @@ class LocationActivity : AppCompatActivity() {
         // Przywracamy poprzedni listener i odpinamy referencję do tej Activity
         BleManager.onGpsDataUpdateLocation = null
         BleManager.onConnectionStateChanged = previousConnectionListener
+
+        mapView.onDetach()
 
         scope.cancel()
         try {
